@@ -2,7 +2,7 @@ import { Component, OnInit, Output } from '@angular/core';
 import { CheckSentence } from '../../services/checksentence.service';
 import { RecordAudio } from '../../services/recordaudio.service';
 import {FormControl, Form} from '@angular/forms';
-import { GoogleObj, Solution } from '../models/solution';
+import { GoogleObj, Solution } from '../../models/solution';
 import { SolutionService } from '../../services/solution.service';
 import { GoogletranslateService } from '../../services/googletranslate.service';
 // import { ElementRef, NgZone, ViewChild } from '@angular/core';
