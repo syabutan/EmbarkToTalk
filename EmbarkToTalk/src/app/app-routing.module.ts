@@ -7,13 +7,19 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
-  {
-    path: 'talk',
-    loadChildren: () => import('./talk/talk.module').then( m => m.TalkPageModule)
-  },
+
   {
     path: 'home',
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+  },
+  {
+    path: 'footer',
+    loadChildren: () => import('./components/footer/footer.module').then( m => m.FooterPageModule)
+  },
+
+  {
+    path: 'talk',
+    loadChildren: () => import('./talk/talk.module').then( m => m.TalkPageModule)
   },
 ];
 

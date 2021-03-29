@@ -1,28 +1,46 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Home
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  
-  <ion-header collapse="condense">
+  <ion-header [translucent]="true">
     <ion-toolbar>
-      <ion-title size="large">Home</ion-title>
+          <ion-title>
+            Home
+          </ion-title>
     </ion-toolbar>
   </ion-header>
+  
+  <ion-content >
 
-  <ion-content [fullscreen]="true">
+  <!-- language switch list -->
+  <form [formGroup]="langSwitch" (ngSubmit)="langForm()">
+      <ion-item>
+    <ion-label >Translate From</ion-label>
+    <ion-select formControlName="langFrom" cancelText="Cancel" okText="OK">
+      <ion-select-option *ngFor="let lang of langs" [value]="langs.value">{{ lang.name }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label>Translate To</ion-label>
+    <ion-select formControlName="langTo" cancelText="Cancel" okText="OK">
+      <ion-select-option *ngFor="let lang of langs" [value]="langs.value">{{ lang.name }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+
     <div class="ion-padding">
-      <ion-button fill="outline" (click)="presentModal()">Start</ion-button>
+      <ion-button 
+        [disabled]="!langSwitch.valid"
+        type="submit"
+        fill="outline" 
+        [routerLink]="['/talk']"
+        >
+        start
+      </ion-button>
     </div>
+
+
+     
+  </form>
+
+
+
+
   </ion-content>
-
-</ion-content>
-
-
-
-
 

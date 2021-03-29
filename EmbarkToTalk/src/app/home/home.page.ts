@@ -1,5 +1,9 @@
+import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Lang } from '../talk/lang.model';
+import { LangsService } from '../talk/langs.service';
 import { TalkPage } from '../talk/talk.page';
 
 @Component({
@@ -8,19 +12,32 @@ import { TalkPage } from '../talk/talk.page';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
+  langs: Lang[];
+  private langSwitch : FormGroup;
 
   constructor(
-    private modalCtrl: ModalController
-  ) { }
+    private langService: LangsService,
+    private formBuilder: FormBuilder,
+    private activatedRoute: ActivatedRoute 
+  ) {
+    this.langSwitch = this.formBuilder.group({
+      langFrom: new FormControl('', Validators.compose([
+        Validators.required
+      ])),
+      langTo: new FormControl('', Validators.compose([
+        Validators.required
+      ]))
+    });
+  }
+  langForm() {
+    console.log(this.langSwitch)
+  }
 
   ngOnInit() {
+    this.langs = this.langService.getAllLangs();
+
   }
 
-  async presentModal() {
-    const model = await this.modalCtrl.create({
-      component: TalkPage,
-    });
-    return await model.present();
-  }
+
 
 }
