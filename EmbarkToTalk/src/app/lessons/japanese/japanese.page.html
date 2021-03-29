@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-row>
+
+      <ion-buttons color="light">
+        <ion-button [routerLink]="['/home']">
+          <ion-icon color="dark" slot="start" name="return-up-back-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-row>
+    <ion-row>
+      <video [src]="videoUrl" type="video/mp4" width="100%" controls autoplay playsinline webkit-playsinline>
+      </video>
+    </ion-row>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+
+  <div class="line-bc">
+    <!--chat start-->
+
+    <!--CP side comment start-->
+    <div class="balloon6">
+      <ion-avatar>
+        <ion-img [src]="cpImage"></ion-img>
+      </ion-avatar>
+
+      <div class="chatting">
+        <div class="says">
+          <p>computerSentence}}</p>
+        </div>
+      </div>
+    </div>
+    <!--CP side comment end->
+        Your comment start -->
+
+    <ion-avatar slot="end" class="faceiconright">
+      <ion-img [src]="cpImage"></ion-img>
+    </ion-avatar>
+    <div class="mycomment">
+      <div class="balloon6">
+        <!-- <div *ngIf = "voiceText" class="mycommentmargin">
+                <p>{{voiceText}}</p>
+            </div> -->
+        <div *ngFor="let voice of userVoiceText" class="mycommentmargin">
+          <p>{{voice}}</p>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  <!--chat end-->
+
+  <hr>
+  <ion-card>
+    <ion-card-content>
+      <!-- <ion-icon name="mic-circle-outline"></ion-icon> -->
+      {{choiceOne}}
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-content>
+      <!-- <ion-icon name="mic-circle-outline"></ion-icon> -->
+      {{choiceTwo}}
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
+
+<app-footer></app-footer>
