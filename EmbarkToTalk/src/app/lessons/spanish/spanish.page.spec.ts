@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { EnglishComponent } from './english.component';
+import { SpanishPage } from './spanish.page';
 
-describe('EnglishComponent', () => {
-  let component: EnglishComponent;
-  let fixture: ComponentFixture<EnglishComponent>;
+describe('SpanishPage', () => {
+  let component: SpanishPage;
+  let fixture: ComponentFixture<SpanishPage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ EnglishComponent ],
+      declarations: [ SpanishPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(EnglishComponent);
+    fixture = TestBed.createComponent(SpanishPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

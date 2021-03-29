@@ -24,6 +24,14 @@ const routes: Routes = [
     path: 'japanese',
     loadChildren: () => import('./lessons/japanese/japanese.module').then( m => m.JapanesePageModule)
   },
+  {
+    path: 'english',
+    loadChildren: () => import('./lessons/english/english.module').then( m => m.EnglishPageModule)
+  },
+  {
+    path: 'spanish',
+    loadChildren: () => import('./lessons/spanish/spanish.module').then( m => m.SpanishPageModule)
+  },
 
 ];
 
