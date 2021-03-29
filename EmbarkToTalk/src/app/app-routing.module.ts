@@ -20,7 +20,11 @@ const routes: Routes = [
   {
     path: 'talk',
     loadChildren: () => import('./talk/talk.module').then( m => m.TalkPageModule)
+  },  {
+    path: 'japanese',
+    loadChildren: () => import('./lessons/japanese/japanese.module').then( m => m.JapanesePageModule)
   },
+
 ];
 
 @NgModule({

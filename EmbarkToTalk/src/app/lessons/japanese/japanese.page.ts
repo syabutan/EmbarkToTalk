@@ -11,10 +11,10 @@ import {ModalController} from "@ionic/angular"
 
 @Component({
   selector: 'app-japanese',
-  templateUrl: './japanese.component.html',
-  styleUrls: ['./japanese.component.scss'],
+  templateUrl: './japanese.page.html',
+  styleUrls: ['./japanese.page.scss'],
 })
-export class JapaneseComponent implements OnInit {
+export class JapanesePage implements OnInit {
   //To record voice 
   userVoiceText = [];
   voiceActiveSectionDisabled: boolean = true;
