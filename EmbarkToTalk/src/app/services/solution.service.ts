@@ -12,7 +12,8 @@ export class SolutionService {
     firstChoice: '',
     secondChoice: '',
     userText: '',
-    computerText: ''
+    computerText: '',
+    inputString: ''
   };
 
   constructor(private http: HttpClient) { }
@@ -25,6 +26,7 @@ export class SolutionService {
           this.data.secondChoice = res.secondChoice;
           this.data.userText = res.userText;
           this.data.computerText = res.computerText;
+          this.data.inputString = res.inputString;
           return this.data;
         })
       );

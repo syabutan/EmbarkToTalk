@@ -4,6 +4,7 @@ export interface Solution {
   secondChoice: string;
   userText: string;
   computerText: string;
+  inputString: string;
 }
 
 export interface GoogleObj {
