@@ -1,0 +1,178 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-row>
+
+      <ion-buttons color="light">
+        <ion-button [routerLink]="['/home']">
+          <ion-icon color="dark" slot="start" name="return-up-back-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-row>
+    <ion-row>
+      <video [src]="videoUrl" type="video/mp4" width="100%" controls autoplay playsinline webkit-playsinline>
+      </video>
+    </ion-row>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content >
+
+
+  <div class="line-bc">
+    <!--chat start-->
+
+    <!--CP side comment start-->
+
+    <div class="balloon6">
+      <div class="faceicon">
+        <!-- <img src="https://cdn0.iconfinder.com/data/icons/avatar-2/500/man-2-512.png"/> -->
+        <img [src] = "cpImage"/>
+      </div>
+      <div class="chatting">
+        <div *ngIf = "!choiceComputerTrans" class="says">
+          <ion-icon name="language-outline" style= "float:right; color: gray" (click) = "send('computerText')"></ion-icon>
+          <p>{{computerSentence}}</p>
+        </div>
+        <div *ngIf = "choiceComputerTrans" class="says">
+          <ion-icon name="language-outline" style= "float:right; color:gray" (click) = "send('computerText')"></ion-icon>
+          <p>{{data.computerText}}</p>
+        </div>
+      </div>
+    </div>
+
+
+       <div class="mycomment">
+      <div class="balloon6">
+        <div class="faceiconright">
+          <img [src] = "userImage"/>
+        </div>
+          <div *ngIf = "!choiceUserTrans">
+            <div *ngFor = "let voice of userVoiceText" class="mycommentmargin" (click) = "send('userText')">
+              <p>{{voice}}</p>
+          </div>
+          </div>
+          <div *ngIf = "choiceUserTrans">
+            <div *ngFor = "let voice of userVoiceTextTrans" class="mycommentmargin" (click) = "send('userText')">
+              <p>{{voice}}</p>
+          </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <hr>
+
+  <ion-card>
+    <ion-card-content *ngIf = "!choiceOneTran else choiceone">
+      <ion-icon name="language-outline" style= "float:right" (click) = "send('choiceOne')"></ion-icon>
+      {{choiceOne}}
+    </ion-card-content>
+  </ion-card>
+
+  <ng-template #choiceone>
+    <ion-card-content>
+      <ion-icon name="language-outline" style= "float:right" (click) = "send('choiceOne')"></ion-icon>
+      {{data.firstChoice}}
+    </ion-card-content>
+  </ng-template>
+
+  <ion-card *ngIf = "choiceTwo !== ''">
+    <ion-card-content *ngIf = "!choiceTwoTrans; else choicetwo">
+      <ion-icon name="language-outline" style= "float:right" (click) = "send('choiceTwo')"></ion-icon>
+      {{choiceTwo}}
+    </ion-card-content>
+  </ion-card>
+
+  <ng-template #choicetwo>
+    <ion-card-content>
+      <ion-icon name="language-outline" style= "float:right" (click) = "send('choiceTwo')"></ion-icon>
+      {{data.secondChoice}}
+    </ion-card-content>
+  </ng-template>
+  
+
+  <button id="translatebtn" (click)="send('nothing')" style="margin-left: auto;"></button>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <!-- <ion-button (click)="onStartVoiceRecognition()" *ngIf="voiceActiveSectionDisabled">
+      <ion-icon name="play-circle-outline"></ion-icon>
+    </ion-button>
+    <ion-button color="danger" *ngIf="!voiceActiveSectionDisabled" (click) = "onCloseVoiceRecognition()">
+      <ion-icon name="mic-circle-outline"></ion-icon>
+    </ion-button>
+    <ion-button color="success" *ngIf="!recordStart" (click) = "check()">
+      Check    
+    </ion-button> -->
+    
+    <!-- <ion-buttons *ngIf="voiceActiveSectionDisabled; else voicesection;"> -->
+      <ion-button
+        (click)="onStartVoiceRecognition()" *ngIf="voiceActiveSectionDisabled; else voicesection;">
+        <ion-icon name="play-circle-outline" style = "font-size: 40px"></ion-icon>
+      </ion-button>
+      <circle-progress
+      [percent]= "score * 100"
+      [radius]="25"
+      [outerStrokeWidth]="4"
+      [innerStrokeWidth]="5"
+      [outerStrokeColor]="'#3279a8'"
+      [innerStrokeColor]="'#a4adb3'"
+      [animation]="true"
+      [animationDuration]="300"
+    ></circle-progress>
+    <!-- </ion-buttons> -->
+
+    <ng-template #voicesection>
+      <ng-container *ngIf="!voiceActiveSectionError; else failure">
+        <ng-container *ngIf="voiceText; else start">
+          <!-- <ion-buttons>
+            <ion-button color="danger" type="button" (click)="onCloseVoiceRecognition()">Close</ion-button>
+            <ion-button color="success" type="button" (click)="onStartVoiceRecognition()">Restart</ion-button>
+          </ion-buttons> -->
+          <ion-button color="danger" (click) = "onStartVoiceRecognition()">
+            <ion-icon name="mic-circle-outline" style = "font-size: 40px"></ion-icon>
+          </ion-button>
+          <ion-button color="success" (click) = "onCheck()">
+            Check    
+          </ion-button>
+        </ng-container>
+        <ng-template #start>
+          <ng-container *ngIf="voiceActiveSectionListening; else beginning" (click) = "onCloseVoiceRecognition">
+            <!-- <span style="margin-left:10px"> -->
+              <ion-button (click) = "onCloseVoiceRecognition()">
+                <!-- <img src="../../assets/icon/stop-white.png" height="32px" width="32px"/> -->
+                <ion-icon name="stop-circle-outline" style = "font-size: 40px"></ion-icon>
+              </ion-button>
+            <!-- <img src="../../assets/icon/stop.png" height="40px" width="40px" /> -->
+            <!-- </span> -->
+          </ng-container>
+          <ng-template #beginning>
+            <!-- <span style="margin-left:10px"> -->
+            <ion-button (click) = "onCloseVoiceRecognition()">
+              <!-- <img src="../../assets/icon/stop-white.png" height="32px" width="32px"/> -->
+              <ion-icon name="stop-circle-outline" style = "font-size: 40px"></ion-icon>
+            </ion-button>
+            <!-- </span> -->
+          </ng-template>
+        </ng-template>
+      </ng-container>
+      <ng-template #failure>
+        <span style="margin-left:10px">Didn't catch that</span>
+          <!-- <ion-button color="danger" type="button" (click)="onCloseVoiceRecognition()">Close</ion-button>
+          <ion-button color="success" type="button" (click)="onStartVoiceRecognition()">Restart</ion-button> -->
+          <ion-button color="danger" (click) = "onStartVoiceRecognition()">
+          <ion-icon name="mic-circle-outline" style = "font-size: 40px"
+          ></ion-icon>
+          </ion-button>
+          <ion-button color="success" (click) = "onCheck()">
+            Check    
+          </ion-button>
+      </ng-template>
+    </ng-template>
+  </ion-toolbar>
+</ion-footer>
+
+
+
+

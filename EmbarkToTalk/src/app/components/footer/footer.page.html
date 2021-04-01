@@ -1,0 +1,71 @@
+<ion-footer>
+  <ion-toolbar>
+    <!-- <ion-button (click)="onStartVoiceRecognition()" *ngIf="voiceActiveSectionDisabled">
+      <ion-icon name="play-circle-outline"></ion-icon>
+    </ion-button>
+    <ion-button color="danger" *ngIf="!voiceActiveSectionDisabled" (click) = "onCloseVoiceRecognition()">
+      <ion-icon name="mic-circle-outline"></ion-icon>
+    </ion-button>
+    <ion-button color="success" *ngIf="!recordStart" (click) = "check()">
+      Check    
+    </ion-button> -->
+
+    <!-- <ion-buttons *ngIf="voiceActiveSectionDisabled; else voicesection;"> -->
+      <ion-button
+        (click)="onStartVoiceRecognition()" *ngIf="voiceActiveSectionDisabled; else voicesection;">
+        <ion-icon name="play-circle-outline"></ion-icon>
+      </ion-button>
+    <!-- </ion-buttons> -->
+
+    <ng-template #voicesection>
+      <ng-container *ngIf="!voiceActiveSectionError; else failure">
+        <ng-container *ngIf="voiceText; else start">
+          <!-- <ion-buttons>
+            <ion-button color="danger" type="button" (click)="onCloseVoiceRecognition()">Close</ion-button>
+            <ion-button color="success" type="button" (click)="onStartVoiceRecognition()">Restart</ion-button>
+          </ion-buttons> -->
+          <ion-button color="danger" (click) = "onStartVoiceRecognition()">
+            <ion-icon name="mic-circle-outline"></ion-icon>
+          </ion-button>
+          <ion-button color="success" (click) = "onCheck()">
+            Check    
+          </ion-button>
+        </ng-container>
+        <ng-template #start>
+          <ng-container *ngIf="voiceActiveSectionListening; else beginning" (click) = "onCloseVoiceRecognition">
+            <!-- <span style="margin-left:10px"> -->
+              <ion-button (click) = "onCloseVoiceRecognition()">
+                <!-- <img src="../../assets/icon/stop-white.png" height="32px" width="32px"/> -->
+                <ion-icon name="stop-circle-outline"></ion-icon>
+              </ion-button>
+            <!-- <img src="../../assets/icon/stop.png" height="40px" width="40px" /> -->
+            <!-- </span> -->
+          </ng-container>
+          <ng-template #beginning>
+            <!-- <span style="margin-left:10px"> -->
+            <ion-button (click) = "onCloseVoiceRecognition()">
+              <!-- <img src="../../assets/icon/stop-white.png" height="32px" width="32px"/> -->
+              <ion-icon name="stop-circle-outline"></ion-icon>
+            </ion-button>
+            <!-- </span> -->
+          </ng-template>
+        </ng-template>
+      </ng-container>
+      <ng-template #failure>
+        <span style="margin-left:10px">Didn't catch that</span>
+          <!-- <ion-button color="danger" type="button" (click)="onCloseVoiceRecognition()">Close</ion-button>
+          <ion-button color="success" type="button" (click)="onStartVoiceRecognition()">Restart</ion-button> -->
+          <ion-button color="danger" (click) = "onStartVoiceRecognition()">
+          <ion-icon name="mic-circle-outline"></ion-icon>
+          </ion-button>
+          <ion-button color="success" (click) = "onCheck()">
+            Check    
+          </ion-button>
+      </ng-template>
+    </ng-template>
+  </ion-toolbar>
+</ion-footer>
+
+
+
+

@@ -1,0 +1,7 @@
+{
+  "name": "EmbarkToTalk",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
