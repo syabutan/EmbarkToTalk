@@ -40,7 +40,7 @@ export class JapanesePage implements OnInit {
   choiceUserTrans = false;
   choiceOneTran = false;
 
-  langFrom = new FormControl('en');
+  langFrom = new FormControl('ja');
   langTo = new FormControl('en');
 
   private translateBtn: any;
@@ -48,7 +48,7 @@ export class JapanesePage implements OnInit {
   score: number = 0;
 
   //Japanese tree
-  userChoiceOneArray = ['hey how is it going','はい元気です。元気ですか？', '私は山田長老です。お名前は何ですか？','私は田中姉妹です。お名前は何ですか？','私たちは宣教師で、イエスキリストについて教えています。','私たちはボランティアとして奉仕するために来ました。'];
+  userChoiceOneArray = ['はい元気です。元気ですか？', '私は山田長老です。お名前は何ですか？','私は田中姉妹です。お名前は何ですか？','私たちは宣教師で、イエスキリストについて教えています。','私たちはボランティアとして奉仕するために来ました。'];
   userChoiceTwoArray = ['hello','はい元気です。私たちは最近この近くに引っ越してきました。地元の方ですか？','私たちは宣教師で、イエスキリストについて教えています。','私たちはボランティアとして奉仕するために来ました。','福音を学ぶことに興味がありますか？','宣教師について聞いたことがありますか？'];                         
   computerSentenceArrayTwo = ['こんにちは。元気ですか？','そうなんですね。私はここに10年間住んでいます。何をしに引っ越してきたんですか？','キリストについては学んだことないですね。','素晴らしいですね。','はい、聞いてみたいです。','教会に行っている友達がいますが、そのことについてあまり話したことがありません。学んでみたいと思っていました。'];
 
@@ -222,9 +222,9 @@ export class JapanesePage implements OnInit {
         this.translateBtn.disabled = false;
         this.data = {
           firstChoice: res.data.translations[0].translatedText.replace(/&#39;/g, "'"),
-        	secondChoice: res.data.translations[1].translatedText,
-        	userText: res.data.translations[2].translatedText,
-          computerText: res.data.translations[3].translatedText
+        	secondChoice: res.data.translations[1].translatedText.replace(/&#39;/g, "'"),
+        	userText: res.data.translations[2].translatedText.replace(/&#39;/g, "'"),
+          computerText: res.data.translations[3].translatedText.replace(/&#39;/g, "'")
         };
         console.log(this.data);
       },

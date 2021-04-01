@@ -50,8 +50,8 @@ export class CheckSentence{
       checkPercent(a,b){
         this.wordCountUserTotal = 0;
         var wordCountCorrect = 1;
-        var correctSentence = a.replace(/[.,\/#!$%\?^&\*;:{}=\-_`~()]/g,"");
-        var userSentence = b.replace(/[.,\/#!$%\^&?\*;:{}=\-_`~()]/g,"");
+        var correctSentence = a.replace(/[.,\/#!$%\?^&\*;:{}=\-_`~()。、？]/g,"");
+        var userSentence = b.replace(/[.,\/#!$%\^&?\*;:{}=\-_`~()。、？]/g,"");
         var lastCharacter = 0;
         var newWordCorrect = '';
         this.sum = 0;
