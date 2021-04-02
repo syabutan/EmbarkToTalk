@@ -90,6 +90,10 @@
   
 
   <button id="translatebtn" (click)="send('nothing')" style="margin-left: auto;"></button>
+
+<br><br><br>
+<br><br><br>
+<br><br><br>
 </ion-content>
 
 <ion-footer>
@@ -105,20 +109,29 @@
     </ion-button> -->
     
     <!-- <ion-buttons *ngIf="voiceActiveSectionDisabled; else voicesection;"> -->
-      <ion-button
-        (click)="onStartVoiceRecognition()" *ngIf="voiceActiveSectionDisabled; else voicesection;">
-        <ion-icon name="play-circle-outline" style = "font-size: 40px"></ion-icon>
-      </ion-button>
-      <circle-progress
-      [percent]= "score * 100"
-      [radius]="25"
-      [outerStrokeWidth]="4"
-      [innerStrokeWidth]="5"
-      [outerStrokeColor]="'#3279a8'"
-      [innerStrokeColor]="'#a4adb3'"
-      [animation]="true"
-      [animationDuration]="300"
-    ></circle-progress>
+      <ion-row>
+        <ion-col></ion-col>
+        <ion-col >
+          <ion-button
+            (click)="onStartVoiceRecognition()" *ngIf="voiceActiveSectionDisabled; else voicesection;">
+            <ion-icon name="play-circle-outline" style = "font-size: 40px"></ion-icon>
+          </ion-button>          
+        </ion-col>
+        <ion-col >
+          <circle-progress
+          [percent]= "score * 100"
+          [radius]="20"
+          [outerStrokeWidth]="4"
+          [innerStrokeWidth]="5"
+          [outerStrokeColor]="'#3279a8'"
+          [innerStrokeColor]="'#a4adb3'"
+          [animation]="true"
+          [animationDuration]="300"
+        ></circle-progress>          
+        </ion-col>
+        <!-- <ion-col></ion-col> -->
+      </ion-row>
+
     <!-- </ion-buttons> -->
 
     <ng-template #voicesection>
@@ -130,9 +143,6 @@
           </ion-buttons> -->
           <ion-button color="danger" (click) = "onStartVoiceRecognition()">
             <ion-icon name="mic-circle-outline" style = "font-size: 40px"></ion-icon>
-          </ion-button>
-          <ion-button color="success" (click) = "onCheck()">
-            Check    
           </ion-button>
         </ng-container>
         <ng-template #start>
