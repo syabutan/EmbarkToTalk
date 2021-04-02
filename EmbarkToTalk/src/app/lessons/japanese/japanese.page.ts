@@ -52,8 +52,8 @@ export class JapanesePage implements OnInit {
 
   //Japanese tree
   userChoiceOneArray = ['はい元気です。元気ですか？', '私は山田長老です。お名前は何ですか？','私は田中姉妹です。お名前は何ですか？','私たちは宣教師で、イエスキリストについて教えています。','私たちはボランティアとして奉仕するために来ました。'];
-  userChoiceTwoArray = ['hello','はい元気です。私たちは最近この近くに引っ越してきました。地元の方ですか？','私たちは宣教師で、イエスキリストについて教えています。','私たちはボランティアとして奉仕するために来ました。','福音を学ぶことに興味がありますか？','宣教師について聞いたことがありますか？'];                         
-  computerSentenceArrayTwo = ['こんにちは。元気ですか？','そうなんですね。私はここに10年間住んでいます。何をしに引っ越してきたんですか？','キリストについては学んだことないですね。','素晴らしいですね。','はい、聞いてみたいです。','教会に行っている友達がいますが、そのことについてあまり話したことがありません。学んでみたいと思っていました。'];
+  userChoiceTwoArray = ['はい元気です。私たちは最近この近くに引っ越してきました。地元の方ですか？','私たちは宣教師で、イエスキリストについて教えています。','私たちはボランティアとして奉仕するために来ました。','福音を学ぶことに興味がありますか？','宣教師について聞いたことがありますか？'];                         
+  computerSentenceArrayTwo = ['こんにちは。元気ですか？', '元気です。お名前は何ですか？', 'そうなんですね。私はここに10年間住んでいます。何をしに引っ越してきたんですか？','キリストについては学んだことないですね。','素晴らしいですね。','はい、聞いてみたいです。','教会に行っている友達がいますが、そのことについてあまり話したことがありません。学んでみたいと思っていました。'];
 
   showAccuracy: boolean;
   langSwitch: boolean;
@@ -166,8 +166,8 @@ export class JapanesePage implements OnInit {
       this.recordAudio.clearText();
       this.videoUrl = this.videoBase + this.videoTimeJapanese[this.videoCount];
       this.computerSentence = this.computerSentenceArrayTwo[this.sentenceCounter];
-      this.choiceOne = this.userChoiceOneArray[this.sentenceCounter];
-       this.choiceTwo = this.userChoiceOneArray[this.sentenceCounter+1];
+      this.choiceOne = this.userChoiceOneArray[this.sentenceCounter+1];
+    this.choiceTwo = this.userChoiceOneArray[this.sentenceCounter+1];
     //   let audio = new Audio();
     //   audio.src = this.practiceParagraphNeighborAudio[this.sentenceCounter -1];
     // audio.load();
