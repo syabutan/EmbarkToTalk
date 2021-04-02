@@ -52,10 +52,8 @@
               <p>{{voice}}</p>
           </div>
           </div>
-          <div *ngIf = "choiceUserTrans">
-            <div *ngFor = "let voice of userVoiceTextTrans" class="mycommentmargin" (click) = "send('userText')">
+            <div *ngFor = "let voice of voiceTextTrans" class="mycommentmargin" (click) = "send('userText')">
               <p>{{voice}}</p>
-          </div>
           </div>
         </div>
       </div>

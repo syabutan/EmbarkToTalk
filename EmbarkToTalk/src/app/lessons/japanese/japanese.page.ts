@@ -24,6 +24,8 @@ export class JapanesePage implements OnInit {
 	voiceActiveSectionListening: boolean = false;
 	voiceText: any = '';
   voiceTextReady: boolean = false;
+  inputString = '';
+
   
   sentenceCounter = 0; 
 
@@ -39,9 +41,10 @@ export class JapanesePage implements OnInit {
   choiceComputerTrans = false;
   choiceUserTrans = false;
   choiceOneTran = false;
+  voiceTextTrans = [];
 
-  langFrom = new FormControl('ja');
-  langTo = new FormControl('en');
+  langFrom = new FormControl('en');
+  langTo = new FormControl('es');
 
   private translateBtn: any;
 
@@ -60,7 +63,8 @@ export class JapanesePage implements OnInit {
     firstChoice: '',
     secondChoice: '',
     userText: '',
-    computerText: ''
+    computerText: '',
+    inputString: ''
   };
 
   cpImage ="../../../assets/icon/face1.PNG"
@@ -110,7 +114,7 @@ export class JapanesePage implements OnInit {
     );
 
     this.recordAudio.voiceTextChanged.subscribe(
-      (change: any) => {this.voiceText = change; this.onCheck(); this.send("")}
+      (change: any) => {this.voiceText = change; this.onCheck(); this.send("hello");}
     );
     
     this.voiceActiveSectionDisabled = this.recordAudio.voiceActiveSectionDisabled;
@@ -133,7 +137,6 @@ export class JapanesePage implements OnInit {
     //this.recordAudio.setLanguage(this.langFrom.value);
     this.recordAudio.closeVoiceRecognition();
   }
-
 
   onStart(){
     //this.currentSentence = this.practiceParagraphBrown[this.sentenceCounter];
@@ -190,7 +193,6 @@ export class JapanesePage implements OnInit {
   }
   //Sends sentences to Google translate 
   send(paragraphSel: string) {
-
     if(paragraphSel === 'choiceOne'){
       console.log(this.choiceOneTrans)
       this.choiceOneTran = !this.choiceOneTran;
@@ -209,9 +211,12 @@ export class JapanesePage implements OnInit {
     if(this.voiceText === undefined){
       this.voiceText = '';
     }
+    else{
+      this.inputString = paragraphSel;
+    }
     console.log(this.choiceOne,this.choiceTwo,this.voiceText,this.computerSentence);
     const googleObj: GoogleObj = {
-      q: [this.choiceOne, this.choiceTwo, this.voiceText, this.computerSentence],
+      q: [this.choiceOne, this.choiceTwo, this.voiceText, this.computerSentence, this.inputString],
       target: this.langTo.value
     };
 
@@ -224,7 +229,8 @@ export class JapanesePage implements OnInit {
           firstChoice: res.data.translations[0].translatedText.replace(/&#39;/g, "'"),
         	secondChoice: res.data.translations[1].translatedText.replace(/&#39;/g, "'"),
         	userText: res.data.translations[2].translatedText.replace(/&#39;/g, "'"),
-          computerText: res.data.translations[3].translatedText.replace(/&#39;/g, "'")
+          computerText: res.data.translations[3].translatedText.replace(/&#39;/g, "'"),
+          inputString: res.data.translations[4].translatedText.replace(/&#39;/g, "'")
         };
         console.log(this.data);
       },
