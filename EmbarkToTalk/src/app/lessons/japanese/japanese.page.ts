@@ -28,9 +28,9 @@ export class JapanesePage implements OnInit {
   sentenceCounter = 0; 
 
   //Where to start and stop video for each line 
-  videoTimeJapanese = ["0,1","2,7", "8,10", "11,12", "13,14", "15,22"];
+  videoTimeJapanese = ["0,2","3,5", "6,10", "10,17", "17,21", "21,23", "24,26", "27,34"];
   videoUrl: SafeResourceUrl;
-  videoBase = "../../assets/videos/conversationJP.mp4#t=";
+  videoBase = "../../assets/videos/JapaneseConversation.mp4#t=";
   videoCount = 0;
 
   //To know whether to show L1 or L2
@@ -50,7 +50,7 @@ export class JapanesePage implements OnInit {
   //Japanese tree
   userChoiceOneArray = ['はい元気です。元気ですか？', '私は山田長老です。お名前は何ですか？','私は田中姉妹です。お名前は何ですか？','私たちは宣教師で、イエスキリストについて教えています。','私たちはボランティアとして奉仕するために来ました。'];
   userChoiceTwoArray = ['はい元気です。私たちは最近この近くに引っ越してきました。地元の方ですか？','私たちは宣教師で、イエスキリストについて教えています。','私たちはボランティアとして奉仕するために来ました。','福音を学ぶことに興味がありますか？','宣教師について聞いたことがありますか？'];                         
-  computerSentenceArrayTwo = ['こんにちは。元気ですか？', '元気です。お名前は何ですか？', 'そうなんですね。私はここに10年間住んでいます。何をしに引っ越してきたんですか？','キリストについては学んだことないですね。','素晴らしいですね。','はい、聞いてみたいです。','教会に行っている友達がいますが、そのことについてあまり話したことがありません。学んでみたいと思っていました。'];
+  computerSentenceArrayTwo = ['こんにちは。元気ですか？', '元気です。お名前は何ですか？', '私ははやとです。お二人は何をしていますか？', 'そうなんですね。私はここに10年間住んでいます。何をしに引っ越してきたんですか？','キリストについては学んだことないですね。','素晴らしいですね。','はい、聞いてみたいです。','教会に行っている友達がいますが、そのことについてあまり話したことがありません。学んでみたいと思っていました。'];
 
   showAccuracy: boolean;
   langSwitch: boolean;
@@ -163,7 +163,7 @@ export class JapanesePage implements OnInit {
       this.recordAudio.clearText();
       this.videoUrl = this.videoBase + this.videoTimeJapanese[this.videoCount];
       this.computerSentence = this.computerSentenceArrayTwo[this.sentenceCounter];
-      this.choiceOne = this.userChoiceOneArray[this.sentenceCounter+1];
+      this.choiceOne = this.userChoiceOneArray[this.sentenceCounter];
     this.choiceTwo = this.userChoiceOneArray[this.sentenceCounter+1];
     //   let audio = new Audio();
     //   audio.src = this.practiceParagraphNeighborAudio[this.sentenceCounter -1];
