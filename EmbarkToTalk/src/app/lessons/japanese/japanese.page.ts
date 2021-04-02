@@ -230,7 +230,7 @@ export class JapanesePage implements OnInit {
         	secondChoice: res.data.translations[1].translatedText.replace(/&#39;/g, "'"),
         	userText: res.data.translations[2].translatedText.replace(/&#39;/g, "'"),
           computerText: res.data.translations[3].translatedText.replace(/&#39;/g, "'"),
-          inputString: res.data.translatoins[4].translatedText.replace(/&#39;/g, "'")
+          inputString: res.data.translations[4].translatedText.replace(/&#39;/g, "'")
         };
         console.log(this.data);
       },
