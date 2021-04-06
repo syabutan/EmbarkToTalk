@@ -12,6 +12,7 @@ import {ModalController} from "@ionic/angular"
 import { NextSentenceService } from 'src/app/services/nextsentence.service';
 import { stringify } from '@angular/compiler/src/util';
 import { ThrowStmt } from '@angular/compiler';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 @Component({
   selector: 'app-japanese',
@@ -48,8 +49,8 @@ export class JapanesePage implements OnInit {
   voiceTextTrans = [];
   userArray = [];
 
-  langFrom = new FormControl('en');
-  langTo = new FormControl('es');
+  langFrom = new FormControl('ja');
+  langTo = new FormControl('en');
 
   private translateBtn: any;
 
@@ -108,39 +109,51 @@ export class JapanesePage implements OnInit {
   //   leftChild: '',
   //   rightChild: ''
   // }
+  nodeComp8: TreenodeComputer = {
+    name: ' 教会に行っている友達がいますが、そのことについてあまり話したことがありません。学んでみたいと思っていました。',
+    video: '27,34',
+    leftChild: '',
+    rightChild: ''
+  }
+  nodeComp7: TreenodeComputer = {
+    name: ' はい、聞いてみたいです。',
+    video: '24,26',
+    leftChild: '',
+    rightChild: ''
+  }
   nodeComp6: TreenodeComputer = {
     name: ' 素晴らしいですね。',
-    video: '',
+    video: '21,23',
     leftChild: '',
     rightChild: ''
   }
   nodeComp5: TreenodeComputer = {
     name: 'キリストについては学んだことないですね。',
-    video: '',
+    video: '17,20',
     leftChild: '',
     rightChild: ''
   }
   nodeComp4: TreenodeComputer = {
     name: ' 私ははやとです。お二人は何をしていますか？',
-    video: '',
+    video: '5,10',
     leftChild: '',
     rightChild: ''
   }
   nodeComp3: TreenodeComputer = {
     name: ' 私ははやとです。お二人は何をしていますか？',
-    video: '',
+    video: '5,10',
     leftChild: '',
     rightChild: ''
   }
   nodeComp2: TreenodeComputer = {
     name: 'そうなんですね。私はここに10年間住んでいます。何をしに引っ越してきたんですか？',
-    video: '',
-    leftChild: this.nodeComp6,
-    rightChild: this.nodeComp5
+    video: '10,17',
+    leftChild: this.nodeComp5,
+    rightChild: this.nodeComp6
   }
   nodeComp1: TreenodeComputer = {
     name: '元気です。お名前は何ですか？',
-    video: '',
+    video: '2,5',
     leftChild: this.nodeComp3,
     rightChild: this.nodeComp4
   }
@@ -207,43 +220,43 @@ export class JapanesePage implements OnInit {
     audio: ''
   }
   node6:Treenode = {
-    // name: '私たちはボランティアとして奉仕するために来ました。 ',
-    name: 'hey what up',
+    name: '私たちはボランティアとして奉仕するために来ました。 ',
+    //name: 'hey what up',
     leftChild: this.node13,
     rightChild: this.node14,
     audio: ''
   }
   node5:Treenode = {
-    // name: '私たちは宣教師で、イエスキリストについて教えています。',
-    name: 'hey how are you',
+    name: '私たちは宣教師で、イエスキリストについて教えています。',
+    //name: 'hey how are you',
     leftChild: this.node11,
     rightChild: this.node12,
     audio: ''
   }
   node4:Treenode = {
-    // name: ' 私は田中姉妹です。お名前は何ですか？',
-    name: 'hello what up',
+    name: ' 私は田中姉妹です。お名前は何ですか？',
+    //name: 'hello what up',
     leftChild: this.node5,
     rightChild: this.node6,
     audio: ''
   }
   node3:Treenode = {
-    // name: '私は山田長老です。お名前は何ですか？',
-    name: 'hello how are you',
+    name: '私は山田長老です。お名前は何ですか？',
+    // name: 'hello how are you',
     leftChild: this.node5,
     rightChild: this.node6,
     audio: ''
   }
   node2:Treenode = {
-    // name: 'はい元気です。私たちは最近この近くに引っ越してきました。地元の方ですか？',
-    name: 'hey',
+    name: 'はい元気です。私たちは最近この近くに引っ越してきました。地元の方ですか？',
+    // name: 'hey',
     leftChild: this.node5,
     rightChild: this.node6,
     audio: '../../assets/soundFile/Me llamo Benjamin Brown.mp3'
   }
   node1:Treenode = {
-    // name: 'はい元気です。元気ですか？',
-    name: 'hello',
+    name: 'はい元気です。元気ですか？',
+    // name: 'hello',
     leftChild: this.node3,
     rightChild: this.node4,
     audio: '../../assets/soundFile/Japanese/2 Im good, how are you.m4a'
@@ -344,11 +357,13 @@ export class JapanesePage implements OnInit {
       }
       else {this.score = this.checkSentence.checkPercent(this.choiceOne,this.voiceText);
         this.scoreLeft = this.checkSentence.checkPercent(this.choiceOne,this.voiceText);
+        this.score = this.scoreLeft;
       }
     }
     else if (this.choiceTwo !== ''){
       this.scoreRight = this.checkSentence.checkPercent(this.choiceTwo,this.voiceText);
       this.checkSentence.checkPercent(this.choiceTwo,this.voiceText);
+      this.score = this.scoreRight;
     }
 
     // this.score = this.checkSentence.checkPercent(this.,this.voiceText);
@@ -358,11 +373,13 @@ export class JapanesePage implements OnInit {
       this.choiceOne = this.parentNode.leftChild.name;
       this.choiceTwo = this.parentNode.rightChild.name;
       this.computerSentence = this.parentNodeComp.name;
+
       // this.videoCount +=1;
       // this.sentenceCounter+=1;
 
       // this.userVoiceText = [];
       // this.recordAudio.clearText();
+      this.videoUrl = this.videoBase + this.parentNodeComp.video;
       // this.videoUrl = this.videoBase + this.videoTimeJapanese[this.videoCount];
       // this.computerSentence = this.computerSentenceArrayTwo[this.sentenceCounter];
       // this.choiceOne = this.userChoiceOneArray[this.sentenceCounter];
@@ -371,6 +388,7 @@ export class JapanesePage implements OnInit {
     //   audio.src = this.practiceParagraphNeighborAudio[this.sentenceCounter -1];
     // audio.load();
     // audio.play();
+    
     }
     else if(this.scoreRight > .8){
       this.parentNodeComp = this.parentNodeComp.rightChild;
@@ -378,8 +396,12 @@ export class JapanesePage implements OnInit {
       this.choiceOne = this.parentNode.leftChild.name;
       this.choiceTwo = this.parentNode.rightChild.name;
       this.computerSentence = this.parentNodeComp.name;
+
+      this.videoUrl = this.videoBase + this.parentNodeComp.video;
       //this.guideSentence = 'Try again :)'
     }
+
+    console.log(this.checkSentence.checkPercent('私たちはボランティアとして奉仕するために来ました。', '私たちはボランティアとして奉仕するために来ました'));
   }
 
   onListenToSentence(num: number){
