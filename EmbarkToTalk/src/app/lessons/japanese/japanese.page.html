@@ -47,12 +47,21 @@
         <div class="faceiconright">
           <img [src] = "userImage"/>
         </div>
-          <div *ngIf = "!choiceUserTrans">
-            <div *ngFor = "let voice of userVoiceText" class="mycommentmargin" (click) = "send('userText')">
+          <!-- <div *ngIf = "!choiceUserTrans">
+            <div *ngFor = "let voice of userArray" class="mycommentmargin" (click) = "send('userText'); send(voice)">
+              <ion-icon name="language-outline" style= "float:left" (click) = "send('choiceOne')"></ion-icon>
               <p>{{voice}}</p>
           </div>
           </div>
-            <div *ngFor = "let voice of voiceTextTrans" class="mycommentmargin" (click) = "send('userText')">
+          
+          <div *ngIf = "choiceUserTrans">
+            <div *ngFor = "let voice of voiceTextTrans" class="mycommentmargin" (click) = "send('userText'); send(voice)">
+              <ion-icon name="language-outline" style= "float:left" (click) = "send('choiceOne')"></ion-icon>
+              <p>{{voice}}</p>
+          </div>
+        </div> -->
+            <div *ngFor = "let voice of userArray; let i=index" class="mycommentmargin">
+              <ion-icon name="language-outline" style= "float:left" (click) = "setUserArray(voice, i)"></ion-icon>
               <p>{{voice}}</p>
           </div>
         </div>
@@ -166,7 +175,7 @@
         </ng-template>
       </ng-container>
       <ng-template #failure>
-        <span style="margin-left:10px">Didn't catch that</span>
+        <span style="margin-left:10px"></span>
           <!-- <ion-button color="danger" type="button" (click)="onCloseVoiceRecognition()">Close</ion-button>
           <ion-button color="success" type="button" (click)="onStartVoiceRecognition()">Restart</ion-button> -->
           <ion-button color="danger" (click) = "onStartVoiceRecognition()">

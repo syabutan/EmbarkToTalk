@@ -74,7 +74,7 @@ export class RecordAudio{
 				annyang.abort();
 			}
 		});
-
+    
 		annyang.addCallback('result', (userSaid) => {
 			this.ngZone.run(() => this.voiceActiveSectionError = false, this.voiceActiveSectionErrorChanged.emit(this.voiceActiveSectionError));
       this.userVoiceRec = userSaid[0];
