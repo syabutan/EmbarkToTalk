@@ -9,6 +9,7 @@ import { GoogletranslateService } from '../../services/googletranslate.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import {ModalController} from "@ionic/angular"
 import { NextSentenceService } from 'src/app/services/nextsentence.service';
+import { stringify } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-japanese',
@@ -83,8 +84,6 @@ export class JapanesePage implements OnInit {
     this.choiceOne = this.userChoiceOneArray[this.sentenceCounter];
   }
 
-
-
   ngOnInit() {
     this.solution.getSolution().subscribe(res => this.data = res);
     this.translateBtn = document.getElementById('translatebtn');
@@ -114,7 +113,7 @@ export class JapanesePage implements OnInit {
     );
 
     this.recordAudio.voiceTextChanged.subscribe(
-      (change: any) => {this.voiceText = change; this.onCheck(); this.send("hello");}
+      (change: any) => {this.voiceText = change; this.onCheck(); this.voiceTextTrans.push(this.send(change)); console.log(change,1); console.log(this.voiceTextTrans)}
     );
     
     this.voiceActiveSectionDisabled = this.recordAudio.voiceActiveSectionDisabled;
@@ -211,7 +210,7 @@ export class JapanesePage implements OnInit {
     if(this.voiceText === undefined){
       this.voiceText = '';
     }
-    else{
+    if(paragraphSel !== 'userText' && paragraphSel !== 'choiceOne'&& paragraphSel !== '' && paragraphSel !== 'computerText'&& paragraphSel !== 'choiceTwo'){
       this.inputString = paragraphSel;
     }
     console.log(this.choiceOne,this.choiceTwo,this.voiceText,this.computerSentence);
@@ -238,6 +237,7 @@ export class JapanesePage implements OnInit {
         console.log(err);
       }
     );
+    return this.data.inputString;
   }
 
   //Changes if it is using L1 or L2
