@@ -72,6 +72,7 @@
   <ion-card>
     <ion-card-content *ngIf = "!choiceOneTran else choiceone">
       <ion-icon name="language-outline" style= "float:right" (click) = "send('choiceOne')"></ion-icon>
+      <ion-icon name="play-outline" style="float:right" (click) = "onListenToSentence(1)"></ion-icon>
       {{choiceOne}}
     </ion-card-content>
   </ion-card>
@@ -79,6 +80,7 @@
   <ng-template #choiceone>
     <ion-card-content>
       <ion-icon name="language-outline" style= "float:right" (click) = "send('choiceOne')"></ion-icon>
+      <ion-icon name="play-outline" style="float:right" (click) = "onListenToSentence(1)"></ion-icon>
       {{data.firstChoice}}
     </ion-card-content>
   </ng-template>
@@ -86,6 +88,7 @@
   <ion-card *ngIf = "choiceTwo !== ''">
     <ion-card-content *ngIf = "!choiceTwoTrans; else choicetwo">
       <ion-icon name="language-outline" style= "float:right" (click) = "send('choiceTwo')"></ion-icon>
+      <ion-icon name="play-outline" style="float:right" (click) = "onListenToSentence(2)"></ion-icon>
       {{choiceTwo}}
     </ion-card-content>
   </ion-card>
@@ -93,6 +96,7 @@
   <ng-template #choicetwo>
     <ion-card-content>
       <ion-icon name="language-outline" style= "float:right" (click) = "send('choiceTwo')"></ion-icon>
+      <ion-icon name="play-outline" style="float:right" (click) = "onListenToSentence(2)"></ion-icon>
       {{data.secondChoice}}
     </ion-card-content>
   </ng-template>

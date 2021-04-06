@@ -155,90 +155,106 @@ export class JapanesePage implements OnInit {
   emptyNode: Treenode = {
     name: '',
     leftChild: '',
-    rightChild: ''
+    rightChild: '',
+    audio: ''
     }
   node14:Treenode = {
     name: '',
     leftChild: this.emptyNode,
-    rightChild: this.emptyNode
+    rightChild: this.emptyNode,
+    audio: ''
   }
   node13:Treenode = {
     name: '',
     leftChild: this.emptyNode,
-    rightChild: this.emptyNode
+    rightChild: this.emptyNode,
+    audio: ''
   }
   node12:Treenode = {
     name: '',
     leftChild: this.emptyNode,
-    rightChild: this.emptyNode
+    rightChild: this.emptyNode,
+    audio: ''
   }
   node11:Treenode = {
     name: '',
     leftChild: this.emptyNode,
-    rightChild: this.emptyNode
+    rightChild: this.emptyNode,
+    audio: ''
   }
   node10:Treenode = {
     name: '',
     leftChild: this.emptyNode,
-    rightChild: this.emptyNode
+    rightChild: this.emptyNode,
+    audio: ''
   }
   node9:Treenode = {
     name: '',
     leftChild: this.emptyNode,
-    rightChild: this.emptyNode
+    rightChild: this.emptyNode,
+    audio: ''
   }
   node8:Treenode = {
     name: '',
     leftChild: this.emptyNode,
-    rightChild: this.emptyNode
+    rightChild: this.emptyNode,
+    audio: ''
   }
   node7:Treenode = {
     name: '',
     leftChild: this.emptyNode,
-    rightChild: this.emptyNode
+    rightChild: this.emptyNode,
+    audio: ''
   }
   node6:Treenode = {
     // name: '私たちはボランティアとして奉仕するために来ました。 ',
     name: 'hey what up',
     leftChild: this.node13,
-    rightChild: this.node14
+    rightChild: this.node14,
+    audio: ''
   }
   node5:Treenode = {
     // name: '私たちは宣教師で、イエスキリストについて教えています。',
     name: 'hey how are you',
     leftChild: this.node11,
-    rightChild: this.node12
+    rightChild: this.node12,
+    audio: ''
   }
   node4:Treenode = {
     // name: ' 私は田中姉妹です。お名前は何ですか？',
     name: 'hello what up',
     leftChild: this.node5,
-    rightChild: this.node6
+    rightChild: this.node6,
+    audio: ''
   }
   node3:Treenode = {
     // name: '私は山田長老です。お名前は何ですか？',
     name: 'hello how are you',
     leftChild: this.node5,
-    rightChild: this.node6
+    rightChild: this.node6,
+    audio: ''
   }
   node2:Treenode = {
     // name: 'はい元気です。私たちは最近この近くに引っ越してきました。地元の方ですか？',
     name: 'hey',
     leftChild: this.node5,
-    rightChild: this.node6
+    rightChild: this.node6,
+    audio: '../../assets/soundFile/Me llamo Benjamin Brown.mp3'
   }
   node1:Treenode = {
     // name: 'はい元気です。元気ですか？',
     name: 'hello',
     leftChild: this.node3,
-    rightChild: this.node4
+    rightChild: this.node4,
+    audio: '../../assets/soundFile/Japanese/2 Im good, how are you.m4a'
   }
 
   //we are going to start at node1
   parentNode:Treenode = {
     name: '',
     leftChild: this.node1,
-    rightChild: this.node2
+    rightChild: this.node2,
+    audio: ''
   }
 
   cpImage ="../../../assets/icon/face1.PNG"
@@ -366,11 +382,20 @@ export class JapanesePage implements OnInit {
     }
   }
 
-  onListenToSentence(){
-    let audio = new Audio();
-    //audio.src = this.practiceParagraphBrownAudio[this.sentenceCounter];
-    audio.load();
-    audio.play();
+  onListenToSentence(num: number){
+    //1 is left, two is right
+    if(num === 1){
+      let audio = new Audio();
+      audio.src = this.parentNode.leftChild.audio;
+      audio.load();
+      audio.play();
+    }
+    else if(num === 2){
+      let audio = new Audio();
+      audio.src = this.parentNode.rightChild.audio;
+      audio.load();
+      audio.play();
+    }
   }
 
   onListenAgain(){
@@ -379,6 +404,7 @@ export class JapanesePage implements OnInit {
     audio.load();
     audio.play();
   }
+
 
   setUserArray(check: string, num: number){
     if(check === this.userVoiceText[num]){
