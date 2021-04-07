@@ -83,7 +83,8 @@ export class JapanesePage implements OnInit {
     name: '',
     video: '',
     leftChild: '',
-    rightChild: ''
+    rightChild: '',
+    audio: ''
   }
   // nodeComp4: TreenodeComputer = {
   //   name: ' 私ははやとです。お二人は何をしていますか？',
@@ -113,56 +114,64 @@ export class JapanesePage implements OnInit {
     name: ' 教会に行っている友達がいますが、そのことについてあまり話したことがありません。学んでみたいと思っていました。',
     video: '27,34',
     leftChild: '',
-    rightChild: ''
+    rightChild: '',
+    audio: ''
   }
   nodeComp7: TreenodeComputer = {
     name: ' はい、聞いてみたいです。',
     video: '24,26',
     leftChild: '',
-    rightChild: ''
+    rightChild: '',
+    audio: ''
   }
   nodeComp6: TreenodeComputer = {
     name: ' 素晴らしいですね。',
     video: '21,23',
     leftChild: '',
-    rightChild: ''
+    rightChild: '',
+    audio: ''
   }
   nodeComp5: TreenodeComputer = {
     name: 'キリストについては学んだことないですね。',
     video: '17,20',
     leftChild: '',
-    rightChild: ''
+    rightChild: '',
+    audio: ''
   }
   nodeComp4: TreenodeComputer = {
     name: ' 私ははやとです。お二人は何をしていますか？',
     video: '5,10',
     leftChild: '',
-    rightChild: ''
+    rightChild: '',
+    audio: ''
   }
   nodeComp3: TreenodeComputer = {
     name: ' 私ははやとです。お二人は何をしていますか？',
     video: '5,10',
     leftChild: '',
-    rightChild: ''
+    rightChild: '',
+    audio: ''
   }
   nodeComp2: TreenodeComputer = {
     name: 'そうなんですね。私はここに10年間住んでいます。何をしに引っ越してきたんですか？',
     video: '10,17',
     leftChild: this.nodeComp5,
-    rightChild: this.nodeComp6
+    rightChild: this.nodeComp6,
+    audio: ''
   }
   nodeComp1: TreenodeComputer = {
     name: '元気です。お名前は何ですか？',
     video: '2,5',
     leftChild: this.nodeComp3,
-    rightChild: this.nodeComp4
+    rightChild: this.nodeComp4,
+    audio: ''
   }
-
   parentNodeComp: TreenodeComputer = {
     name: 'こんにちは。元気ですか？',
     video: '0,2',
     leftChild: this.nodeComp1,
-    rightChild: this.nodeComp2
+    rightChild: this.nodeComp2,
+    audio: '../../assets/soundFile/Japanese/1 Hello! How are you.m4a'
   }
   //Setting up user tree
   emptyNode: Treenode = {
@@ -238,21 +247,21 @@ export class JapanesePage implements OnInit {
     //name: 'hello what up',
     leftChild: this.node5,
     rightChild: this.node6,
-    audio: ''
+    audio: '../../assets/soundFile/Japanese/5 My name is Sister Tanaka.m4a'
   }
   node3:Treenode = {
     name: '私は山田長老です。お名前は何ですか？',
     // name: 'hello how are you',
     leftChild: this.node5,
     rightChild: this.node6,
-    audio: ''
+    audio: '../../assets/soundFile/Japanese/4 My name is Elder Yamada.m4a'
   }
   node2:Treenode = {
     name: 'はい元気です。私たちは最近この近くに引っ越してきました。地元の方ですか？',
     // name: 'hey',
     leftChild: this.node5,
     rightChild: this.node6,
-    audio: '../../assets/soundFile/Me llamo Benjamin Brown.mp3'
+    audio: '../../assets/soundFile/Japanese/17 Im good. Im new here.m4a'
   }
   node1:Treenode = {
     name: 'はい元気です。元気ですか？',
@@ -379,21 +388,7 @@ export class JapanesePage implements OnInit {
       this.choiceOne = this.parentNode.leftChild.name;
       this.choiceTwo = this.parentNode.rightChild.name;
       this.computerSentence = this.parentNodeComp.name;
-
-      // this.videoCount +=1;
-      // this.sentenceCounter+=1;
-
-      // this.userVoiceText = [];
-      // this.recordAudio.clearText();
       this.videoUrl = this.videoBase + this.parentNodeComp.video;
-      // this.videoUrl = this.videoBase + this.videoTimeJapanese[this.videoCount];
-      // this.computerSentence = this.computerSentenceArrayTwo[this.sentenceCounter];
-      // this.choiceOne = this.userChoiceOneArray[this.sentenceCounter];
-      // this.choiceTwo = this.userChoiceOneArray[this.sentenceCounter+1];
-    //   let audio = new Audio();
-    //   audio.src = this.practiceParagraphNeighborAudio[this.sentenceCounter -1];
-    // audio.load();
-    // audio.play();
     
     }
     else if(this.scoreRight > .8){
@@ -424,6 +419,18 @@ export class JapanesePage implements OnInit {
       audio.load();
       audio.play();
     }
+    else if(num === 3){
+      let audio = new Audio();
+      audio.src = this.parentNodeComp.audio;
+      audio.load();
+      audio.play();
+    }
+  }
+
+  //Replay video -- not working because the source remains the same
+  onReplayVideo(){
+    this.videoUrl = this.videoBase + this.parentNodeComp.video;
+    console.log(this.videoUrl)
   }
 
   onListenAgain(){
