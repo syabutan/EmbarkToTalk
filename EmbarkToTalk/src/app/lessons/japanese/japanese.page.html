@@ -9,8 +9,9 @@
       </ion-buttons>
     </ion-row>
     <ion-row>
-      <video [src]="videoUrl" type="video/mp4" width="100%" controls autoplay playsinline webkit-playsinline>
+      <video [src]="videoUrl" type="video/mp4" width="100%" autoplay playsinline webkit-playsinline>
       </video>
+      <!-- <ion-icon name="repeat-outline" (click) = "onReplayVideo()"></ion-icon> -->
     </ion-row>
 
   </ion-toolbar>
@@ -32,10 +33,12 @@
       <div class="chatting">
         <div *ngIf = "!choiceComputerTrans" class="says">
           <ion-icon name="language-outline" style= "float:right; color: gray" (click) = "send('computerText')"></ion-icon>
+          <ion-icon name="play-outline" style="float:right" (click) = "onListenToSentence(3)"></ion-icon>
           <p>{{computerSentence}}</p>
         </div>
         <div *ngIf = "choiceComputerTrans" class="says">
           <ion-icon name="language-outline" style= "float:right; color:gray" (click) = "send('computerText')"></ion-icon>
+          <ion-icon name="play-outline" style="float:right" (click) = "onListenToSentence(3)"></ion-icon>
           <p>{{data.computerText}}</p>
         </div>
       </div>

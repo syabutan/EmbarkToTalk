@@ -11,4 +11,5 @@ export interface TreenodeComputer{
     video: string;
     leftChild: any;
     rightChild: any;
+    audio: any;
 }
