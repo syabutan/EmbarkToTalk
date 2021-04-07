@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, ɵgetDebugNodeR2 } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { CheckSentence } from '../../services/checksentence.service';
 import { RecordAudio } from 'src/app/services/recordaudio.service';
 import {FormControl, Form} from '@angular/forms';
@@ -29,8 +29,8 @@ export class JapanesePage implements OnInit {
 	voiceText: any = '';
   voiceTextReady: boolean = false;
   inputString = '';
-
-
+  userVoice: any = '';
+  userVoiceArray = [];
   
   sentenceCounter = 0; 
 
@@ -318,6 +318,12 @@ export class JapanesePage implements OnInit {
     this.recordAudio.voiceTextChanged.subscribe(
       (change: any) => {this.voiceText = change; if(change !== undefined){this.userArray.push(change)}; this.onCheck(); if(change !== undefined){this.send(change)};}
     );
+
+    this.recordAudio.userAudioChanged.subscribe(
+      (change: any) => {this.userVoice = change; 
+        this.userVoiceArray.push(change);}
+    );
+
     
     this.voiceActiveSectionDisabled = this.recordAudio.voiceActiveSectionDisabled;
   	this.voiceActiveSectionError = this.recordAudio.voiceActiveSectionError;
@@ -427,6 +433,13 @@ export class JapanesePage implements OnInit {
     audio.play();
   }
 
+  playUserAudio(num: number){
+      console.log(num);
+      let audio = new Audio();
+      audio.src = this.userVoiceArray[num];
+      audio.load();
+      audio.play();
+  }
 
   setUserArray(check: string, num: number){
     if(check === this.userVoiceText[num]){

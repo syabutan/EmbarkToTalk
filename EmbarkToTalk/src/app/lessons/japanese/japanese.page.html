@@ -62,6 +62,7 @@
         </div> -->
             <div *ngFor = "let voice of userArray; let i=index" class="mycommentmargin">
               <ion-icon name="language-outline" style= "float:left" (click) = "setUserArray(voice, i)"></ion-icon>
+              <ion-icon name="play-outline" style="float:left" (click) = "playUserAudio(i)"></ion-icon>
               <p>{{voice}}</p>
           </div>
         </div>

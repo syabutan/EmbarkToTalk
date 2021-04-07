@@ -4,6 +4,7 @@ import {NgZone} from '@angular/core';
 import { Injectable } from '@angular/core';
 import {FormControl} from '@angular/forms'
 import {Observable, range, Subject} from 'rxjs';
+import { NgAudioRecorderService, OutputFormat } from 'ng-audio-recorder';
 
 declare const annyang: any;
 
@@ -22,6 +23,7 @@ export class RecordAudio{
   voiceTextReady: boolean = false;
   public voiceTextReadyObs = new Observable<boolean>();
   language: string = 'en';
+  userAudio: any;
 
 	userVoiceRecChanged = new EventEmitter<any>();
 	userVoiceTextChanged = new EventEmitter<any[]>();
@@ -32,11 +34,11 @@ export class RecordAudio{
 	voiceActiveSectionListeningChanged = new EventEmitter<boolean>();
 	voiceTextChanged = new EventEmitter<any>();
   voiceTextReadyChanged = new EventEmitter<boolean>();
-  
+  userAudioChanged = new EventEmitter<any>();
 
 	langFrom = new FormControl('en');
 
-  constructor(private checkSentence: CheckSentence, private ngZone: NgZone){}
+  constructor(private audioRecorderService: NgAudioRecorderService, private checkSentence: CheckSentence, private ngZone: NgZone){}
   //Trying to get the service to talk to component 
 
   private sentenceReady = new Subject<any>();
@@ -63,7 +65,7 @@ export class RecordAudio{
 		});
 
 		annyang.addCallback('soundstart', (res) => {
-      this.ngZone.run(() => this.voiceActiveSectionListening = true, this.voiceActiveSectionListeningChanged.emit(this.voiceActiveSectionListening));
+      this.ngZone.run(() => {this.voiceActiveSectionListening = true; this.voiceActiveSectionListeningChanged.emit(this.voiceActiveSectionListening)});
 		});
 
 		annyang.addCallback('end', () => {
@@ -74,15 +76,19 @@ export class RecordAudio{
 				annyang.abort();
 			}
 		});
-    
+
 		annyang.addCallback('result', (userSaid) => {
 			this.ngZone.run(() => this.voiceActiveSectionError = false, this.voiceActiveSectionErrorChanged.emit(this.voiceActiveSectionError));
       this.userVoiceRec = userSaid[0];
       this.userVoiceRecChanged.emit(this.userVoiceRec);
 			let queryText: any = userSaid[0];
-
 			annyang.abort();
 
+      this.audioRecorderService.stopRecording(OutputFormat.WEBM_BLOB_URL).then((output) => {
+        console.log(output);
+        this.userAudio = output;
+        this.userAudioChanged.emit(this.userAudio);
+      });
 
       this.voiceText = queryText;
       this.voiceTextChanged.emit(this.voiceText);
@@ -114,7 +120,7 @@ export class RecordAudio{
 		this.voiceActiveSectionSuccess = false;
         this.voiceText = undefined;
         this.voiceTextReady = false;
-
+        this.audioRecorderService.startRecording(); 
         this.voiceActiveSectionDisabledChanged.emit(this.voiceActiveSectionDisabled);
         this.voiceActiveSectionErrorChanged.emit(this.voiceActiveSectionError);
         this.voiceActiveSectionSuccessChanged.emit(this.voiceActiveSectionSuccess);
