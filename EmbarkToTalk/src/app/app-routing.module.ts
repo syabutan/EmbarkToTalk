@@ -4,7 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'talk',
     pathMatch: 'full'
   },
 
@@ -20,7 +20,8 @@ const routes: Routes = [
   {
     path: 'talk',
     loadChildren: () => import('./talk/talk.module').then( m => m.TalkPageModule)
-  },  {
+  },
+  {
     path: 'japanese',
     loadChildren: () => import('./lessons/japanese/japanese.module').then( m => m.JapanesePageModule)
   },

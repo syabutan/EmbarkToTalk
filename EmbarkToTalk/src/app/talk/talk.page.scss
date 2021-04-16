@@ -1,8 +1,6 @@
 ion-icon {
-  font-size: 50px;
+  font-size: 20px;
 }
-
-
 
 /*background */
 .line-bc {
@@ -31,12 +29,7 @@ ion-icon {
 .balloon6 .faceiconright {
   float: right;
   margin-left: -50px;
-
-}
-
-.faceiconright {
-  float: right;
-  margin-left: -50px;
+  width: 40px;
 }
 
 .balloon6 .faceicon img{
@@ -91,7 +84,7 @@ ion-icon {
 }
 .mycommentmargin{
   margin-top:5px;
-  margin-right: 50px;
+  margin-right: 42px;
 }
 .mycomment p {
   display: inline-block;
@@ -115,6 +108,8 @@ ion-icon {
   transform: rotate(-35deg);
 }
 
+
+//loading bar
 .ldBar {
   position: relative;
 }
@@ -134,16 +129,14 @@ ion-icon {
   content: "";
 }
 
-ion-avatar {
-  width: 13%;
-  height: 13%;
+ion-footer {
+  text-align: center;
+  bottom: 0;
+  width: 100%;
+  position: fixed;
 }
 
-ion-buttons:hover {
-  background-color:lightgray;
-  border-color:lightgray;
+ion-icon-footer {
+  font-size: 40px;
 }
 
-ion-button {
-  border-color:lightgray;
-}
