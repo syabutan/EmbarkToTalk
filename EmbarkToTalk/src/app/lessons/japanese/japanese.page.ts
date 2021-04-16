@@ -10,9 +10,6 @@ import { GoogletranslateService } from '../../services/googletranslate.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import {ModalController} from "@ionic/angular"
 import { NextSentenceService } from 'src/app/services/nextsentence.service';
-import { stringify } from '@angular/compiler/src/util';
-import { ThrowStmt } from '@angular/compiler';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 @Component({
   selector: 'app-japanese',
@@ -49,15 +46,14 @@ export class JapanesePage implements OnInit {
   voiceTextTrans = [];
   userArray = [];
 
-  langFrom = new FormControl('ja');
-  langTo = new FormControl('en');
+  langFrom = new FormControl('en');
+  langTo = new FormControl('es');
 
   private translateBtn: any;
 
   scoreLeft: number = 0;
   scoreRight: number = 0;
   score: number = 0;
-
 
   //Japanese tree
   userChoiceOneArray = ['はい元気です。元気ですか？', '私は山田長老です。お名前は何ですか？','私は田中姉妹です。お名前は何ですか？','私たちは宣教師で、イエスキリストについて教えています。','私たちはボランティアとして奉仕するために来ました。'];
@@ -230,21 +226,21 @@ export class JapanesePage implements OnInit {
   }
   node6:Treenode = {
     name: '私たちはボランティアとして奉仕するために来ました。 ',
-    //name: 'hey what up',
+    // name: 'hey what up',
     leftChild: this.node13,
     rightChild: this.node14,
     audio: ''
   }
   node5:Treenode = {
     name: '私たちは宣教師で、イエスキリストについて教えています。',
-    //name: 'hey how are you',
+    // name: 'hey how are you',
     leftChild: this.node11,
     rightChild: this.node12,
     audio: ''
   }
   node4:Treenode = {
     name: ' 私は田中姉妹です。お名前は何ですか？',
-    //name: 'hello what up',
+    // name: 'hello what up',
     leftChild: this.node5,
     rightChild: this.node6,
     audio: '../../assets/soundFile/Japanese/5 My name is Sister Tanaka.m4a'
