@@ -49,7 +49,7 @@ ion-icon {
   }
   .balloon6 .chattingright {
     width: 100%;
-    text-align: right;
+    text-align: left;
     margin-left: -50px;
   }
   .says {
@@ -95,13 +95,15 @@ ion-icon {
   .mycommentmargin{
     margin-top:5px;
     margin-right: 42px;
+    
   }
   .mycomment p {
+    text-align: left;
     display: inline-block;
     position: relative;
     margin: 0 10px 0 0;
     padding: 8px;
-    max-width: 250px;
+    max-width: 235px;
     border-radius: 12px;
     background: #ffffff;
     font-size: 15px;
@@ -150,6 +152,6 @@ ion-icon-footer {
     font-size: 40px;
 }
 
-.hide {
-  display: none;
+.background-image{
+    --background: url(../../../assets/icon/embarkbackground.png) 0 0/100% 100% no-repeat;
 }

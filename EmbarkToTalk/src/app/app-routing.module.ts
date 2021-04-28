@@ -33,8 +33,14 @@ const routes: Routes = [
     path: 'spanish',
     loadChildren: () => import('./lessons/spanish/spanish.module').then( m => m.SpanishPageModule)
   },
+  {
+    path: 'shadowread',
+    loadChildren: () => import('./lessons/shadowread/shadowread.module').then( m => m.ShadowreadPageModule)
+  },
 
 ];
+
+
 
 @NgModule({
   imports: [
