@@ -77,6 +77,16 @@ ion-icon {
     margin: 0;
     padding: 0;
   }
+
+  .ion-button changecolor{
+    margin: 100px;
+    background-color: rgb(240, 87, 87);
+  }
+
+  .changecolor{
+    margin: 100px;
+    background-color: rgb(240, 87, 87);
+  }
   
   /*Your comment*/
   .mycomment {
@@ -140,3 +150,6 @@ ion-icon-footer {
     font-size: 40px;
 }
 
+.hide {
+  display: none;
+}

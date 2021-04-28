@@ -20,7 +20,8 @@ const routes: Routes = [
   {
     path: 'talk',
     loadChildren: () => import('./talk/talk.module').then( m => m.TalkPageModule)
-  },  {
+  },
+  {
     path: 'japanese',
     loadChildren: () => import('./lessons/japanese/japanese.module').then( m => m.JapanesePageModule)
   },
@@ -31,6 +32,10 @@ const routes: Routes = [
   {
     path: 'spanish',
     loadChildren: () => import('./lessons/spanish/spanish.module').then( m => m.SpanishPageModule)
+  },
+  {
+    path: 'shadowread',
+    loadChildren: () => import('./lessons/shadowread/shadowread.module').then( m => m.ShadowreadPageModule)
   },
 
 ];

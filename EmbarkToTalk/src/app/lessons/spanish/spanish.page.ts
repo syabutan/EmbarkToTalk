@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { CheckSentence } from '../../services/checksentence.service';
 import { RecordAudio } from 'src/app/services/recordaudio.service';
 import {FormControl, Form} from '@angular/forms';
@@ -8,7 +8,7 @@ import { SolutionService } from '../../services/solution.service';
 import { GoogletranslateService } from '../../services/googletranslate.service';
 // import { ElementRef, NgZone, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import {ModalController} from "@ionic/angular"
+import {AnimationController, ModalController, Animation} from "@ionic/angular"
 import { NextSentenceService } from 'src/app/services/nextsentence.service';
 
 @Component({
@@ -17,6 +17,8 @@ import { NextSentenceService } from 'src/app/services/nextsentence.service';
   styleUrls: ['./spanish.page.scss'],
 })
 export class SpanishPage implements OnInit {
+
+
   //To record voice 
   userVoiceText = [];
   voiceActiveSectionDisabled: boolean = true;
@@ -754,7 +756,8 @@ export class SpanishPage implements OnInit {
   choiceOne: string = '';
   choiceTwo: string = '';
 
-  constructor(private nextSentence: NextSentenceService, private modalCtrl: ModalController, private google: GoogletranslateService , private solution: SolutionService, private recordAudio: RecordAudio, private checkSentence: CheckSentence) {
+  constructor(private animationCtrl: AnimationController, private nextSentence: NextSentenceService, private modalCtrl: ModalController, private google: GoogletranslateService , private solution: SolutionService, private recordAudio: RecordAudio, private checkSentence: CheckSentence) {
+    
     this.videoUrl = this.videoBase + 6;
 
     this.showAccuracy = true;
@@ -762,6 +765,33 @@ export class SpanishPage implements OnInit {
     this.computerSentence = this.parentNode.name;
     this.choiceOne = this.parentNode.leftChild.name;
     this.choiceTwo = this.parentNode.rightChild.name;
+  }
+  @ViewChild('changeColor', {read: ElementRef}) changeColor: ElementRef;
+  // this.animation = this.animationCtrl.create()
+  //     .addElement(document.querySelector('.changecolor'))
+  //     .duration(1000)
+  //     .fromTo('opacity', '1', '0.5');
+  
+  startLoad(){
+    const animation = this.animationCtrl.create('change-color')
+      .addElement(this.changeColor.nativeElement)
+      .duration(3000)
+      .iterations(Infinity)
+      .keyframes([
+        {offset: 0, opacity: '1'
+      },{
+        offset: .25, opacity: '.75'
+      }, {
+        offset: .5, opacity: '.5'
+      },
+      {
+        offset: .75, opacity: '.75'
+      },
+      {
+        offset: 1, opacity: '1'
+      }
+      ]);
+      animation.play();
   }
 
   ngOnInit() {

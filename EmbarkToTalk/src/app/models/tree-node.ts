@@ -13,3 +13,9 @@ export interface TreenodeComputer{
     rightChild: any;
     audio: any;
 }
+
+export interface OnePath {
+  name: string;
+  next: any;
+  audio: any;
+}
