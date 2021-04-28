@@ -33,14 +33,18 @@ ion-icon {
 }
 
 .balloon6 .faceicon img{
-  width: 100%;
-  height: auto;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
+  background-position: center center;
+  // background-size:cover;
 }
 .balloon6 .faceiconright img{
-  width: 100%;
-  height: auto;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
+  background-position: center center;
+  // background-size:cover;
 }
 
 .balloon6 .chatting {
@@ -93,7 +97,7 @@ ion-icon {
   padding: 8px;
   max-width: 250px;
   border-radius: 12px;
-  background: #ffffff;
+  background: #b1eba9;
   font-size: 15px;
 }
 
@@ -103,7 +107,7 @@ ion-icon {
   top: 3px;
   right: -19px;
   border: 8px solid transparent;
-  border-left: 18px solid #ffffff;
+  border-left: 18px solid #b1eba9;
   -webkit-transform: rotate(-35deg);
   transform: rotate(-35deg);
 }
@@ -140,3 +144,8 @@ ion-icon-footer {
   font-size: 40px;
 }
 
+.item-text-center
+{
+  display: block;
+  margin: 0 0 0 auto;
+}

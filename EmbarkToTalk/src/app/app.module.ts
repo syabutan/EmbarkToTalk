@@ -23,6 +23,7 @@ import { NgAudioRecorderModule} from 'ng-audio-recorder';
     BrowserModule, 
     IonicModule.forRoot(), 
     AppRoutingModule,
+    NgAudioRecorderModule,
     NgCircleProgressModule.forRoot({
       // set defaults here
       radius: 100,
@@ -31,8 +32,7 @@ import { NgAudioRecorderModule} from 'ng-audio-recorder';
       outerStrokeColor: "#78C000",
       innerStrokeColor: "#C7E596",
       animationDuration: 300
-    }),
-    NgAudioRecorderModule
+    })
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

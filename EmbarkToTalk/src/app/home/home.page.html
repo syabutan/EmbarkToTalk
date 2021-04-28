@@ -13,13 +13,13 @@
       <ion-item>
     <ion-label >Translate From</ion-label>
     <ion-select formControlName="langFrom" cancelText="Cancel" okText="OK">
-      <ion-select-option *ngFor="let lang of langs" [value]="langs.value">{{ lang.name }}</ion-select-option>
+      <ion-select-option *ngFor="let lang of langs" [value]="lang.value">{{ lang.name }}</ion-select-option>
     </ion-select>
   </ion-item>
   <ion-item>
     <ion-label>Translate To</ion-label>
     <ion-select formControlName="langTo" cancelText="Cancel" okText="OK">
-      <ion-select-option *ngFor="let lang of langs" [value]="langs.value">{{ lang.name }}</ion-select-option>
+      <ion-select-option *ngFor="let lang of langs" [value]="lang.value">{{ lang.name }}</ion-select-option>
     </ion-select>
   </ion-item>
 
@@ -30,6 +30,7 @@
         type="submit"
         fill="outline" 
         [routerLink]="['/talk']"
+        click="getLangInfo"
         >
         start
       </ion-button>

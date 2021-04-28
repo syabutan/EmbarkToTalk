@@ -118,14 +118,14 @@ export class RecordAudio{
     this.voiceActiveSectionDisabled = false;
 		this.voiceActiveSectionError = false;
 		this.voiceActiveSectionSuccess = false;
-        this.voiceText = undefined;
-        this.voiceTextReady = false;
-        this.audioRecorderService.startRecording(); 
-        this.voiceActiveSectionDisabledChanged.emit(this.voiceActiveSectionDisabled);
-        this.voiceActiveSectionErrorChanged.emit(this.voiceActiveSectionError);
-        this.voiceActiveSectionSuccessChanged.emit(this.voiceActiveSectionSuccess);
-        this.voiceTextChanged.emit(this.voiceText);
-        this.voiceTextReadyChanged.emit(this.voiceTextReady);        
+    this.voiceText = undefined;
+    this.voiceTextReady = false;
+    this.audioRecorderService.startRecording(); 
+    this.voiceActiveSectionDisabledChanged.emit(this.voiceActiveSectionDisabled);
+    this.voiceActiveSectionErrorChanged.emit(this.voiceActiveSectionError);
+    this.voiceActiveSectionSuccessChanged.emit(this.voiceActiveSectionSuccess);
+    this.voiceTextChanged.emit(this.voiceText);
+    this.voiceTextReadyChanged.emit(this.voiceTextReady);        
 
 		if (annyang) {
 			let commands = {

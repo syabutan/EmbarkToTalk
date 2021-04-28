@@ -40,7 +40,7 @@ export class SpanishPage implements OnInit {
   //Where to start and stop video for each line 
   // videoTimeJapanese = ["0,2","3,5", "6,10", "10,17", "17,21", "21,23", "24,26", "27,34"];
   videoUrl: SafeResourceUrl;
-  videoBase = "../../assets/videos/spanish.mp4#t=";
+  videoBase = "../../assets/videos/JapaneseConversation.mp4#t=";
   videoCount = 0;
 
   //To know whether to show L1 or L2

@@ -9,6 +9,7 @@ import { TalkPageRoutingModule } from './talk-routing.module';
 import { TalkPage } from './talk.page';
 import { ComponentsModule } from '../components/components.module';
 import { NgCircleProgressModule } from 'ng-circle-progress';
+import { HomePage } from '../home/home.page';
 
 
 @NgModule({
@@ -37,6 +38,9 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
     ],
   declarations: [
     TalkPage
-    ]
+    ],
+  providers: [
+    HomePage
+  ]
 })
 export class TalkPageModule {}
