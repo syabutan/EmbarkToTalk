@@ -8,8 +8,9 @@ import { SolutionService } from '../../services/solution.service';
 import { GoogletranslateService } from '../../services/googletranslate.service';
 // import { ElementRef, NgZone, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import {AnimationController, ModalController, Animation} from "@ionic/angular"
+import {AnimationController, ModalController, Animation, DomController} from "@ionic/angular"
 import { NextSentenceService } from 'src/app/services/nextsentence.service';
+import { IonContent } from '@ionic/angular';
 
 @Component({
   selector: 'app-spanish',
@@ -17,7 +18,7 @@ import { NextSentenceService } from 'src/app/services/nextsentence.service';
   styleUrls: ['./spanish.page.scss'],
 })
 export class SpanishPage implements OnInit {
-
+  @ViewChild('scroll') private scroll: any;
 
   //To record voice 
   userVoiceText = [];
@@ -35,14 +36,18 @@ export class SpanishPage implements OnInit {
   userTextCorrect = "";
   userTextCorrectAudio = "";
   userTextCorrectTrans = '';
-
-  
-  sentenceCounter = 0; 
+  playVideo: number = 0; 
+  showVoiceText = false;
+  showVoiceText2 = false;
+  previousSentence; 
+  sentenceCounter = 0;
+  currentUserRecord; 
+  computerVoiceArray = []; 
 
   //Where to start and stop video for each line 
   // videoTimeJapanese = ["0,2","3,5", "6,10", "10,17", "17,21", "21,23", "24,26", "27,34"];
   videoUrl: SafeResourceUrl;
-  videoBase = "../../assets/videos/JapaneseConversation.mp4#t=";
+  videoBase = "../../assets/videos/spanish.mp4#t=";
   videoCount = 0;
 
   //To know whether to show L1 or L2
@@ -53,6 +58,7 @@ export class SpanishPage implements OnInit {
   choiceOneTran = false;
   voiceTextTrans = [];
   userArray = [];
+  computerTextTrans = '';
 
   langFrom = new FormControl('es');
   langTo = new FormControl('en');
@@ -76,17 +82,23 @@ export class SpanishPage implements OnInit {
     computerText: '',
     inputString: ''
   };
-
+  conversationLog = [];
   //Setting up computer tree
   
   emptyNodeComp: TreenodeComputer = {
     name: '',
-    video: '',
+    video: '6,6.0001',
     leftChild: '',
     rightChild: '',
     audio: ''
   }
-  
+  node93: TreenodeComputer = {
+    name: '¡Gracias! ¡Adiós!',
+    video: '634,636.5',
+    leftChild: this.emptyNodeComp,
+    rightChild: this.emptyNodeComp,
+    audio: '../../assets/soundFile/spanish-lesson/93.mp3'
+  }
   node32: TreenodeComputer = {
     name: '¿Cómo?',
     video: '162,163',
@@ -97,15 +109,15 @@ export class SpanishPage implements OnInit {
    node29: TreenodeComputer = {
     name: '¡Muy bien gracias! ¡Hasta luego!',
     video: '',
-    leftChild: this.emptyNodeComp,
-    rightChild: this.emptyNodeComp,
+    leftChild: this.node93,
+    rightChild: this.node93,
     audio: '../../assets/soundFile/spanish-lesson/29.mp3'
   }
   nodeRepeat: TreenodeComputer = {
     name: 'Si, es 801-433-2278',
-    video: '140,147',
+    video: '139.9,147',
     leftChild: this.node29,
-    rightChild: '',
+    rightChild: this.emptyNodeComp,
     audio: '../../assets/soundFile/spanish-lesson/28.0.mp3'
   }
   node30: TreenodeComputer = {
@@ -138,7 +150,7 @@ export class SpanishPage implements OnInit {
     audio: '../../assets/soundFile/spanish-lesson/59.mp3'
   }
   node80: TreenodeComputer = {
-    name: '¡Está bien! ¿Podemos tener su número de teléfono para fijar un día par avenir a visitarle?',
+    name: '¡Está bien! ¿Podemos tener su número de teléfono para fijar un día para venir a visitarle?',
     video: '',
     leftChild: this.node28,
     rightChild: this.node28,
@@ -153,7 +165,7 @@ export class SpanishPage implements OnInit {
   }
   node76: TreenodeComputer = {
     name: '¡Si claro!',
-    video: '500,502',
+    video: '500,502.5',
     leftChild: this.node79,
     rightChild: this.node80,
     audio: '../../assets/soundFile/spanish-lesson/76.mp3'
@@ -161,15 +173,15 @@ export class SpanishPage implements OnInit {
   node73: TreenodeComputer = {
     name: 'No se preocupe.',
     video: '',
-    leftChild: this.emptyNodeComp,
-    rightChild: this.emptyNodeComp,
+    leftChild: this.node93,
+    rightChild: this.node93,
     audio: '../../assets/soundFile/spanish-lesson/73.mp3'
   }
   node72: TreenodeComputer = {
     name: '¡Está bien, no hay problema! ¡Adiós!',
     video: '',
-    leftChild: this.emptyNodeComp,
-    rightChild: this.emptyNodeComp,
+    leftChild: this.node93,
+    rightChild: this.node93,
     audio: '../../assets/soundFile/spanish-lesson/72.mp3'
   }
   node70: TreenodeComputer = {
@@ -186,13 +198,7 @@ export class SpanishPage implements OnInit {
     rightChild: this.node70,
     audio: '../../assets/soundFile/spanish-lesson/27.mp3'
   }
-  node93: TreenodeComputer = {
-    name: '¡Gracias! ¡Adiós!',
-    video: '634,636',
-    leftChild: this.emptyNodeComp,
-    rightChild: this.emptyNodeComp,
-    audio: '../../assets/soundFile/spanish-lesson/93.mp3'
-  }
+  
   node92: TreenodeComputer = {
     name: 'Está bien. ¡Esperamos que venga esta semana!',
     video: '',
@@ -355,8 +361,6 @@ export class SpanishPage implements OnInit {
     audio: '../../assets/soundFile/spanish-lesson/64.mp3'
   }
   
-  
-  
   // node90: TreenodeComputer = {
   //   name: 'Para nosotros la familia es la mas importante. ¿Ha escuchado de algo se llama un templo?',
   //   video: '',
@@ -377,7 +381,7 @@ export class SpanishPage implements OnInit {
     name: '¡Claro que sí! Por eso me mudé aquí.',
     video: '422,425',
     leftChild: this.node64,
-    rightChild: '',
+    rightChild: this.emptyNodeComp,
     audio: '../../assets/soundFile/spanish-lesson/54.mp3'
   }
   node53: TreenodeComputer = {
@@ -495,7 +499,7 @@ export class SpanishPage implements OnInit {
     audio: '../../assets/soundFile/spanish-lesson/43.mp3'
   }
   node89: TreenodeComputer = {
-    name: 'Trabajo en una panadería. Tengo que proveer por mi familia.',
+    name: 'Trabajo en una panadería. Necesito proveer por mi familia.',
     video: '614,619',
     leftChild: this.node43,
     rightChild: this.node49,
@@ -551,7 +555,7 @@ export class SpanishPage implements OnInit {
     audio: '../../assets/soundFile/spanish-lesson/35.mp3'
   }
   node34: TreenodeComputer = {
-    name: '¿Enserio? Viví allí por un tiempo para aprender español.',
+    name: '¿En serio? Viví allí por un tiempo para aprender español.',
     video: '',
     leftChild: this.node36,
     rightChild: this.node37,
@@ -612,7 +616,7 @@ export class SpanishPage implements OnInit {
     audio: '../../assets/soundFile/spanish-lesson/9.0.mp3'
   }
   node10: TreenodeComputer = {
-    name: 'Mi familia es de México, pero me creí en España.',
+    name: 'Mi familia es de México, pero me crecí en España.',
     video: '26,30',
     leftChild: this.node15,
     rightChild: this.node16,
@@ -758,7 +762,8 @@ export class SpanishPage implements OnInit {
 
   constructor(private animationCtrl: AnimationController, private nextSentence: NextSentenceService, private modalCtrl: ModalController, private google: GoogletranslateService , private solution: SolutionService, private recordAudio: RecordAudio, private checkSentence: CheckSentence) {
     
-    this.videoUrl = this.videoBase + 6;
+    //quick fix for video automatically playing, there is probably a better way
+    this.videoUrl = this.videoBase + '6,6.0001';
 
     this.showAccuracy = true;
     this.langSwitch = true;
@@ -823,14 +828,13 @@ export class SpanishPage implements OnInit {
     );
 
     this.recordAudio.voiceTextChanged.subscribe(
-      (change: any) => {this.voiceText = change; if(change !== undefined){this.userArray.push(change)}; if(change !== undefined){this.send(change)}; this.onCheck();}
-    );
+      (change: any) => {this.voiceText = change;
+        if(change !== undefined){this.send(change)}; this.onCheck()});
 
     this.recordAudio.userAudioChanged.subscribe(
       (change: any) => {this.userVoice = change; 
-        this.userVoiceArray.push(change);}
+        if(this.score >= .7){this.userVoiceArray.push(change)};}
     );
-
     this.voiceActiveSectionDisabled = this.recordAudio.voiceActiveSectionDisabled;
   	this.voiceActiveSectionError = this.recordAudio.voiceActiveSectionError;
   	this.voiceActiveSectionSuccess = this.recordAudio.voiceActiveSectionSuccess;
@@ -842,12 +846,14 @@ export class SpanishPage implements OnInit {
   }
   
   onStartVoiceRecognition(){
+    this.showVoiceText = true;
     this.recordAudio.setLanguage(this.langFrom.value);
     this.recordAudio.startVoiceRecognition();
     console.log(this.voiceText)
   }
 
   onCloseVoiceRecognition(){
+    this.showVoiceText = false;
     //this.recordAudio.setLanguage(this.langFrom.value);
     this.recordAudio.closeVoiceRecognition();
   }
@@ -857,6 +863,7 @@ export class SpanishPage implements OnInit {
   }
 
   onCheck(){
+    // this.showVoiceText = true;
     if(this.voiceText === undefined){
       return;
     }
@@ -880,6 +887,19 @@ export class SpanishPage implements OnInit {
 
     // this.score = this.checkSentence.checkPercent(this.,this.voiceText);
     if(this.scoreLeft >= .7){
+      this.conversationLog.push({
+        computer: this.computerSentence,
+        player: this.voiceText
+        });
+      this.userArray.push({
+        computer: this.computerSentence,
+        player: this.voiceText
+        });
+      this.computerVoiceArray.push(this.parentNode.audio)
+      
+      // this.previousSentence = this.computerSentence;
+      // console.log(this.previousSentence);
+      // console.log(this.conversationLog);
       var rand = Math.floor(Math.random() * 2);
       if(rand === 0){
         this.parentNode = this.parentNode.leftChild.leftChild;
@@ -891,24 +911,31 @@ export class SpanishPage implements OnInit {
       this.choiceOne = this.parentNode.leftChild.name;
       this.choiceTwo = this.parentNode.rightChild.name;
       this.computerSentence = this.parentNode.name;
-
+      
       this.userTextCorrect = this.voiceText;
-      // this.userTextCorrect = this.userVoiceText[this.userArray.length];
-      // this.userTextCorrectTrans = this.voiceTextTrans[0];
-      // this.userTextCorrectAudio = this.userVoiceArray[this.userArray.length];
-      // this.userTextCorrect = this.voiceText;
-      // console.log(this.userVoiceArray)
-      this.recordAudio.userVoiceText = [];
       this.userTextCorrectTrans = this.voiceTextTrans[this.voiceTextTrans.length];
+      this.showVoiceText2 = false;
 
-      this.userArray = [];
-      this.userVoiceArray = [];
       this.userVoiceText = [];
-      this.voiceTextTrans = [];
       this.videoUrl = this.videoBase + this.parentNode.video;
-    
+      this.playVideo = 1;
+
     }
     else if(this.scoreRight >= .7){
+      
+      this.conversationLog.push({
+        computer: this.computerSentence,
+        player: this.voiceText
+        });
+        this.userArray.push({
+          computer: this.computerSentence,
+          player: this.voiceText
+          });
+      
+      this.computerVoiceArray.push(this.parentNode.audio)
+      console.log(this.userVoiceArray);
+      this.previousSentence = this.computerSentence;
+      console.log(this.conversationLog); 
       var rand = Math.floor(Math.random() * 2);
       if(rand === 0){
         this.parentNode = this.parentNode.rightChild.leftChild;
@@ -920,14 +947,12 @@ export class SpanishPage implements OnInit {
       this.choiceTwo = this.parentNode.rightChild.name;
       this.computerSentence = this.parentNode.name;
       this.userTextCorrect = this.voiceText;
-      this.recordAudio.userVoiceText = [];
       this.userTextCorrectTrans = this.voiceTextTrans[this.voiceTextTrans.length];
 
-      this.userArray = [];
-      this.userVoiceArray = [];
       this.userVoiceText = [];
-      this.voiceTextTrans = [];
-      
+      this.playVideo = 1;
+      this.showVoiceText2 = false;
+
       // this.userTextCorrectTrans = this.voiceTextTrans[this.voiceTextTrans.length];
       // this.userTextCorrectAudio = this.userVoiceArray[this.userArray.length];
       // this.userArray = [];
@@ -936,7 +961,15 @@ export class SpanishPage implements OnInit {
       this.videoUrl = this.videoBase + this.parentNode.video;
       //this.guideSentence = 'Try again :)'
     }
-
+    else{
+      console.log(this.userVoiceArray)
+      this.currentUserRecord = this.userVoice;
+      console.log(this.currentUserRecord)
+      console.log(this.userVoiceArray.length)
+      this.showVoiceText2 = true;
+      // this.showVoiceText = false;
+    }
+    this.showVoiceText = false;
   }
 
   onListenToSentence(num: number){
@@ -983,67 +1016,53 @@ export class SpanishPage implements OnInit {
     audio.play();
   }
 
-  playUserAudio(num){
-  if(!this.userTextCorrect){
-    if(num >= 0){
+  playAudio(num, user){
+  console.log(num)
+  console.log(this.currentUserRecord)
+  if(user === 'player'){
+    if(num === 'current'){
       this.audio.pause();
-      console.log(num);
-      this.audio.src = this.userVoiceArray[num];
-      this.audio.load();
-      this.audio.play();
+        console.log(num);
+        this.audio.src = this.userVoice;
+        this.audio.load();
+        this.audio.play();
     }
     else{
       this.audio.pause();
-      console.log(num);
-      this.audio.src = num;
-      this.audio.load();
-      this.audio.play();
+        console.log(num);
+        this.audio.src = this.userVoiceArray[num];
+        this.audio.load();
+        this.audio.play();
     }
   }
-  else{
-    if(num === 99){
-      console.log(num);
-      this.audio.src = this.userVoiceArray[0];
-      this.audio.load();
-      this.audio.play();
+  else if(user === 'computer'){
+    this.audio.pause();
+        console.log(num);
+        this.audio.src = this.computerVoiceArray[num];
+        this.audio.load();
+        this.audio.play();
   }
-    if(num >= 0){
-      this.audio.pause();
-      console.log(num);
-      this.audio.src = this.userVoiceArray[num+1];
-      this.audio.load();
-      this.audio.play();
-    }
-    else{
-      this.audio.pause();
-      console.log(num);
-      this.audio.src = num;
-      this.audio.load();
-      this.audio.play();
-    }
-  }
-    
-  }
+}
 
   setUserArray(check: string, num: number){
-    if(!this.userTextCorrect){
-      if(check === this.userVoiceText[num]){
-        this.userArray[num] = this.voiceTextTrans[num];
+    console.log(num)
+    console.log(check)
+    console.log(this.userArray)
+    console.log(this.voiceTextTrans)
+    console.log(this.userArray[num].player)
+      if(check === this.userArray[num].player){
+        console.log("hey");
+        this.conversationLog[num].player = this.voiceTextTrans[num].player;
       }
-      else if(check === this.voiceTextTrans[num]){
-        this.userArray[num] = this.userVoiceText[num];
+      else if(check === this.userArray[num].computer){
+        this.conversationLog[num].computer = this.voiceTextTrans[num].computer;
       }
-
-    }
-    else{
-      if(check === this.userVoiceText[num+1]){
-        this.userArray[num] = this.voiceTextTrans[num+1];
+      else if(check === this.voiceTextTrans[num].player){
+        this.conversationLog[num].player = this.userArray[num].player;
       }
-      else if(check === this.voiceTextTrans[num+1]){
-        this.userArray[num] = this.userVoiceText[num+1];
+      else if(check === this.voiceTextTrans[num].computer){
+        this.conversationLog[num].computer = this.userArray[num].computer;
       }
-    }
-    
   }
   
   //Sends sentences to Google translate 
@@ -1088,20 +1107,33 @@ export class SpanishPage implements OnInit {
           computerText: res.data.translations[3].translatedText.replace(/&#39;/g, "'"),
           inputString: res.data.translations[4].translatedText.replace(/&#39;/g, "'")
         };
-        if(this.voiceTextTrans.length < this.userVoiceText.length){
-          console.log(this.userVoiceArray)
-          this.voiceTextTrans.push(res.data.translations[4].translatedText.replace(/&#39;/g, "'"));
-          console.log(this.voiceTextTrans)
-          this.userTextCorrectTrans = this.voiceTextTrans[0];
-
+        this.userTextCorrectTrans = this.data.userText;
+        console.log(this.userTextCorrectTrans)
+        this.computerTextTrans = this.data.computerText;
+        console.log(this.computerTextTrans);
+        if(this.score >= .7){
+          if(this.voiceTextTrans.length < this.userArray.length){
+          this.voiceTextTrans.push({
+            computer: this.data.computerText,
+            player: this.userTextCorrectTrans
+          });
         }
+            console.log(this.userArray)
+          }
+          console.log(this.voiceTextTrans);
       },
       err => {
         console.log(err);
       }
+
     );
-    this.userTextCorrectTrans = this.voiceTextTrans[0];
+    
     // this.onCheck();
+  }
+
+  scrollToBottom(){
+      const el = document.querySelector('.btn');
+      document.querySelector('.fixed-content').scroll(0,el.scrollTop);
   }
 
   //Changes if it is using L1 or L2

@@ -109,7 +109,7 @@ export class JapaneseService {
     {
       faceIcon: "../../../assets/icon/face2.PNG",
       videoRef: "../assets/videos/JapaneseConversation.mp4#t=",
-      voiceRef: "../../assets/soundFile/japanese/"
+      voiceRef: "../../assets/soundFile/Japanese/"
     }]
 
 

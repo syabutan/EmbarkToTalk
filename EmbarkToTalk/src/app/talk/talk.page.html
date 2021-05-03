@@ -38,6 +38,8 @@
     </div>
     <div class="chatting">
       <div  class="says">
+        <ion-icon name="language-outline" style= "float:right; color: gray" (click) = "send('computerText')"></ion-icon>
+        <ion-icon name="play-outline" style="float:right" (click) = "onListenToSentence(3)"></ion-icon>
         <p>{{log.computer}}</p>
       </div>
     </div>
@@ -49,8 +51,8 @@
         <img [src] = "userImage"/>
       </div>
         <div class="mycommentmargin">
-          <ion-icon name="language-outline" style= "float:right; color: gray" (click) = "send('computerText')"></ion-icon>
-          <ion-icon name="play-outline" style="float:right" (click) = "onListenToSentence(3)"></ion-icon>
+          <ion-icon name="language-outline" style= "float:left" (click) = "setUserArray(voice, i)"></ion-icon>
+            <ion-icon name="play-outline" style="float:left" (click) = "playUserAudio(i)"></ion-icon>
           <p>{{log.player}}</p>
         </div>
     </div>
@@ -159,10 +161,6 @@
         {{data.secondChoice}}
       </ion-card-content>
     </ng-template>
-
-
-
-
   </div>
 
 

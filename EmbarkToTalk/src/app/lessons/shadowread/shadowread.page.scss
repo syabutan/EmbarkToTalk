@@ -9,7 +9,7 @@ ion-icon {
     margin: 15px auto;
     text-align: right;
     font-size: 14px;
-    background: #7da4cd;
+    // background: #7da4cd;
   
   }
   
@@ -153,5 +153,29 @@ ion-icon-footer {
 }
 
 .background-image{
-    --background: url(../../../assets/icon/embarkbackground.png) 0 0/100% 100% no-repeat;
+    background: url(../../../assets/icon/embarkbackground.png) 0 0/100% 100% no-repeat;
+}
+
+.fixed-content {
+  right: relative;
+  left: relative;
+  // top: 225px;
+  top: 10%;
+  width: 100%;
+  margin: 15px auto;
+  // bottom: 225px;
+  bottom: 35.5%;
+  position:fixed;
+  overflow-y:scroll;
+  overflow-x:auto;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+
+.user-option{
+  top: 70%;
+}
+
+.bg-style {
+  background: url(../../../assets/icon/embarkbackground.png) 0 0/100% 100% no-repeat;
 }

@@ -224,7 +224,6 @@ export class TalkPage implements OnInit {
     // this.score = this.checkSentence.checkPercent(this.,this.voiceText);
     if(this.scoreLeft >= .7){
       this.sentenceNum = parseInt(this.choiceOne.id);
-      
       this.conversationLog.push({
         computer: this.serviceArray[this.sentenceNum/2].computer,
         player: this.voiceText
@@ -282,8 +281,10 @@ export class TalkPage implements OnInit {
 
   onListenToSentence(num: number){
     //1 is left, two is right
+    console.log(num);
     if(num === 1){
       console.log(this.sentenceNum);
+      console.log(this.audioBase + (this.sentenceNum * 2 + 1).toString() + "p.m4a");
       this.audio.pause();
       this.audio.src = this.audioBase + (this.sentenceNum * 2).toString() + "p.m4a"; 
       this.audio.load();
@@ -427,12 +428,14 @@ export class TalkPage implements OnInit {
           computerText: res.data.translations[3].translatedText.replace(/&#39;/g, "'"),
           inputString: res.data.translations[4].translatedText.replace(/&#39;/g, "'")
         };
-        if(this.voiceTextTrans.length < this.userVoiceText.length){
+        if(this.voiceTextTrans.length < this.conversationLog.length){
           console.log(this.userVoiceArray)
-          this.voiceTextTrans.push(res.data.translations[4].translatedText.replace(/&#39;/g, "'"));
+          this.voiceTextTrans.push({
+            computer: res.data.translations[3].translatedText.replace(/&#39;/g, "'"),
+            player: res.data.translations[4].translatedText.replace(/&#39;/g, "'")
+            });
           console.log(this.voiceTextTrans)
           this.userTextCorrectTrans = this.voiceTextTrans[0];
-
         }
       },
       err => {

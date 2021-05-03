@@ -34,9 +34,14 @@ export class ShadowreadPage implements OnInit {
   userTextCorrect = "";
   userTextCorrectAudio = "";
   userTextCorrectTrans = '';
-
-  
-  sentenceCounter = 0; 
+  showVoiceText = false;
+  showVoiceText2 = false;
+  previousSentence; 
+  sentenceCounter = 0;
+  currentUserRecord; 
+  computerVoiceArray = [];
+  conversationLog = [];
+  computerTextTrans;
 
   //Where to start and stop video for each line 
   // videoTimeJapanese = ["0,2","3,5", "6,10", "10,17", "17,21", "21,23", "24,26", "27,34"];
@@ -240,12 +245,12 @@ export class ShadowreadPage implements OnInit {
     );
 
     this.recordAudio.voiceTextChanged.subscribe(
-      (change: any) => {this.voiceText = change; if(change !== undefined){this.userArray.push(change)}; if(change !== undefined){this.send(change)}; this.onCheck();}
-    );
-
+      (change: any) => {this.voiceText = change;
+        if(change !== undefined){this.send(change)}; this.onCheck()});
+        
     this.recordAudio.userAudioChanged.subscribe(
       (change: any) => {this.userVoice = change; 
-        this.userVoiceArray.push(change);}
+        if(this.score >= .7){this.userVoiceArray.push(change)};}
     );
 
     this.voiceActiveSectionDisabled = this.recordAudio.voiceActiveSectionDisabled;
@@ -259,6 +264,7 @@ export class ShadowreadPage implements OnInit {
   }
   
   onStartVoiceRecognition(){
+    this.showVoiceText = true;
     this.recordAudio.setLanguage(this.langFrom.value);
     this.recordAudio.startVoiceRecognition();
     console.log(this.voiceText)
@@ -276,10 +282,13 @@ export class ShadowreadPage implements OnInit {
       this.userVoiceArray = [];
       this.userVoiceText = [];
       this.voiceTextTrans = [];
+      this.computerVoiceArray = [];
       this.userTextCorrect = '';
       this.userTextCorrectTrans = '';
+      this.conversationLog = [];
+      this.voiceText = '';
       this.cpImage ="../../../assets/icon/neighbor.jpg"
-      this.userImage ="../../../assets/icon/blank.webp"
+      this.userImage ="../../../assets/icon/missionary-couple.jpg"
     }
     else if(event.detail.value === '2'){
       this.parentNodeUser = this.neighborNode1;
@@ -287,17 +296,21 @@ export class ShadowreadPage implements OnInit {
       this.choiceOne = this.parentNodeUser.name;
       this.computerSentence = this.parentNodeCom.name;
       this.onListenToSentence(3);
+      this.computerVoiceArray = [];
+      this.computerVoiceArray.push(this.parentNodeCom.audio)
       this.userArray = [];
       this.userVoiceArray = [];
       this.userVoiceText = [];
       this.voiceTextTrans = [];
       this.userTextCorrect = '';
       this.userTextCorrectTrans = '';
-      this.cpImage ="../../../assets/icon/blank.webp"
+      this.conversationLog = [];
+      this.cpImage ="../../../assets/icon/missionary-couple.jpg"
       this.userImage ="../../../assets/icon/neighbor.jpg"
     }
   }
   onCloseVoiceRecognition(){
+    this.showVoiceText = false;
     //this.recordAudio.setLanguage(this.langFrom.value);
     this.recordAudio.closeVoiceRecognition();
   }
@@ -330,6 +343,17 @@ export class ShadowreadPage implements OnInit {
 
     // this.score = this.checkSentence.checkPercent(this.,this.voiceText);
     if(this.scoreLeft >= .7){
+      this.conversationLog.push({
+        computer: this.computerSentence,
+        player: this.voiceText
+        });
+      this.userArray.push({
+          computer: this.computerSentence,
+          player: this.voiceText
+          });
+      if(this.computerVoiceArray.length < this.userArray.length){
+        this.computerVoiceArray.push(this.parentNodeCom.audio)
+      }
       if(this.value === "1"){
         this.parentNodeCom = this.neighborNode1;
         this.value = 0;
@@ -348,22 +372,30 @@ export class ShadowreadPage implements OnInit {
       
 
       this.userTextCorrect = this.voiceText;
+      this.showVoiceText2 = false;
+
       // this.userTextCorrect = this.userVoiceText[this.userArray.length];
       // this.userTextCorrectTrans = this.voiceTextTrans[0];
       // this.userTextCorrectAudio = this.userVoiceArray[this.userArray.length];
       // this.userTextCorrect = this.voiceText;
       // console.log(this.userVoiceArray)
-      this.recordAudio.userVoiceText = [];
       this.userTextCorrectTrans = this.voiceTextTrans[this.voiceTextTrans.length];
 
-      this.userArray = [];
-      this.userVoiceArray = [];
-      this.userVoiceText = [];
-      this.voiceTextTrans = [];
       // this.videoUrl = this.videoBase + this.parentNode.video;
     
     }
     else if(this.scoreRight >= .7){
+      this.conversationLog.push({
+        computer: this.computerSentence,
+        player: this.voiceText
+        });
+      this.userArray.push({
+          computer: this.computerSentence,
+          player: this.voiceText
+          });
+       if(this.computerVoiceArray.length < this.userArray.length){
+         this.computerVoiceArray.push(this.parentNodeCom.audio)
+        }    
       if(this.value === "1"){
         this.parentNodeCom = this.neighborNode1;
         this.value = 0;
@@ -382,13 +414,9 @@ export class ShadowreadPage implements OnInit {
       // this.choiceTwo = this.parentNode.rightChild.name;
       this.computerSentence = this.parentNodeCom.name;
       this.userTextCorrect = this.voiceText;
-      this.recordAudio.userVoiceText = [];
       this.userTextCorrectTrans = this.voiceTextTrans[this.voiceTextTrans.length];
+      this.showVoiceText2 = false;
 
-      this.userArray = [];
-      this.userVoiceArray = [];
-      this.userVoiceText = [];
-      this.voiceTextTrans = [];
       
       // this.userTextCorrectTrans = this.voiceTextTrans[this.voiceTextTrans.length];
       // this.userTextCorrectAudio = this.userVoiceArray[this.userArray.length];
@@ -397,7 +425,15 @@ export class ShadowreadPage implements OnInit {
       // this.userVoiceText = [];
       // this.videoUrl = this.videoBase + this.parentNode.video;
       //this.guideSentence = 'Try again :)'
+    }else{
+      console.log(this.userVoiceArray)
+      this.currentUserRecord = this.userVoice;
+      console.log(this.currentUserRecord)
+      console.log(this.userVoiceArray.length)
+      this.showVoiceText2 = true;
+      // this.showVoiceText = false;
     }
+    this.showVoiceText = false;
 
   }
 
@@ -444,75 +480,54 @@ export class ShadowreadPage implements OnInit {
     audio.play();
   }
 
-  playUserAudio(num){
-  if(!this.userTextCorrect){
-    if(num >= 0 && num != 99){
+  playAudio(num, user){
+    console.log(num)
+    console.log(this.currentUserRecord)
+    if(user === 'player'){
+      if(num === 'current'){
+        this.audio.pause();
+          console.log(num);
+          this.audio.src = this.userVoice;
+          this.audio.load();
+          this.audio.play();
+      }
+      else{
+        this.audio.pause();
+          console.log(num);
+          this.audio.src = this.userVoiceArray[num];
+          this.audio.load();
+          this.audio.play();
+      }
+    }
+    else if(user === 'computer'){
       this.audio.pause();
-      console.log(num);
-      this.audio.src = this.userVoiceArray[num];
-      this.audio.load();
-      this.audio.play();
+          console.log(num);
+          this.audio.src = this.computerVoiceArray[num];
+          this.audio.load();
+          this.audio.play();
     }
-    else if(num === 99){
-      
-      console.log(num);
-      this.audio.src = this.userVoiceArray[0];
-      this.audio.load();
-      this.audio.play();
-  }
-    else{
-      this.audio.pause();
-      console.log(num);
-      this.audio.src = num;
-      this.audio.load();
-      this.audio.play();
-    }
-    
-  }
-    if(num >= 0 && num != 99){
-      this.audio.pause();
-      console.log(num);
-      this.audio.src = this.userVoiceArray[num+1];
-      this.audio.load();
-      this.audio.play();
-    }
-    else if(num === 99){
-      
-        console.log(num);
-        this.audio.src = this.userVoiceArray[0];
-        this.audio.load();
-        this.audio.play();
-    }
-    else{
-      this.audio.pause();
-      console.log(num);
-      this.audio.src = num;
-      this.audio.load();
-      this.audio.play();
-    }
-    
   }
     
 
   setUserArray(check: string, num: number){
-    if(!this.userTextCorrect){
-      if(check === this.userVoiceText[num]){
-        this.userArray[num] = this.voiceTextTrans[num];
+    console.log(num)
+    console.log(check)
+    console.log(this.userArray)
+    console.log(this.voiceTextTrans)
+    console.log(this.userArray[num].player)
+      if(check === this.userArray[num].player){
+        console.log("hey");
+        this.conversationLog[num].player = this.voiceTextTrans[num].player;
       }
-      else if(check === this.voiceTextTrans[num]){
-        this.userArray[num] = this.userVoiceText[num];
+      else if(check === this.userArray[num].computer){
+        this.conversationLog[num].computer = this.voiceTextTrans[num].computer;
       }
-
-    }
-    else{
-      if(check === this.userVoiceText[num+1]){
-        this.userArray[num] = this.voiceTextTrans[num+1];
+      else if(check === this.voiceTextTrans[num].player){
+        this.conversationLog[num].player = this.userArray[num].player;
       }
-      else if(check === this.voiceTextTrans[num+1]){
-        this.userArray[num] = this.userVoiceText[num+1];
+      else if(check === this.voiceTextTrans[num].computer){
+        this.conversationLog[num].computer = this.userArray[num].computer;
       }
-    }
-    
   }
   
   //Sends sentences to Google translate 
@@ -557,13 +572,18 @@ export class ShadowreadPage implements OnInit {
           computerText: res.data.translations[3].translatedText.replace(/&#39;/g, "'"),
           inputString: res.data.translations[4].translatedText.replace(/&#39;/g, "'")
         };
-        if(this.voiceTextTrans.length < this.userVoiceText.length){
-          console.log(this.userVoiceArray)
-          this.voiceTextTrans.push(res.data.translations[4].translatedText.replace(/&#39;/g, "'"));
-          console.log(this.voiceTextTrans)
-          this.userTextCorrectTrans = this.voiceTextTrans[0];
-
+        this.userTextCorrectTrans = this.data.userText;
+        console.log(this.userTextCorrectTrans)
+        this.computerTextTrans = this.data.computerText;
+        console.log(this.computerTextTrans);
+        if(this.score >= .7){
+          if(this.voiceTextTrans.length < this.userArray.length){
+          this.voiceTextTrans.push({
+            computer: this.data.computerText,
+            player: this.userTextCorrectTrans
+          });
         }
+      }
       },
       err => {
         console.log(err);
