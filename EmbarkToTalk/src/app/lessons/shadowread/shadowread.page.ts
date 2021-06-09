@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { CheckSentence } from '../../services/checksentence.service';
 import { RecordAudio } from 'src/app/services/recordaudio.service';
 import {FormControl, Form} from '@angular/forms';
@@ -42,7 +42,12 @@ export class ShadowreadPage implements OnInit {
   computerVoiceArray = [];
   conversationLog = [];
   computerTextTrans;
-
+  showComputerSentence: boolean;
+  listeningElement; 
+  audioIcon = ["play-outline","play-outline","play-outline"];
+  audioIconArray = [];
+  
+  fullConversation = [];
   //Where to start and stop video for each line 
   // videoTimeJapanese = ["0,2","3,5", "6,10", "10,17", "17,21", "21,23", "24,26", "27,34"];
   videoUrl: SafeResourceUrl;
@@ -57,6 +62,7 @@ export class ShadowreadPage implements OnInit {
   choiceOneTran = false;
   voiceTextTrans = [];
   userArray = [];
+
 
   langFrom = new FormControl('es');
   langTo = new FormControl('en');
@@ -97,7 +103,7 @@ export class ShadowreadPage implements OnInit {
     audio:     '../assets/soundFile/shadowread/Que sabe de la iglesia.mp3'
   };
   brownNode6: OnePath ={
-    name: 'En realidad, no. Estamos aqui para compartir un mensaje de Dios y Jesucristo. Somos misioneros de nuestra iglesia. Ha escuchado de La Iglesia de Jesuscristo de los Santos do los Ultimos Dias?',
+    name: 'En realidad, no. Estamos aqui para compartir un mensaje de Dios y Jesucristo. Somos misioneros de nuestra iglesia. Ha escuchado de La Iglesia de Jesuscristo de los Santos de los Ultimos Dias?',
     next: this.brownNode7,
     audio: '../assets/soundFile/shadowread/somos misioneros.mp3'
   };
@@ -183,7 +189,7 @@ export class ShadowreadPage implements OnInit {
   choiceOne: string = '';
   choiceTwo: string = '';
 
-  constructor(private animationCtrl: AnimationController, private nextSentence: NextSentenceService, private modalCtrl: ModalController, private google: GoogletranslateService , private solution: SolutionService, private recordAudio: RecordAudio, private checkSentence: CheckSentence) {
+  constructor(private cd: ChangeDetectorRef, private animationCtrl: AnimationController, private nextSentence: NextSentenceService, private modalCtrl: ModalController, private google: GoogletranslateService , private solution: SolutionService, private recordAudio: RecordAudio, private checkSentence: CheckSentence) {
     
     this.videoUrl = this.videoBase + 6;
 
@@ -217,6 +223,24 @@ export class ShadowreadPage implements OnInit {
   // }
 
   ngOnInit() {
+    
+    if(this.choiceOne === ''){
+      this.audio.addEventListener("ended", () =>{
+        this.choiceOne = this.parentNodeUser.name;
+        this.cd.detectChanges();
+        console.log('empty')
+      });
+    }
+    this.audio.addEventListener("ended", () =>{
+      for(var i = 0; i<this.audioIcon.length; i++){
+        this.audioIcon[i] = "play-outline";
+      }
+      for(let i = 0; i < this.audioIconArray.length; i++){
+        this.audioIconArray[i].computer = 'play-outline';
+        this.audioIconArray[i].player = 'play-outline';
+      }
+    });
+
     this.solution.getSolution().subscribe(res => this.data = res);
     this.translateBtn = document.getElementById('translatebtn');
     console.log(this.translateBtn);
@@ -274,6 +298,7 @@ export class ShadowreadPage implements OnInit {
   chooseRoleplay(event){
     console.log(event.detail.value);
     this.value = event.detail.value;
+
     if(event.detail.value === '1'){
       this.parentNodeUser = this.brownNode1;
       this.choiceOne = this.parentNodeUser.name;
@@ -295,7 +320,7 @@ export class ShadowreadPage implements OnInit {
       this.parentNodeCom = this.brownNode1;
       this.choiceOne = this.parentNodeUser.name;
       this.computerSentence = this.parentNodeCom.name;
-      this.onListenToSentence(3);
+      this.onListenToSentence(2);
       this.computerVoiceArray = [];
       this.computerVoiceArray.push(this.parentNodeCom.audio)
       this.userArray = [];
@@ -325,28 +350,20 @@ export class ShadowreadPage implements OnInit {
     }
     this.showAccuracy = !this.showAccuracy;
     if(this.choiceOne !== ''){
-      if(this.choiceTwo !==''){
-        this.scoreLeft = this.checkSentence.checkPercent(this.choiceOne,this.voiceText);
-        this.scoreRight = this.checkSentence.checkPercent(this.choiceTwo,this.voiceText);
-        this.score =  Math.max(this.checkSentence.checkPercent(this.choiceOne,this.voiceText), this.checkSentence.checkPercent(this.choiceTwo,this.voiceText));
+      this.score = this.checkSentence.checkPercent(this.choiceOne,this.voiceText);
       }
-      else {this.score = this.checkSentence.checkPercent(this.choiceOne,this.voiceText);
-        this.scoreLeft = this.checkSentence.checkPercent(this.choiceOne,this.voiceText);
-        this.score = this.scoreLeft;
-      }
-    }
-    else if (this.choiceTwo !== ''){
-      this.scoreRight = this.checkSentence.checkPercent(this.choiceTwo,this.voiceText);
-      this.checkSentence.checkPercent(this.choiceTwo,this.voiceText);
-      this.score = this.scoreRight;
-    }
 
     // this.score = this.checkSentence.checkPercent(this.,this.voiceText);
-    if(this.scoreLeft >= .7){
+    if(this.score >= .7){
+      this.voiceText = this.parentNodeUser.name;
       this.conversationLog.push({
         computer: this.computerSentence,
         player: this.voiceText
         });
+      this.audioIconArray.push({
+        computer: 'play-outline',
+        player: 'play-outline'
+      })
       this.userArray.push({
           computer: this.computerSentence,
           player: this.voiceText
@@ -358,74 +375,32 @@ export class ShadowreadPage implements OnInit {
         this.parentNodeCom = this.neighborNode1;
         this.value = 0;
         this.parentNodeUser = this.parentNodeUser.next;
-        this.choiceOne = this.parentNodeUser.name;
-        this.computerSentence = this.parentNodeCom.name;
-        this.onListenToSentence(3);
+        // this.choiceOne = this.parentNodeUser.name;
+        this.choiceOne = '';
+        this.computerSentence = "...";
+        setTimeout(() => {
+          this.computerSentence = this.parentNodeCom.name;
+          this.onListenToSentence(2);
+          this.cd.detectChanges();
+        }, 1500);        
       }
       else{
         this.parentNodeCom = this.parentNodeCom.next;
         this.parentNodeUser = this.parentNodeUser.next;
-        this.choiceOne = this.parentNodeUser.name;
-        this.computerSentence = this.parentNodeCom.name;
-        this.onListenToSentence(3);
+        // this.choiceOne = this.parentNodeUser.name;
+        this.choiceOne = '';
+        this.computerSentence = "...";
+        setTimeout(() => {
+          this.computerSentence = this.parentNodeCom.name;
+          this.onListenToSentence(2);
+          this.cd.detectChanges();
+        }, 1500);        
       }
-      
-
       this.userTextCorrect = this.voiceText;
       this.showVoiceText2 = false;
-
-      // this.userTextCorrect = this.userVoiceText[this.userArray.length];
-      // this.userTextCorrectTrans = this.voiceTextTrans[0];
-      // this.userTextCorrectAudio = this.userVoiceArray[this.userArray.length];
-      // this.userTextCorrect = this.voiceText;
-      // console.log(this.userVoiceArray)
-      this.userTextCorrectTrans = this.voiceTextTrans[this.voiceTextTrans.length];
-
-      // this.videoUrl = this.videoBase + this.parentNode.video;
-    
+      this.userTextCorrectTrans = this.voiceTextTrans[this.voiceTextTrans.length];    
     }
-    else if(this.scoreRight >= .7){
-      this.conversationLog.push({
-        computer: this.computerSentence,
-        player: this.voiceText
-        });
-      this.userArray.push({
-          computer: this.computerSentence,
-          player: this.voiceText
-          });
-       if(this.computerVoiceArray.length < this.userArray.length){
-         this.computerVoiceArray.push(this.parentNodeCom.audio)
-        }    
-      if(this.value === "1"){
-        this.parentNodeCom = this.neighborNode1;
-        this.value = 0;
-        this.parentNodeUser = this.parentNodeUser.next;
-        this.choiceOne = this.parentNodeUser.name;
-        this.computerSentence = this.parentNodeCom.name;
-        this.onListenToSentence(3);
-      }
-      else{
-        this.parentNodeCom = this.parentNodeCom.next;
-        this.parentNodeUser = this.parentNodeUser.next;
-        this.choiceOne = this.parentNodeUser.name;
-        this.computerSentence = this.parentNodeCom.name;
-        this.onListenToSentence(3);
-      }
-      // this.choiceTwo = this.parentNode.rightChild.name;
-      this.computerSentence = this.parentNodeCom.name;
-      this.userTextCorrect = this.voiceText;
-      this.userTextCorrectTrans = this.voiceTextTrans[this.voiceTextTrans.length];
-      this.showVoiceText2 = false;
-
-      
-      // this.userTextCorrectTrans = this.voiceTextTrans[this.voiceTextTrans.length];
-      // this.userTextCorrectAudio = this.userVoiceArray[this.userArray.length];
-      // this.userArray = [];
-      // this.userVoiceArray = [];
-      // this.userVoiceText = [];
-      // this.videoUrl = this.videoBase + this.parentNode.video;
-      //this.guideSentence = 'Try again :)'
-    }else{
+    else{
       console.log(this.userVoiceArray)
       this.currentUserRecord = this.userVoice;
       console.log(this.currentUserRecord)
@@ -438,34 +413,35 @@ export class ShadowreadPage implements OnInit {
   }
 
   onListenToSentence(num: number){
-    //1 is left, two is right
+    //1 is userChoice, two is most recent computer sentence
     if(num === 1){
-      // console.log(this.parentNode.leftChild.audio)
-      this.audio.pause();
-      this.audio.src = this.parentNodeUser.audio;
-      this.audio.load();
-      this.audio.play();
+      if(this.audioIcon[0] === "stop-outline"){
+        this.audioIcon[0] = "play-outline";
+        this.audio.pause();
+      }
+      else{
+        this.audioIcon[0] = "stop-outline"
+        this.audioIcon[1] = "play-outline"
+        this.audio.pause();
+        this.audio.src = this.parentNodeUser.audio;
+        this.audio.load();
+        this.audio.play();
+      }
     }
     else if(num === 2){
-      this.audio.pause();
-      // this.audio.src = this.parentNode.rightChild.audio;
-      this.audio.load();
-      this.audio.play();
+      if(this.audioIcon[1] === "stop-outline"){
+        this.audioIcon[1] = "play-outline";
+        this.audio.pause();
+      }
+      else{
+        this.audio.pause();
+        this.audio.src = this.parentNodeCom.audio;
+        this.audio.load();
+        this.audio.play();
+        this.audioIcon[1] = "stop-outline"
+        this.audioIcon[0] = "play-outline";
+      }
     }
-    else if(num === 3){
-      this.audio.pause();
-      this.audio.src = this.parentNodeCom.audio;
-      this.audio.load();
-      this.audio.play();
-      // this.audio.onended(this.onStopListening())
-      // setTimeout(()=> (this.onStopListening(),this.audio.duration));
-    }
-  }
-
-  //Replay video -- not working because the source remains the same
-  onReplayVideo(){
-    // this.videoUrl = this.videoBase + this.parentNode.video;
-    console.log(this.videoUrl)
   }
 
   onStopListening(){
@@ -492,19 +468,41 @@ export class ShadowreadPage implements OnInit {
           this.audio.play();
       }
       else{
-        this.audio.pause();
-          console.log(num);
-          this.audio.src = this.userVoiceArray[num];
-          this.audio.load();
-          this.audio.play();
+        if(this.audioIconArray[num].player === 'stop-outline'){
+          this.audio.pause();
+          this.audioIconArray[num].player = 'play-outline';
+        }
+        else{
+          for(let i = 0; i < this.audioIconArray.length; i++){
+            this.audioIconArray[i].computer = 'play-outline';
+            this.audioIconArray[i].player = 'play-outline';
+          }
+          this.audioIconArray[num].player = 'stop-outline';
+          this.audio.pause();
+            console.log(num);
+            this.audio.src = this.userVoiceArray[num];
+            this.audio.load();
+            this.audio.play();
+        }
       }
     }
     else if(user === 'computer'){
-      this.audio.pause();
-          console.log(num);
-          this.audio.src = this.computerVoiceArray[num];
-          this.audio.load();
-          this.audio.play();
+      if(this.audioIconArray[num].computer === 'stop-outline'){
+        this.audio.pause();
+        this.audioIconArray[num].computer = 'play-outline';
+      }
+      else{
+        for(let i = 0; i < this.audioIconArray.length; i++){
+          this.audioIconArray[i].computer = 'play-outline';
+          this.audioIconArray[i].player = 'play-outline';
+        }
+        this.audioIconArray[num].computer = 'stop-outline';
+        this.audio.pause();
+            console.log(num);
+            this.audio.src = this.computerVoiceArray[num];
+            this.audio.load();
+            this.audio.play();
+      }
     }
   }
     
@@ -591,6 +589,38 @@ export class ShadowreadPage implements OnInit {
     );
     this.userTextCorrectTrans = this.voiceTextTrans[0];
     // this.onCheck();
+  }
+
+  playFullActivity(){
+    //first choice
+    if(this.value === 0){
+      var count = 0;
+      if(this.conversationLog){
+        for(var i = 0; i < this.conversationLog.length; i++){
+          if(i === 0){
+            this.fullConversation[i] = this.userVoiceArray[i]; //0,0
+            this.fullConversation[i+1] = this.computerVoiceArray[i+1]; //1,0
+            console.log(this.computerVoiceArray[i], "test")
+          }
+          else{
+            i+=1; 
+            this.fullConversation[i] = this.userVoiceArray[i-1];
+            this.fullConversation[i+1] = this.computerVoiceArray[i];
+          }
+          var count = i;
+        }
+        console.log(this.fullConversation);
+        this.fullConversation[count + 1] = this.parentNodeCom.audio;
+        // this.fullConversation[count + 2] = this.userVoice;
+        console.log(this.fullConversation);
+      }
+    }
+    //second choice 
+    else if(this.value === 2){
+      this.fullConversation[0]
+    }
+
+    
   }
 
   //Changes if it is using L1 or L2
