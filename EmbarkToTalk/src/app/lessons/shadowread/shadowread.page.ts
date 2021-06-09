@@ -298,7 +298,6 @@ export class ShadowreadPage implements OnInit {
   chooseRoleplay(event){
     console.log(event.detail.value);
     this.value = event.detail.value;
-
     if(event.detail.value === '1'){
       this.parentNodeUser = this.brownNode1;
       this.choiceOne = this.parentNodeUser.name;
@@ -591,6 +590,7 @@ export class ShadowreadPage implements OnInit {
     // this.onCheck();
   }
 
+  //#TODO This is not complete, it should play back the audio for each sentence of the activity
   playFullActivity(){
     //first choice
     if(this.value === 0){
@@ -619,8 +619,6 @@ export class ShadowreadPage implements OnInit {
     else if(this.value === 2){
       this.fullConversation[0]
     }
-
-    
   }
 
   //Changes if it is using L1 or L2
