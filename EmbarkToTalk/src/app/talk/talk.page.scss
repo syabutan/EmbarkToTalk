@@ -2,6 +2,11 @@ ion-icon {
   font-size: 20px;
 }
 
+// ion-row.fixVideo{
+//   top:5%;
+//   bottom: 65%;
+// }
+
 /*background */
 .line-bc {
   padding: 20px 10px;
@@ -10,7 +15,6 @@ ion-icon {
   text-align: right;
   font-size: 14px;
   background: #7da4cd;
-
 }
 
 /*CP side comment*/
@@ -97,7 +101,7 @@ ion-icon {
   padding: 8px;
   max-width: 250px;
   border-radius: 12px;
-  background: #b1eba9;
+  background:white;
   font-size: 15px;
 }
 
@@ -107,7 +111,7 @@ ion-icon {
   top: 3px;
   right: -19px;
   border: 8px solid transparent;
-  border-left: 18px solid #b1eba9;
+  border-left: 18px solid white;
   -webkit-transform: rotate(-35deg);
   transform: rotate(-35deg);
 }
@@ -148,4 +152,27 @@ ion-icon-footer {
 {
   display: block;
   margin: 0 0 0 auto;
+}
+
+.fixed-content {
+  right: relative;
+  left: relative;
+  // top: 225px;
+  top: 35%;
+  width: 100%;
+  margin: 15px auto;
+  // bottom: 225px;
+  bottom: 35.5%;
+  position:fixed;
+  overflow-y:scroll;
+  overflow-x:auto;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+// .scrollTop{
+//   scroll-behavior: smooth;
+// }
+
+.bg-style {
+  background: url(../../assets/icon/embarkbackground.png) 0 0/100% 100% no-repeat;
 }

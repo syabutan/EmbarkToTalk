@@ -446,6 +446,12 @@ export class TalkPage implements OnInit {
     // this.onCheck();
   }
 
+  scrollToBottom(){
+    const el = document.querySelector('.btn');
+    document.querySelector('.fixed-content').scroll(0,el.scrollTop);
+}
+
+
   //Changes if it is using L1 or L2
   onSwitch() {
     this.langSwitch = !this.langSwitch;
