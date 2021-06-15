@@ -1,30 +1,35 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-row>
-
-      <ion-buttons color="light">
+    <!-- <ion-row> -->
+      <ion-buttons>
         <ion-button [routerLink]="['/home']">
-          <ion-icon color="dark" slot="start" name="return-up-back-outline"></ion-icon>
+          <ion-icon color="dark" name="arrow-back-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
-    </ion-row>
-    <ion-row>
-      <video [src]="videoUrl" type="video/mp4" width="100%" autoplay playsinline webkit-playsinline>
-      </video>
-      <!-- <ion-icon name="repeat-outline" (click) = "onReplayVideo()"></ion-icon> -->
-    </ion-row>
-  </ion-toolbar>
+      <!-- <ion-title>
+
+      </ion-title> -->
+      
+        <video [src]="videoUrl" type="video/mp4" width="100%" autoplay playsinline webkit-playsinline></video>
+
+      </ion-toolbar>
+      <ion-buttons>
+        <ion-button slot="start" class="flex-left" (click)="onPlayBack();">
+          <ion-icon color="dark" name="play-back-outline" ></ion-icon>
+        </ion-button>
+      </ion-buttons>
 </ion-header>
 
-<ion-content>
-  <!-- <div class = "bg-style">
-    <div #list class = "fixed-content" [scrollTop] = "list.scrollHeight"> -->
+<ion-content class="ion-no-border;">
+ <!-- <div class = "all-center"> -->
+     <div #list class = "fixed-content" [scrollTop] = "list.scrollHeight" >
   <div class="line-bc">
+
     <!--chat start-->
 
 <div *ngFor="let log of conversationLog; let i=index">
   <ng-template #bubble>
-    <div class="mycomment">
+    <div class="mycomment padding">
       <div class="balloon6">
         <div class="faceiconright">
           <img [src] = "userImage"/>
@@ -60,7 +65,7 @@
   </div>
 </div>
 
-    <!--CP side comment start-->    
+    <!--my side comment start-->    
     <ng-template #bubble>
       <div *ngIf = "userArray.length === 0">
       <div class="mycomment">
@@ -124,16 +129,16 @@
 
 
     <!-- </div> -->
-  </div>
-  <!-- </div>
-</div> -->
-
+  <!-- </div> -->
+  <!-- </div> -->
+</div>
+</div>
 
   <hr>
 
 
-  <div *ngIf="!lessonCompleted">
-    <ion-card>
+  <div *ngIf="!lessonCompleted" class="fixed-content-bottom">
+    <ion-card class="ion-no-padding">
       <ion-card-content *ngIf="!choiceOneTran else choiceone">
         <ion-icon name="language-outline" style="float:right" (click)="send('choiceOne')"></ion-icon>
         <ion-icon name="play-outline" style="float:right" (click)="onListenToSentence(1)"></ion-icon>
@@ -149,7 +154,7 @@
       </ion-card-content>
     </ng-template>
 
-    <ion-card *ngIf="choiceTwo !== ''">
+    <ion-card *ngIf="choiceTwo !== ''" class="ion-no-padding">
       <ion-card-content *ngIf="!choiceTwoTrans; else choicetwo">
         <ion-icon name="language-outline" style="float:right" (click)="send('choiceTwo')"></ion-icon>
         <ion-icon name="play-outline" style="float:right" (click)="onListenToSentence(2)"></ion-icon>
@@ -167,9 +172,12 @@
   </div>
 
 
-  <div *ngIf="lessonCompleted">
-    <iframe src="https://giphy.com/embed/3oz9ZE2Oo9zRC" width="100%" frameBorder="0" class="giphy-embed"
-      allowFullScreen></iframe>
+  <div *ngIf="!!lessonCompleted" class="fixed-content-bottom all-center">
+      <div class="badge disable-hover ion-text-center">
+        <img class="trophy" class="hot-air-ballon" src="../../assets/icon/Trophy.png" height="100px"/>
+      </div>
+
+
       <ion-row class="item-text-center">
         <ion-col>
           <ion-button color="success" >
@@ -185,47 +193,33 @@
           </ion-button>    
         </ion-col>
       </ion-row>
-
   </div>
-
-
-
 
   <button id="translatebtn" (click)="send('nothing')" style="margin-left: auto;"></button>
 
   <br><br><br>
   <br><br><br>
   <br><br><br>
+  <!-- </div> -->
 </ion-content>
 
-<ion-footer>
-  <ion-toolbar>
-    <!-- <ion-button (click)="onStartVoiceRecognition()" *ngIf="voiceActiveSectionDisabled">
-      <ion-icon name="play-circle-outline"></ion-icon>
-    </ion-button>
-    <ion-button color="danger" *ngIf="!voiceActiveSectionDisabled" (click) = "onCloseVoiceRecognition()">
-      <ion-icon name="mic-circle-outline"></ion-icon>
-    </ion-button>
-    <ion-button color="success" *ngIf="!recordStart" (click) = "check()">
-      Check    
-    </ion-button> -->
-    
-    <!-- <ion-buttons *ngIf="voiceActiveSectionDisabled; else voicesection;"> -->
+<ion-footer class="ion-no-border">
+  <ion-toolbar >
       <ion-row>
         <ion-col></ion-col>
         <ion-col >
-          <ion-button shape = "round" color = "white"
+          <ion-button color="primary" class="shadow"
             (click)="onStartVoiceRecognition();" *ngIf="voiceActiveSectionDisabled; else voicesection;">
-            <ion-icon name="mic-outline" style = "font-size: 35px; color:rgb(71, 71, 71);"></ion-icon>
+            <ion-icon class="ion-padding" name="mic-outline" style="font-size: 35px; color:white;"></ion-icon>
           </ion-button>          
         </ion-col>
         <ion-col >
           <circle-progress
           [percent]= "score * 100"
           [radius]="20"
-          [outerStrokeWidth]="4"
-          [innerStrokeWidth]="5"
-          [outerStrokeColor]="'#3279a8'"
+          [outerStrokeWidth]="5"
+          [innerStrokeWidth]="4"
+          [outerStrokeColor]="'#d17d00'"
           [innerStrokeColor]="'#a4adb3'"
           [animation]="true"
           [animationDuration]="300"
@@ -238,26 +232,27 @@
       <ng-template #voicesection>
       <ng-container *ngIf="!voiceActiveSectionError; else failure">
         <ng-container *ngIf="voiceText; else start">
-          <ion-button color="white" shape = "round" (click) = "onStartVoiceRecognition()">
-            <ion-icon name="mic-outline" style = "font-size: 35px; color:rgb(71, 71, 71);"></ion-icon>
+          <ion-button color="primary" (click)="onStartVoiceRecognition()" class="shadow">
+            <ion-icon class="ion-padding" name="mic-outline" style="font-size: 35px; color:white;"></ion-icon>
+        
           </ion-button>
         </ng-container>
         <ng-template #start>
           <ng-container *ngIf="voiceActiveSectionListening; else beginning" (click) = "onCloseVoiceRecognition();">
-              <ion-button shape = "round" color = "white" (click) = "onCloseVoiceRecognition();">
-                  <ion-icon name="mic-outline" style = "font-size: 35px; color: red" #changeColor></ion-icon>
+              <ion-button color="light" (click) = "onCloseVoiceRecognition();" class="shadow">
+                  <ion-icon class="ion-padding" name="stop-circle-outline" style = "font-size: 35px; color: red" #changeColor></ion-icon>
               </ion-button>
           </ng-container>
           <ng-template #beginning>
-            <ion-button shape = "round" color = "white" (click) = "onCloseVoiceRecognition();">
-                <ion-icon name="mic-outline" style = "font-size: 35px; color: red" #changeColor></ion-icon>
+            <ion-button color = "light" (click) = "onCloseVoiceRecognition();"  class="shadow">
+                <ion-icon class="ion-padding" name="stop-circle-outline" style = "font-size: 35px; color: red" #changeColor></ion-icon>
             </ion-button>
           </ng-template>
         </ng-template>
       </ng-container>
       <ng-template #failure>
-        <ion-button color="white" shape = "round" (click) = "onStartVoiceRecognition()">
-          <ion-icon name="mic-outline" style = "font-size: 35px; color:rgb(71, 71, 71);"></ion-icon>
+        <ion-button color="primary" (click) = "onStartVoiceRecognition()" class="shadow">
+          <ion-icon class="ion-padding" name="mic-outline" style = "font-size: 35px; color:white;"></ion-icon>
         </ion-button>
       </ng-template>
     </ng-template>

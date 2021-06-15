@@ -40,7 +40,7 @@ export class JapaneseService {
     },
     {
       id: '5',
-      player: '私は田中姉妹です。私たちは末日生徒イエスキリスト教会の宣教師です。', 
+      player: '私は田中姉妹です。私たちは末日聖徒イエスキリスト教会の宣教師です。', 
       computer: '宣教師には初めて会いました。何をしているんですか？', 
       video: '19,23'
     },
@@ -107,7 +107,7 @@ export class JapaneseService {
 
   private refference: Refference[] = [
     {
-      faceIcon: "../../../assets/icon/face2.PNG",
+      faceIcon: "../../../assets/icon/face/face2.PNG",
       videoRef: "../assets/videos/JapaneseConversation.mp4#t=",
       voiceRef: "../../assets/soundFile/Japanese/"
     }]

@@ -1,0 +1,31 @@
+<svg width="131px" height="146px" viewBox="0 0 131 146" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-8.8%" y="-5.6%" width="117.6%" height="115.6%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="3" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+        <linearGradient x1="7.02971982%" y1="23.4954396%" x2="90.1214958%" y2="74.9344961%" id="linearGradient-2">
+            <stop stop-color="#FFC30D" offset="0%"></stop>
+            <stop stop-color="#FDC94E" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home---All-Lessons-Copy-18" transform="translate(-115.000000, -227.000000)">
+            <g id="Group-2" transform="translate(121.000000, 230.000000)">
+                <g id="Group" filter="url(#filter-1)">
+                    <path d="M1.97216622,25.7547091 L57.6596662,0.305361195 C58.5505758,-0.101787065 59.5744242,-0.101787065 60.4653338,0.305361195 L116.152834,25.7547091 C117.354311,26.3037876 118.125,27.5033504 118.125,28.8243479 L118.125,105.755009 C118.125,107.080457 117.349171,108.2832 116.141648,108.829735 L60.4541482,134.03439 C59.5695758,134.434755 58.5554242,134.434755 57.6708518,134.03439 L1.98335182,108.829735 C0.77582923,108.2832 -5.61083919e-15,107.080457 -5.77315973e-15,105.755009 L1.77635684e-15,28.8243479 C2.78786281e-15,27.5033504 0.77068909,26.3037876 1.97216622,25.7547091 Z" id="Rectangle-Copy-3" fill="url(#linearGradient-2)"></path>
+                    <path d="M13.2221662,34.0556707 L57.5332862,13.8053612 C58.4241958,13.3982129 59.4480441,13.3982129 60.3389537,13.8053612 L104.650074,34.0556707 C105.851551,34.6047492 106.62224,35.8043119 106.62224,37.1253095 L106.62224,98.400905 C106.62224,99.7263527 105.846411,100.929096 104.638888,101.475631 L60.3277681,121.531235 C59.4431958,121.931601 58.4290441,121.931601 57.5444718,121.531235 L13.2333518,101.475631 C12.0258292,100.929096 11.25,99.7263527 11.25,98.400905 L11.25,37.1253095 C11.25,35.8043119 12.0206891,34.6047492 13.2221662,34.0556707 Z" id="Rectangle-Copy-3" fill="#FFA800" opacity="0.870471014"></path>
+                    <path d="M58.93612,13.1642621 L104.650074,34.0556707 C105.851551,34.6047492 106.62224,35.8043119 106.62224,37.1253095 L106.62224,98.400905 C106.62224,99.7263527 105.846411,100.929096 104.638888,101.475631 L58.93612,122.161108 L58.93612,13.1642621 Z" id="Rectangle-Copy-3" fill="#FF9A00" opacity="0.870471014"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
+

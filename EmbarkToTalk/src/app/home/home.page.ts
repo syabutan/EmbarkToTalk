@@ -38,6 +38,9 @@ export class HomePage implements OnInit {
   langForm() {
     console.log(this.langSwitch.value.langFrom);
     console.log(this.langSwitch.value.langTo);
+    localStorage.setItem('userLangFrom', this.langSwitch.value.langFrom);
+    localStorage.setItem('userLangTo', this.langSwitch.value.langTo);
+
   }
 
   getLangInfo() {

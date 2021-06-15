@@ -24,3 +24,227 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+@mixin mobileExperience {
+  @media (max-width: 550px) {
+    @content;
+  }
+}
+
+@mixin desktopExperience {
+  @media (min-width: 551px) {
+    @content;
+  }
+}
+
+@mixin safe-area-inset-top($padding-top) {
+  padding-top: $padding-top;
+  @supports (padding-top: unquote("max(0px)")) {
+    padding-top: unquote("max(#{$padding-top}, env(safe-area-inset-top))");
+  }
+}
+
+/******included in ionic 4 template********/
+/** Ionic CSS Variables **/
+:root {
+  --ion-background-color: var(--transparent);
+  --ion-toolbar-background: var(--transparent);
+  --ion-tab-bar-background: var(--light);
+  --ion-tab-bar-color: var(--coin);
+  --ion-item-background: var(--light);
+  --ion-item-background-activated: var(--transparent);
+  --ion-backdrop-color: var(--dark);
+  --ion-font-family: "open sans", "Helvetica Neue", "sans-serif";
+  --text-input-highlight-color-valid: var(--primary);
+  --placeholder-color: var(--medium);
+  --h1-font-size: 20px;
+  --ion-text-color: var(--dark);
+  --border-radius: 6px;
+  --ion-safe-area-top: 0px;
+  --ion-statusbar-padding: 0px;
+  --box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  --primary: #ff9800; // honey
+  --ion-color-primary: #ff9800;
+  --ion-color-primary-rgb: 255, 152, 0;
+  --ion-color-primary-contrast: #fafafa;
+  --ion-color-primary-contrast-rgb: 250, 250, 250;
+  --ion-color-primary-shade: #e08600;
+  --ion-color-primary-tint: #ffa21a;
+
+  --warning: #f4f4f4; // disabled background
+  --ion-color-warning: #f4f4f4;
+  --ion-color-warning-rgb: 244, 244, 244;
+  --ion-color-warning-contrast: #000000;
+  --ion-color-warning-contrast-rgb: 0, 0, 0;
+  --ion-color-warning-shade: #d7d7d7;
+  --ion-color-warning-tint: #f5f5f5;
+  --ion-color-base: var(--transparent);
+
+  --transparent: transparent;
+  --ion-color-transparent: transparent;
+  --ion-color-transparent-rgb: transparent;
+  --ion-color-transparent-contrast: transparent;
+  --ion-color-transparent-contrast-rgb: transparent;
+  --ion-color-transparent-shade: transparent;
+  --ion-color-transparent-tint: transparent;
+
+  --success: #64b58a; // fern
+  --ion-color-success: #64b58a;
+  --ion-color-success-rgb: 100, 181, 138;
+  --ion-color-success-contrast: var(--ion-color-light);
+  --ion-color-success-contrast-rgb: 250, 250, 250;
+  --ion-color-success-shade: #589f79;
+  --ion-color-success-tint: #74bc96;
+
+  --danger: #d13b4c; // cherry
+  --ion-color-danger: #d13b4c;
+  --ion-color-danger-rgb: 209, 59, 76;
+  --ion-color-danger-contrast: var(--ion-color-light);
+  --ion-color-danger-contrast-rgb: 250, 250, 250;
+  --ion-color-danger-shade: #b83443;
+  --ion-color-danger-tint: #d64f5e;
+
+  --dark: #424242; // charcoal
+  --ion-color-dark: #424242;
+  --ion-color-dark-rgb: 66, 66, 66;
+  --ion-color-dark-contrast: var(--ion-color-light);
+  --ion-color-dark-contrast-rgb: 250, 250, 250;
+  --ion-color-dark-shade: #3a3a3a;
+  --ion-color-dark-tint: #555555;
+
+  --medium: #d1d3d4;
+  --ion-color-medium: #d1d3d4;
+  --ion-color-medium-rgb: 189, 189, 189;
+  --ion-color-medium-contrast: var(--ion-color-dark);
+  --ion-color-medium-contrast-rgb: 66, 66, 66;
+  --ion-color-medium-shade: #a6a6a6;
+  --ion-color-medium-tint: #c4c4c4;
+
+  --light: #fafafa;
+  --ion-color-light: #fafafa;
+  --ion-color-light-rgb: 250, 250, 250;
+  --ion-color-light-contrast: var(--ion-color-dark);
+  --ion-color-light-contrast-rgb: 66, 66, 66;
+  --ion-color-light-shade: #dcdcdc;
+  --ion-color-light-tint: #fbfbfb;
+
+  // New colors
+  --ion-color-disabled: #f4f4f4;
+  --ion-color-disabled-rgb: 244, 244, 244;
+  --ion-color-disabled-contrast: #a5a5a5;
+  --ion-color-disabled-contrast-rgb: rgb(165, 165, 165);
+  --ion-color-disabled-shade: #d7d7d7;
+  --ion-color-disabled-tint: #f5f5f5;
+
+  --ion-color-coin: #8a8a8a;
+  --ion-color-coin-rgb: 138, 138, 138;
+  --ion-color-coin-contrast: #000000;
+  --ion-color-coin-contrast-rgb: 0, 0, 0;
+  --ion-color-coin-shade: #797979;
+  --ion-color-coin-tint: #969696;
+}
+
+// New Colors implementation
+.ion-color-disabled {
+  --ion-color-base: var(--ion-color-disabled);
+  --ion-color-base-rgb: var(--ion-color-disabled-rgb);
+  --ion-color-contrast: var(--ion-color-disabled-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-disabled-contrast-rgb);
+  --ion-color-shade: var(--ion-color-disabled-shade);
+  --ion-color-tint: var(--ion-color-disabled-tint);
+}
+
+.ion-color-coin {
+  --ion-color-base: var(--ion-color-coin);
+  --ion-color-base-rgb: var(--ion-color-coin-rgb);
+  --ion-color-contrast: var(--ion-color-coin-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-coin-contrast-rgb);
+  --ion-color-shade: var(--ion-color-coin-shade);
+  --ion-color-tint: var(--ion-color-coin-tint);
+}
+
+ion-button.shadow {
+  min-width: 72px !important;
+  border-radius: 36px;
+  margin: 15px 15px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  background-color: var(--light);
+  color: var(--dark);
+
+  .correct {
+    color: var(--success);
+  }
+  ion-button ion-icon {
+    font-size: 32px !important;
+    padding: 0;
+  }
+}
+
+
+
+
+
+
+.container {
+  padding: 18px;
+  height: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin: 0 auto;
+  @include safe-area-inset-top(18px);
+  @include desktopExperience {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+.container::-webkit-scrollbar {
+  display: none;
+}
+
+.container--home {
+  $padding-top: 10px;
+  padding: $padding-top 0 0 0;
+  @include safe-area-inset-top($padding-top);
+  @include desktopExperience {
+    padding: $padding-top 18px 0 18px;
+    max-width: 700px;
+  }
+}
+
+
+
+.badge {
+  background: transparent;
+  position: relative;
+  background-image: url(./assets/icon/badge.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin: 0 auto;
+  margin-top: 20px;
+  width: 150px;
+  height: 170px;
+   .hot-air-balloon {
+     margin: 0 auto;
+     width: 50%;
+     padding-top: 40px;
+   }
+}
+
+.is-browser .badge,
+.is-tablet .small-badge.badge {
+  width: 165px;
+  height: 189px;
+   .hot-air-balloon {
+     padding-top: 50px;
+   }
+}
+
+.is-tablet .badge {
+  width: 220px;
+  height: 246px;
+}

@@ -9,12 +9,12 @@ ion-icon {
 
 /*background */
 .line-bc {
-  padding: 20px 10px;
-  max-width: 450px;
-  margin: 15px auto;
+  padding: 5px 5px;
+  // margin: 5px auto;
   text-align: right;
   font-size: 14px;
-  background: #7da4cd;
+  background: #7da4cdbe;
+
 }
 
 /*CP side comment*/
@@ -67,7 +67,8 @@ ion-icon {
   padding: 10px;
   max-width: 250px;
   border-radius: 12px;
-  background: #edf1ee;
+  background: #f4f7fa;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
 }
 
 .says:after {
@@ -77,9 +78,10 @@ ion-icon {
   top: 3px;
   left: -19px;
   border: 8px solid transparent;
-  border-right: 18px solid #edf1ee;
+  border-right: 18px solid #f4f7fa;
   -webkit-transform: rotate(35deg);
   transform: rotate(35deg);
+
 }
 .says p {
   margin: 0;
@@ -166,13 +168,45 @@ ion-icon-footer {
   position:fixed;
   overflow-y:scroll;
   overflow-x:auto;
-  background: rgba(255, 255, 255, 0.6);
+  // background: rgba(255, 255, 255, 0.6);
+}
+
+.fixed-content-bottom {
+  right: relative;
+  left: relative;
+  top: 60%;
+  bottom: 10%;
+  position: fixed;
+  padding: 0%;
+  overflow-y: scroll;
+  overflow-x: auto;
 }
 
 // .scrollTop{
 //   scroll-behavior: smooth;
 // }
 
-.bg-style {
-  background: url(../../assets/icon/embarkbackground.png) 0 0/100% 100% no-repeat;
-}
+// .bg-style {
+//   background: url(../../assets/icon/embarkbackground.png) 0 0/100% 100% no-repeat;
+// }
+
+ion-toolbar, ion-content {
+  --background: transparent;
+  --ion-color-base: transparent !important;
+  }
+
+
+  .all-center {
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  align-items: center;
+
+  }
+
+
+  .trophy {
+    margin-top: 20px;
+  }
+

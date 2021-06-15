@@ -14,11 +14,16 @@ import { JapaneseService } from '../services/lessons/japanese.service';
 import { Lesson  } from '../services/lesson.model';
 import { ComplexOuterSubscriber } from 'rxjs/internal/innerSubscribe';
 import { HomePage } from '../home/home.page';
+import { EnglishService } from '../services/lessons/english.service';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 @Component({
-  selector: 'app-spanitalksh',
+  selector: 'app-talk',
   templateUrl: './talk.page.html',
   styleUrls: ['./talk.page.scss'],
+  host: {
+    class: "container container--home"
+  }
 })
 
 
@@ -69,6 +74,8 @@ export class TalkPage implements OnInit {
   voiceTextTrans = [];
   userArray = [];
 
+  userLangFrom: string;
+  userLangTo: string;
   langFrom = new FormControl('ja');
   langTo = new FormControl('en');
   langArray;
@@ -122,31 +129,57 @@ export class TalkPage implements OnInit {
     private recordAudio: RecordAudio, 
     private checkSentence: CheckSentence,
     private jpnservice: JapaneseService,
+    private engservice: EnglishService,
     private langChange: HomePage) {
-      // this.langArray = this.langChange.getLangInfo();
-      // console.log("reading talkPage " + this.langArray.value.langFrom);
-    // console.log("langage from " + this.langArray.value.langFrom + " to " + this.langArray.value.langTo);
-    // this.langFrom = new FormControl(this.langArray.value.langFrom);
-    // this.langTo = new FormControl(this.langArray.value.langTo);
-
-      this.refArray = this.jpnservice.getAllRef();
-      this.videoBase = this.refArray[0].videoRef;
-      this.audioBase = this.refArray[0].voiceRef;
-      this.cpImage = this.refArray[0].faceIcon;
-      this.serviceArray = this.jpnservice.getAllArrays();
+      this.conversationLog = [];
       this.showAccuracy = true;
       this.langSwitch = true;
-      this.computerSentence = this.serviceArray[1].computer;
-      this.choiceOne = this.serviceArray[2];
-      this.choiceTwo = this.serviceArray[3];
-      this.videoUrl = this.videoBase + this.serviceArray[1].video;
-      this.conversationLog = [];
       this.showVoiceText = false;
       this.showVoiceText2 = false;
   }
 
 
   ngOnInit() {
+    this.userLangFrom = localStorage.getItem('userLangFrom');
+    this.userLangTo = localStorage.getItem('userLangTo');
+    if (!!this.userLangFrom) {
+      this.langFrom = new FormControl(this.userLangFrom);
+      this.langTo = new FormControl(this.userLangTo);
+
+      this.refArray = [];
+
+      console.log("from talk page: from " + this.userLangFrom);
+      console.log("from talk page: to " + this.userLangTo);
+    }
+    else {
+      this.userLangFrom = 'ja';
+      this.userLangTo = 'en';
+    }
+
+
+    if (this.userLangFrom == 'ja') {
+      this.refArray = this.jpnservice.getAllRef();
+      this.serviceArray = this.jpnservice.getAllArrays();
+      console.log('i got japanese');
+    }
+    else if (this.userLangFrom == 'en') {
+      this.refArray = this.engservice.getAllRef();
+      this.serviceArray = this.engservice.getAllArrays();
+      console.log('i got english');
+
+    }
+
+    this.videoBase = this.refArray[0].videoRef;
+    this.audioBase = this.refArray[0].voiceRef;
+    this.cpImage = this.refArray[0].faceIcon;
+
+
+    this.computerSentence = this.serviceArray[1].computer;
+    this.choiceOne = this.serviceArray[2];
+    this.choiceTwo = this.serviceArray[3];
+    this.videoUrl = this.videoBase + this.serviceArray[1].video;
+
+
 
     this.solution.getSolution().subscribe(res => this.data = res);
     this.translateBtn = document.getElementById('translatebtn');
@@ -456,4 +489,28 @@ export class TalkPage implements OnInit {
   onSwitch() {
     this.langSwitch = !this.langSwitch;
   }
+
+  onPlayBack() {
+
+    if (this.sentenceNum > 1) {
+      if ( this.sentenceNum % 2 ==0 ) {
+        this.sentenceNum = this.sentenceNum/2;
+      }
+      else {
+        this.sentenceNum = (this.sentenceNum - 1)/2;
+      }
+  
+      this.choiceOne = this.serviceArray[(this.sentenceNum * 2)];
+      this.choiceTwo = this.serviceArray[(this.sentenceNum * 2) + 1];
+  
+      this.computerSentence = this.serviceArray[this.sentenceNum].computer;
+  
+      this.userTextCorrect = this.voiceText;
+      this.videoUrl = this.videoBase + this.serviceArray[this.sentenceNum].video;
+  
+      this.recordAudio.userVoiceText = [];
+      this.userTextCorrectTrans = this.voiceTextTrans[this.voiceTextTrans.length];
+      }
+    }
 }
+
