@@ -1,512 +1,696 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component,  NgZone,  OnInit } from '@angular/core';
 import { CheckSentence } from '../../services/checksentence.service';
-import { RecordAudio } from 'src/app/services/recordaudio.service';
-import {FormControl, Form} from '@angular/forms';
-import { GoogleObj, Solution } from '../../models/solution';
-import { Treenode, TreenodeComputer } from '../../models/tree-node';
-import { SolutionService } from '../../services/solution.service';
+import { FormControl } from '@angular/forms';
+import { GoogleObj } from '../../models/solution';
 import { GoogletranslateService } from '../../services/googletranslate.service';
-// import { ElementRef, NgZone, ViewChild } from '@angular/core';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import {ModalController} from "@ionic/angular"
-import { NextSentenceService } from 'src/app/services/nextsentence.service';
+import { SafeResourceUrl } from '@angular/platform-browser';
+import { JapaneseService } from '../../services/lessons/japanese.service';
+import { RecordAudio } from '../../services/recordaudio.service';
 
 @Component({
   selector: 'app-japanese',
   templateUrl: './japanese.page.html',
   styleUrls: ['./japanese.page.scss'],
+  host: {
+    class: "container container--home"
+  }
 })
-export class JapanesePage implements OnInit {
-  //To record voice 
-  userVoiceText = [];
-  voiceActiveSectionDisabled: boolean = true;
-	voiceActiveSectionError: boolean = false;
-	voiceActiveSectionSuccess: boolean = false;
-	voiceActiveSectionListening: boolean = false;
-	voiceText: any = '';
-  voiceTextReady: boolean = false;
-  inputString = '';
-  userVoice: any = '';
-  userVoiceArray = [];
-  
-  sentenceCounter = 0; 
 
-  //Where to start and stop video for each line 
-  videoTimeJapanese = ["0,2","3,5", "6,10", "10,17", "17,21", "21,23", "24,26", "27,34"];
-  videoUrl: SafeResourceUrl;
-  videoBase = "../../assets/videos/JapaneseConversation.mp4#t=";
-  videoCount = 0;
-
+export class JapanesePage implements OnInit, AfterContentChecked {
+  //To record voice
+  public userVoiceText = [];
+  public voiceActiveSectionDisabled = true;
+  public voiceActiveSectionError = false;
+  public voiceActiveSectionSuccess = false;
+  public voiceActiveSectionListening = false;
+  public voiceText: any = '';
+  public voiceTextReady = false;
+  public userVoice: any = '';
+  public userVoiceArray = [];
+  public correctRecord = [];
+  public correctVoiceRecord = [];
+  public notPlaying = true;
+  public audio = new Audio();
+  public userTextCorrect = "";
+  public userTextCorrectAudio = "";
+  public userTextCorrectTrans = '';
+  public sentenceNum = 1;
+  public lessonCompleted = false;
+  //Where to start and stop video for each line
+  public videoUrl: SafeResourceUrl;
+  public videoBase = '';
+  public videoCount = 0;
+  public audioBase = "../../../../assets/soundFile/japanese/";
   //To know whether to show L1 or L2
-  choiceOneTrans = false;
-  choiceTwoTrans = false;
-  choiceComputerTrans = false;
-  choiceUserTrans = false;
-  choiceOneTran = false;
-  voiceTextTrans = [];
-  userArray = [];
-
-  langFrom = new FormControl('en');
-  langTo = new FormControl('es');
-
-  private translateBtn: any;
-
-  scoreLeft: number = 0;
-  scoreRight: number = 0;
-  score: number = 0;
-
+  public choiceOneTrans = false;
+  public choiceTwoTrans = false;
+  public choiceComputerTrans = false;
+  public choiceUserTrans = false;
+  public choiceOneTran = false;
+  public voiceTextTrans = [];
+  public textTran = false;
+  public computerLogTrans = false;
+  public userArray = [];
+  public userLangFrom: string;
+  public userLangTo: string;
+  public langFrom = new FormControl('ja');
+  public langTo = new FormControl('en');
+  public langArray;
+  public scoreLeft: number = 0;
+  public scoreRight: number = 0;
+  public score: number = 0;
   //Japanese tree
-  userChoiceOneArray = ['はい元気です。元気ですか？', '私は山田長老です。お名前は何ですか？','私は田中姉妹です。お名前は何ですか？','私たちは宣教師で、イエスキリストについて教えています。','私たちはボランティアとして奉仕するために来ました。'];
-  userChoiceTwoArray = ['はい元気です。私たちは最近この近くに引っ越してきました。地元の方ですか？','私たちは宣教師で、イエスキリストについて教えています。','私たちはボランティアとして奉仕するために来ました。','福音を学ぶことに興味がありますか？','宣教師について聞いたことがありますか？'];                         
-  computerSentenceArrayTwo = ['こんにちは。元気ですか？', '元気です。お名前は何ですか？', '私ははやとです。お二人は何をしていますか？', 'そうなんですね。私はここに10年間住んでいます。何をしに引っ越してきたんですか？','キリストについては学んだことないですね。','素晴らしいですね。','はい、聞いてみたいです。','教会に行っている友達がいますが、そのことについてあまり話したことがありません。学んでみたいと思っていました。'];
-  computerSentenceArrayOne = ['こんにちは。元気ですか？','元気です。お名前は何ですか？','私ははやとです。お二人は何をしていますか？']
-  computerSentenceArray = [];
-  
-  showAccuracy: boolean;
-  langSwitch: boolean;
-
+  public computerSentenceArray = [];
+  public showAccuracy: boolean;
+  public langSwitch: boolean;
   //stores the translations
-  data: Solution = {
-    firstChoice: '',
-    secondChoice: '',
-    userText: '',
-    computerText: '',
-    inputString: ''
-  };
-
-  //Setting up computer tree
-  emptyNodeComp: TreenodeComputer = {
-    name: '',
-    video: '',
-    leftChild: '',
-    rightChild: '',
-    audio: ''
-  }
-  // nodeComp4: TreenodeComputer = {
-  //   name: ' 私ははやとです。お二人は何をしていますか？',
-  //   video: '',
-  //   leftChild: '',
-  //   rightChild: ''
-  // }
-  // nodeComp4: TreenodeComputer = {
-  //   name: ' 私ははやとです。お二人は何をしていますか？',
-  //   video: '',
-  //   leftChild: '',
-  //   rightChild: ''
-  // }
-  // nodeComp4: TreenodeComputer = {
-  //   name: ' 私ははやとです。お二人は何をしていますか？',
-  //   video: '',
-  //   leftChild: '',
-  //   rightChild: ''
-  // }
-  // nodeComp4: TreenodeComputer = {
-  //   name: ' 私ははやとです。お二人は何をしていますか？',
-  //   video: '',
-  //   leftChild: '',
-  //   rightChild: ''
-  // }
-  nodeComp8: TreenodeComputer = {
-    name: ' 教会に行っている友達がいますが、そのことについてあまり話したことがありません。学んでみたいと思っていました。',
-    video: '27,34',
-    leftChild: '',
-    rightChild: '',
-    audio: ''
-  }
-  nodeComp7: TreenodeComputer = {
-    name: ' はい、聞いてみたいです。',
-    video: '24,26',
-    leftChild: '',
-    rightChild: '',
-    audio: ''
-  }
-  nodeComp6: TreenodeComputer = {
-    name: ' 素晴らしいですね。',
-    video: '21,23',
-    leftChild: '',
-    rightChild: '',
-    audio: ''
-  }
-  nodeComp5: TreenodeComputer = {
-    name: 'キリストについては学んだことないですね。',
-    video: '17,20',
-    leftChild: '',
-    rightChild: '',
-    audio: ''
-  }
-  nodeComp4: TreenodeComputer = {
-    name: ' 私ははやとです。お二人は何をしていますか？',
-    video: '5,10',
-    leftChild: '',
-    rightChild: '',
-    audio: ''
-  }
-  nodeComp3: TreenodeComputer = {
-    name: ' 私ははやとです。お二人は何をしていますか？',
-    video: '5,10',
-    leftChild: '',
-    rightChild: '',
-    audio: ''
-  }
-  nodeComp2: TreenodeComputer = {
-    name: 'そうなんですね。私はここに10年間住んでいます。何をしに引っ越してきたんですか？',
-    video: '10,17',
-    leftChild: this.nodeComp5,
-    rightChild: this.nodeComp6,
-    audio: ''
-  }
-  nodeComp1: TreenodeComputer = {
-    name: '元気です。お名前は何ですか？',
-    video: '2,5',
-    leftChild: this.nodeComp3,
-    rightChild: this.nodeComp4,
-    audio: ''
-  }
-  parentNodeComp: TreenodeComputer = {
-    name: 'こんにちは。元気ですか？',
-    video: '0,2',
-    leftChild: this.nodeComp1,
-    rightChild: this.nodeComp2,
-    audio: '../../assets/soundFile/Japanese/1 Hello! How are you.m4a'
-  }
-  //Setting up user tree
-  emptyNode: Treenode = {
-    name: '',
-    leftChild: '',
-    rightChild: '',
-    audio: ''
-    }
-  node14:Treenode = {
-    name: '',
-    leftChild: this.emptyNode,
-    rightChild: this.emptyNode,
-    audio: ''
-  }
-  node13:Treenode = {
-    name: '',
-    leftChild: this.emptyNode,
-    rightChild: this.emptyNode,
-    audio: ''
-  }
-  node12:Treenode = {
-    name: '',
-    leftChild: this.emptyNode,
-    rightChild: this.emptyNode,
-    audio: ''
-  }
-  node11:Treenode = {
-    name: '',
-    leftChild: this.emptyNode,
-    rightChild: this.emptyNode,
-    audio: ''
-  }
-  node10:Treenode = {
-    name: '',
-    leftChild: this.emptyNode,
-    rightChild: this.emptyNode,
-    audio: ''
-  }
-  node9:Treenode = {
-    name: '',
-    leftChild: this.emptyNode,
-    rightChild: this.emptyNode,
-    audio: ''
-  }
-  node8:Treenode = {
-    name: '',
-    leftChild: this.emptyNode,
-    rightChild: this.emptyNode,
-    audio: ''
-  }
-  node7:Treenode = {
-    name: '',
-    leftChild: this.emptyNode,
-    rightChild: this.emptyNode,
-    audio: ''
-  }
-  node6:Treenode = {
-    name: '私たちはボランティアとして奉仕するために来ました。 ',
-    // name: 'hey what up',
-    leftChild: this.node13,
-    rightChild: this.node14,
-    audio: ''
-  }
-  node5:Treenode = {
-    name: '私たちは宣教師で、イエスキリストについて教えています。',
-    // name: 'hey how are you',
-    leftChild: this.node11,
-    rightChild: this.node12,
-    audio: ''
-  }
-  node4:Treenode = {
-    name: ' 私は田中姉妹です。お名前は何ですか？',
-    // name: 'hello what up',
-    leftChild: this.node5,
-    rightChild: this.node6,
-    audio: '../../assets/soundFile/Japanese/5 My name is Sister Tanaka.m4a'
-  }
-  node3:Treenode = {
-    name: '私は山田長老です。お名前は何ですか？',
-    // name: 'hello how are you',
-    leftChild: this.node5,
-    rightChild: this.node6,
-    audio: '../../assets/soundFile/Japanese/4 My name is Elder Yamada.m4a'
-  }
-  node2:Treenode = {
-    name: 'はい元気です。私たちは最近この近くに引っ越してきました。地元の方ですか？',
-    // name: 'hey',
-    leftChild: this.node5,
-    rightChild: this.node6,
-    audio: '../../assets/soundFile/Japanese/17 Im good. Im new here.m4a'
-  }
-  node1:Treenode = {
-    name: 'はい元気です。元気ですか？',
-    // name: 'hello',
-    leftChild: this.node3,
-    rightChild: this.node4,
-    audio: '../../assets/soundFile/Japanese/2 Im good, how are you.m4a'
-  }
-
-  //we are going to start at node1
-  parentNode:Treenode = {
-    name: '',
-    leftChild: this.node1,
-    rightChild: this.node2,
-    audio: ''
-  }
-
-  cpImage ="../../../assets/icon/face1.PNG"
-  userImage ="../../../assets/icon/blank.webp"
-
+  public firstChoice: string;
+  public secondChoice: string;
+  public voiceTextTran: string;
+  public computerSentenceTran: string;
+  public serviceArray;
+  public refArray;
+  public cpImage = '';
+  public userImage ="../../assets/icon/blank.webp"
   //store user choices and computer responce
-  computerSentence: string = '';
-  choiceOne: string = '';
-  choiceTwo: string = '';
+  public computerSentence = '';
+  public choiceOne;
+  public choiceTwo;
+  public logNum = 0;
+  public showVoiceText: boolean;
+  public showVoiceText2: boolean;
+  public correctOrNot: number;
+  public correctOrNotArray = [{boolean: false, chunk: ''}];
+  public correctOrNotBoolean: boolean;
+  public conversationLog = [{
+    computer: '',
+    player: '',
+    computerTran: false,
+    playerTran: false,
+    sentenceNumber: 0,
+    computerIcon: 'play-outline',
+    playerIcon: 'play-outline'
+  }];
+  public noSymbolSentence: string;
+  public wrongAnswer = false;
+  public wrongAnswer1 = false;
+  public wrongAnswer2 = false;
+  public firstPrompt = true;
+  public chunkSentence = [];
+  public chunkComponent = '';
+  public chunkCheck: string;
+  public hiragana = /[\u{3041}-\u{3093}\u{309B}-\u{309E}]/mu;
+  public katakana = /[\u{30A1}-\u{30F6}\u{30FB}-\u{30FE}]/mu;
+  public kanji = /([\u{3005}\u{3007}\u{303b}\u{3400}-\u{9FFF}\u{F900}-\u{FAFF}\u{20000}-\u{2FFFF}][\u{E0100}-\u{E01EF}\u{FE00}-\u{FE02}]?)/mu;
+  public whichCharacter = '';
+  public previousWhichCharacter = '';
+  public noSpace = false;
+  public oneIsChosen = false;
+  public sentence: string;
+  public logPlayerTran: string;
+  public logComputerTran: string;
+  public choiceOneTranWrong = false;
+  public choiceTwoTransWrong = false;
+  public tranHold = false;
+  public startConversation: boolean;
+  public startButton = 'START CONVERSATION';
+  public againButton = 'RESTART';
+  public audioIcon = ["play-outline", "play-outline", "play-outline", "play-outline"];
+  public speaking = true;
 
-  constructor(private nextSentence: NextSentenceService, private modalCtrl: ModalController, private google: GoogletranslateService , private solution: SolutionService, private recordAudio: RecordAudio, private checkSentence: CheckSentence) {
-    this.videoUrl = this.videoBase + this.videoTimeJapanese[0];
-    this.showAccuracy = true;
-    this.langSwitch = false;
-    this.computerSentence = this.parentNodeComp.name;
-    this.choiceOne = this.parentNode.leftChild.name;
-    this.choiceTwo = this.parentNode.rightChild.name;
+  constructor(
+    private google: GoogletranslateService ,
+    private recordAudio: RecordAudio,
+    private checkSentence: CheckSentence,
+    private jpnservice: JapaneseService,
+    private cdref: ChangeDetectorRef,
+    private _ngzone: NgZone) {
+      this.conversationLog = [];
+      this.showAccuracy = true;
+      this.langSwitch = true;
+      this.showVoiceText = false;
+      this.showVoiceText2 = false;
+      this.startConversation = true;
   }
 
   ngOnInit() {
-    this.solution.getSolution().subscribe(res => this.data = res);
-    this.translateBtn = document.getElementById('translatebtn');
-    console.log(this.translateBtn);
+    localStorage.setItem('userLangFrom', 'ja');
+    this.userLangTo = localStorage.getItem('userLangTo');
+    this.refArray = this.jpnservice.getAllRef();
+    this.serviceArray = this.jpnservice.getAllArrays();
+    this.videoBase = this.refArray[0].videoRef;
+    this.audioBase = this.refArray[0].voiceRef;
+    this.cpImage = this.refArray[0].faceIcon;
+    this.choiceOne = this.serviceArray[2];
+    this.choiceTwo = this.serviceArray[3];
+    this.computerSentence = this.serviceArray[1].computer;
+    this.videoUrl = this.videoBase + this.serviceArray[1].video;
+    this.audio.addEventListener("ended", () => {
+      this.audioIcon = ["play-outline", "play-outline", "play-outline", "play-outline"];
+      this.conversationLog.forEach(element => {
+        element.computerIcon = 'play-outline';
+        element.playerIcon = 'play-outline';
+      })
+    });
     this.recordAudio.voiceActiveSectionDisabledChanged.subscribe(
       (change: boolean) => this.voiceActiveSectionDisabled = change
     );
-
     this.recordAudio.userVoiceTextChanged.subscribe(
       (change: any[]) => {this.userVoiceText = change}
     );
-
     this.recordAudio.voiceTextReadyChanged.subscribe(
       (change: boolean) => this.voiceTextReady = change
     );
-
     this.recordAudio.voiceActiveSectionSuccessChanged.subscribe(
       (change: boolean) => this.voiceActiveSectionSuccess = change
     );
-
     this.recordAudio.voiceActiveSectionErrorChanged.subscribe(
       (change: boolean) => this.voiceActiveSectionError = change
     );
-
     this.recordAudio.voiceActiveSectionListeningChanged.subscribe(
       (change: boolean) => this.voiceActiveSectionListening = change
     );
-
     this.recordAudio.voiceTextChanged.subscribe(
-      (change: any) => {this.voiceText = change; if(change !== undefined){this.userArray.push(change)}; this.onCheck(); if(change !== undefined){this.send(change)};}
+      (change: any) => {this.voiceText = change; if(change !== undefined) {this.userArray.push(change)}; if(change !== undefined) {this.send(change)}; this.onCheck();}
     );
-
     this.recordAudio.userAudioChanged.subscribe(
-      (change: any) => {this.userVoice = change; 
-        this.userVoiceArray.push(change);}
-    );
-
-    
+      (change: any) => {this.userVoice = change;
+        this.userVoiceArray.push(change);
+        this.correctVoiceRecord.push(change);
+      });
     this.voiceActiveSectionDisabled = this.recordAudio.voiceActiveSectionDisabled;
   	this.voiceActiveSectionError = this.recordAudio.voiceActiveSectionError;
   	this.voiceActiveSectionSuccess = this.recordAudio.voiceActiveSectionSuccess;
   	this.voiceActiveSectionListening = this.voiceActiveSectionListening;
-  	this.voiceText = this.recordAudio.voiceText;
     this.voiceTextReady = this.recordAudio.voiceTextReady;
-    this.checkSentence.updateSentences(this.choiceOne,this.choiceTwo, this.voiceText);
-    this.sentenceCounter = this.nextSentence.nextSentence;
+    this.checkSentence.updateSentences(this.choiceOne.player,this.choiceTwo.player, this.voiceText);
   }
 
-  onStartVoiceRecognition(){
+  ngAfterContentChecked() {
+    this.cdref.detectChanges();
+  }
+
+  onStart() {
+    this.startConversation = false;
+    let videoRange = this.serviceArray[1].video;
+    let videoList = videoRange.split(',')
+    let videoSeconds = (parseInt(videoList[1])-parseInt(videoList[0]));
+    this.speaking = true;
+    this.computerSentence = this.serviceArray[1].computer;
+    setTimeout(() => {
+      this._ngzone.run(() => {
+        this.speaking = false;
+      })
+    }, videoSeconds*1200)
+  }
+
+  onStartVoiceRecognition() {
     this.recordAudio.setLanguage(this.langFrom.value);
     this.recordAudio.startVoiceRecognition();
-    console.log(this.voiceText)
+    this.showVoiceText = true;
+    this.showVoiceText2 = false;
   }
 
-  onCloseVoiceRecognition(){
-    //this.recordAudio.setLanguage(this.langFrom.value);
+  onCloseVoiceRecognition() {
     this.recordAudio.closeVoiceRecognition();
+    this.showVoiceText = false;
   }
 
-  onStart(){
-    //this.currentSentence = this.practiceParagraphBrown[this.sentenceCounter];
-  }
-
-  onCheck(){
-    if(this.voiceText === undefined){
+  onCheck() {
+    this.showVoiceText = true;
+    if(this.voiceText === undefined) {
       return;
     }
+    this.correctOrNotArray = [];
     this.showAccuracy = !this.showAccuracy;
-    if(this.choiceOne !== ''){
-      if(this.choiceTwo !==''){
-        this.scoreLeft = this.checkSentence.checkPercent(this.choiceOne,this.voiceText);
-        this.scoreRight = this.checkSentence.checkPercent(this.choiceTwo,this.voiceText);
-        this.score =  Math.max(this.checkSentence.checkPercent(this.choiceOne,this.voiceText), this.checkSentence.checkPercent(this.choiceTwo,this.voiceText));
+    this.scoreLeft = this.checkSentence.checkPercent(this.choiceOne.player,this.voiceText);
+    this.scoreRight = this.checkSentence.checkPercent(this.choiceTwo.player,this.voiceText);
+    this.score =  Math.max(this.checkSentence.checkPercent(this.choiceOne.player,this.voiceText), this.checkSentence.checkPercent(this.choiceTwo.player,this.voiceText));
+    //Highlight missed words
+    if (this.scoreRight <= this.scoreLeft) {
+      this.oneIsChosen = true;
+      //Highlight missed word for Japanese
+      this.noSpace = true;
+      this.chunkComponent = '';
+      this.chunkSentence = [];
+      for (let character of this.choiceOne.player ) {
+        if (this.hiragana.test(character) === true) {
+          this.whichCharacter = 'hiragana';
+        }
+        else if (this.katakana.test(character) === true) {
+          this.whichCharacter = 'katakana';
+        }
+        else if (this.kanji.test(character) === true) {
+          this.whichCharacter = 'kanji';
+        }
+        else {
+          this.whichCharacter = 'symbol';
+        }
+        if (this.previousWhichCharacter === '') {
+          this.previousWhichCharacter = this.whichCharacter;
+        }
+        if (this.previousWhichCharacter === this.whichCharacter) {
+          this.chunkComponent = this.chunkComponent + character;
+        }
+        else {
+          this.chunkSentence.push(this.chunkComponent);
+          this.chunkComponent = character;
+        }
+        this.previousWhichCharacter = this.whichCharacter;
       }
-      else {this.score = this.checkSentence.checkPercent(this.choiceOne,this.voiceText);
-        this.scoreLeft = this.checkSentence.checkPercent(this.choiceOne,this.voiceText);
-        this.score = this.scoreLeft;
+      this.chunkSentence.push(this.chunkComponent);
+      for (let chunk of this.chunkSentence) {
+        this.correctOrNot = this.voiceText.toLowerCase().indexOf(chunk.toLowerCase());
+        if (this.correctOrNot === -1)
+        {
+          this.chunkCheck = chunk.replace(/[¡.,\/#!$%\^&?\*;:{}=\-_`~()。、？¿！]/g,"");
+          this.correctOrNot = this.voiceText.toLowerCase().indexOf(this.chunkCheck.toLowerCase())
+          if ( this.correctOrNot != -1) {
+            this.correctOrNotBoolean = true;
+          }
+          else {
+            this.correctOrNotBoolean = false;
+          }
+          this.correctOrNotArray.push({
+            boolean: this.correctOrNotBoolean,
+            chunk: chunk
+          });
+        }
+        else {
+          this.correctOrNotBoolean = true;
+          this.correctOrNotArray.push({
+            boolean: this.correctOrNotBoolean,
+            chunk: chunk
+          });
+        }
       }
+      this.wrongAnswer = true;
+      this.wrongAnswer1 = true;
+      this.wrongAnswer2 = false;
     }
-    else if (this.choiceTwo !== ''){
-      this.scoreRight = this.checkSentence.checkPercent(this.choiceTwo,this.voiceText);
-      this.checkSentence.checkPercent(this.choiceTwo,this.voiceText);
-      this.score = this.scoreRight;
-    }
+    else if (this.scoreRight > this.scoreLeft) {
+      this.oneIsChosen = false;
+      this.noSpace = true;
+      this.chunkComponent = '';
+      this.chunkSentence = [];
 
-    // this.score = this.checkSentence.checkPercent(this.,this.voiceText);
-    if(this.scoreLeft > .8){
-      this.parentNodeComp = this.parentNodeComp.leftChild;
-      this.parentNode = this.parentNode.leftChild;
-      this.choiceOne = this.parentNode.leftChild.name;
-      this.choiceTwo = this.parentNode.rightChild.name;
-      this.computerSentence = this.parentNodeComp.name;
-      this.videoUrl = this.videoBase + this.parentNodeComp.video;
-    
+      for (let character of this.choiceTwo.player) {
+        if (this.hiragana.test(character) === true) {
+          this.whichCharacter = 'hiragana';
+        }
+        else if (this.katakana.test(character) === true) {
+          this.whichCharacter = 'katakana';
+        }
+        else if (this.kanji.test(character) === true) {
+          this.whichCharacter = 'kanji';
+        }
+        else {
+          this.whichCharacter = 'symbol';
+        }
+        if (this.previousWhichCharacter === '') {
+          this.previousWhichCharacter = this.whichCharacter;
+        }
+        if (this.previousWhichCharacter === this.whichCharacter) {
+          this.chunkComponent = this.chunkComponent + character;
+        }
+        else {
+          this.chunkSentence.push(this.chunkComponent);
+          this.chunkComponent = character;
+        }
+        this.previousWhichCharacter = this.whichCharacter;
+      }
+      this.chunkSentence.push(this.chunkComponent);
+      for (let chunk of this.chunkSentence) {
+        this.correctOrNot = this.voiceText.toLowerCase().indexOf(chunk.toLowerCase());
+        if (this.correctOrNot === -1) {
+          this.chunkCheck = chunk.replace(/[¡.,\/#!$%\^&?\*;:{}=\-_`~()。、？¿！]/g,"");
+          this.correctOrNot = this.voiceText.toLowerCase().indexOf(this.chunkCheck.toLowerCase())
+          if ( this.correctOrNot != -1) {
+            this.correctOrNotBoolean = true;
+          }
+          else {
+            this.correctOrNotBoolean = false;
+          }
+          this.correctOrNotArray.push({
+            boolean: this.correctOrNotBoolean,
+            chunk: chunk
+          });
+        }
+        else {
+          this.correctOrNotBoolean = true;
+          this.correctOrNotArray.push({
+            boolean: this.correctOrNotBoolean,
+            chunk: chunk
+          });
+        }
+      }
+      this.wrongAnswer = true;
+      this.wrongAnswer1 = false;
+      this.wrongAnswer2 = true;
     }
-    else if(this.scoreRight > .8){
-      this.parentNodeComp = this.parentNodeComp.rightChild;
-      this.parentNode = this.parentNode.rightChild;
-      this.choiceOne = this.parentNode.leftChild.name;
-      this.choiceTwo = this.parentNode.rightChild.name;
-      this.computerSentence = this.parentNodeComp.name;
-
-      this.videoUrl = this.videoBase + this.parentNodeComp.video;
-      //this.guideSentence = 'Try again :)'
+    if(this.scoreLeft >= .7) {
+      this.sentenceNum = parseInt(this.choiceOne.id);
+      this.conversationLog.push({
+        computer: this.serviceArray[this.sentenceNum/2].computer,
+        player: this.voiceText,
+        computerTran: false,
+        playerTran: false,
+        sentenceNumber: this.sentenceNum/2,
+        computerIcon: 'play-outline',
+        playerIcon: 'play-outline'
+      });
+      this.logNum += 1;
+      this.voiceText = '...';
+      this.showVoiceText2 = false;
+      this.wrongAnswer = false;
+      this.wrongAnswer1 = false;
+      this.wrongAnswer2 = false;
+      this.choiceOneTranWrong = false;
+      this.choiceTwoTransWrong = false;
+      this.firstPrompt = false;
+      this.speaking = true;
+      this.correctRecord.push(true);
     }
-
-    console.log(this.checkSentence.checkPercent('私たちはボランティアとして奉仕するために来ました。', '私たちはボランティアとして奉仕するために来ました'));
+    else if(this.scoreRight >= .7) {
+      this.sentenceNum = parseInt(this.choiceTwo.id);
+      this.conversationLog.push({
+        computer: this.serviceArray[(this.sentenceNum-1)/2].computer,
+        player: this.voiceText,
+        computerTran: false,
+        playerTran: false,
+        sentenceNumber: (this.sentenceNum-1)/2,
+        computerIcon: 'play-outline',
+        playerIcon: 'play-outline'
+      });
+      this.logNum += 1;
+      this.voiceText = '...';
+      this.showVoiceText2 = false;
+      this.wrongAnswer = false;
+      this.wrongAnswer1 = false;
+      this.wrongAnswer2 = false;
+      this.choiceOneTranWrong = false;
+      this.choiceTwoTransWrong = false;
+      this.firstPrompt = false;
+      this.speaking = true;
+      this.correctRecord.push(true);
+    }
+    if ((this.sentenceNum * 2) >= this.serviceArray.length) {
+      this.voiceText = '...';
+      this.lessonCompleted = true;
+    }
+    this.choiceOne = this.serviceArray[(this.sentenceNum * 2)];
+    this.choiceTwo = this.serviceArray[(this.sentenceNum * 2) + 1];
+    this.videoUrl = this.videoBase + this.serviceArray[this.sentenceNum].video;
+    if (!this.wrongAnswer) {
+      let videoRange = this.serviceArray[this.sentenceNum].video;
+      let videoList = videoRange.split(',')
+      let videoSeconds = (parseInt(videoList[1])-parseInt(videoList[0]));
+      this.computerSentence = this.serviceArray[this.sentenceNum].computer;
+      setTimeout(() => {
+        this._ngzone.run(() => {
+          this.speaking = false;
+        })
+      }, videoSeconds*1200)
+      this.userTextCorrect = this.voiceText;
+      this.recordAudio.userVoiceText = [];
+      this.userTextCorrectTrans = this.voiceTextTrans[this.voiceTextTrans.length];
+    }
+    this.showVoiceText = false;
+    this.showVoiceText2 = false;
+    this.send(undefined);
+    if(this.scoreRight < .7 && this.scoreLeft < .7) {
+      this.showVoiceText = true;
+      this.showVoiceText2 = true;
+      this.correctRecord.push(false);
+    }
   }
 
-  onListenToSentence(num: number){
+  onListenToSentence(num: number) {
     //1 is left, two is right
-    if(num === 1){
-      let audio = new Audio();
-      audio.src = this.parentNode.leftChild.audio;
-      audio.load();
-      audio.play();
+    if(num === 1) {
+      if (this.audioIcon[0] === 'stop-outline') {
+        this.audioIcon[0] = 'play-outline';
+        this.audio.pause();
+      }
+      else {
+        this.audioIcon = ["play-outline", "play-outline", "play-outline", "play-outline"];
+        for (var i= 0; i < this.conversationLog.length; i++) {
+          this.conversationLog[i].computerIcon = 'play-outline';
+          this.conversationLog[i].playerIcon = 'play-outline';
+        }
+        this.audioIcon[0] = 'stop-outline';
+        this.audio.pause();
+        this.audio.src = this.audioBase + (this.sentenceNum * 2).toString() + "p.m4a";
+        this.audio.load();
+        this.audio.play();
+      }
     }
-    else if(num === 2){
-      let audio = new Audio();
-      audio.src = this.parentNode.rightChild.audio;
-      audio.load();
-      audio.play();
+    else if(num === 2) {
+      if (this.audioIcon[1] === 'stop-outline') {
+        this.audioIcon[1] = 'play-outline';
+        this.audio.pause();
+      }
+      else {
+        this.audioIcon = ["play-outline", "play-outline", "play-outline", "play-outline"];
+        for (var i= 0; i < this.conversationLog.length; i++) {
+          this.conversationLog[i].computerIcon = 'play-outline';
+          this.conversationLog[i].playerIcon = 'play-outline';
+        }
+        this.audioIcon[1] = 'stop-outline';
+        this.audio.pause();
+        this.audio.src = this.audioBase + (this.sentenceNum * 2 + 1).toString() + "p.m4a";
+        this.audio.load();
+        this.audio.play();
+      }
     }
-    else if(num === 3){
-      let audio = new Audio();
-      audio.src = this.parentNodeComp.audio;
-      audio.load();
-      audio.play();
+    else if(num === 3) {
+      if (this.audioIcon[2] === 'stop-outline') {
+        this.audioIcon[2] = 'play-outline';
+        this.audio.pause();
+      }
+      else {
+        this.audioIcon = ["play-outline", "play-outline", "play-outline", "play-outline"];
+        for (var i= 0; i < this.conversationLog.length; i++) {
+          this.conversationLog[i].computerIcon = 'play-outline';
+          this.conversationLog[i].playerIcon = 'play-outline';
+        }
+        this.audioIcon[2] = 'stop-outline';
+        this.audio.pause();
+        this.audio.src = this.audioBase + (this.sentenceNum).toString() + "c.m4a";
+        this.audio.load();
+        this.audio.play();
+      }
     }
   }
 
-  //Replay video -- not working because the source remains the same
-  onReplayVideo(){
-    this.videoUrl = this.videoBase + this.parentNodeComp.video;
-    console.log(this.videoUrl)
-  }
-
-  onListenAgain(){
-    let audio = new Audio();
-    //audio.src = this.practiceParagraphNeighborAudio[this.sentenceCounter -1];
-    audio.load();
-    audio.play();
-  }
-
-  playUserAudio(num: number){
-      console.log(num);
-      let audio = new Audio();
-      audio.src = this.userVoiceArray[num];
-      audio.load();
-      audio.play();
-  }
-
-  setUserArray(check: string, num: number){
-    if(check === this.userVoiceText[num]){
-      this.userArray[num] = this.voiceTextTrans[num];
+  onListenToLog (num: number) {
+    if (this.conversationLog[num].computerIcon === 'stop-outline') {
+      this.conversationLog[num].computerIcon = 'play-outline';
+      this.audio.pause();
     }
-    else if(check === this.voiceTextTrans[num]){
-      this.userArray[num] = this.userVoiceText[num];
+    else {
+      this.audioIcon = ["play-outline", "play-outline", "play-outline", "play-outline"];
+      for (var i= 0; i < this.conversationLog.length; i++) {
+        this.conversationLog[i].computerIcon = 'play-outline';
+        this.conversationLog[i].playerIcon = 'play-outline';
+      }
+      this.conversationLog[num].computerIcon = 'stop-outline';
+      this.audio.src = this.audioBase + (this.conversationLog[num].sentenceNumber).toString() + "c.m4a";
+      this.audio.pause();
+      this.audio.load();
+      this.audio.play();
     }
   }
-  
-  //Sends sentences to Google translate 
+
+  playUserAudio(num) {
+    if (num === 99) {
+      if (this.audioIcon[3] === 'stop-outline') {
+        this.audioIcon[3] = 'play-outline';
+        this.audio.pause();
+      }
+      else {
+        this.audioIcon = ["play-outline", "play-outline", "play-outline", "play-outline"];
+        for (var i= 0; i < this.conversationLog.length; i++) {
+          this.conversationLog[i].computerIcon = 'play-outline';
+          this.conversationLog[i].playerIcon = 'play-outline';
+        }
+        this.audioIcon[3] = 'stop-outline';
+        this.audio.pause();
+        this.audio.src = this.userVoiceArray[this.userVoiceArray.length-1];
+        this.audio.load();
+        this.audio.play();
+      }
+    }
+    else {
+      if (this.conversationLog[num].playerIcon === 'stop-outline') {
+        this.conversationLog[num].playerIcon = 'play-outline';
+        this.audio.pause();
+      }
+      else {
+        this.audioIcon = ["play-outline", "play-outline", "play-outline", "play-outline"];
+        for (var i= 0; i < this.conversationLog.length; i++) {
+          this.conversationLog[i].computerIcon = 'play-outline';
+          this.conversationLog[i].playerIcon = 'play-outline';
+        }
+        this.conversationLog[num].playerIcon = 'stop-outline';
+        this.audio.pause();
+        for (var i = this.userVoiceArray.length-1; i >= 0; i--) {
+          if (this.correctRecord[i] === false) {
+            this.correctVoiceRecord.splice(i,1);
+            this.correctRecord.splice(i,1);
+          }
+        }
+        this.audio.src = this.correctVoiceRecord[num];
+        this.audio.load();
+        this.audio.play();
+      }
+    }
+  }
+
+  //Sends sentences to Google translate
   send(paragraphSel: string) {
-    console.log(paragraphSel);
-    if(paragraphSel === 'choiceOne'){
-      console.log(this.choiceOneTrans)
+    if (!this.lessonCompleted) {
+      const googleObj: GoogleObj = {
+        q: [this.choiceOne.player, this.choiceTwo.player, this.voiceText, this.computerSentence],
+        target: this.langTo.value
+      };
+      this.google.translate(googleObj).subscribe(
+        (res: any) => {
+          this.firstChoice = res.data.translations[0].translatedText.replace(/&#39;/g, "'");
+          this.secondChoice = res.data.translations[1].translatedText.replace(/&#39;/g, "'");
+          this.voiceTextTran = res.data.translations[2].translatedText.replace(/&#39;/g, "'");
+          this.computerSentenceTran = res.data.translations[3].translatedText.replace(/&#39;/g, "'");
+        },
+        err => {
+          console.error(err);
+        }
+      );
+      this.userTextCorrectTrans = this.voiceTextTrans[0];
+    }
+    if(paragraphSel === 'choiceOne') {
       this.choiceOneTran = !this.choiceOneTran;
+      this.choiceOneTranWrong = false;
     }
-    if(paragraphSel === 'choiceTwo'){
+    if(paragraphSel === 'choiceTwo') {
       this.choiceTwoTrans = !this.choiceTwoTrans;
+      this.choiceTwoTransWrong = false;
     }
-    if(paragraphSel === 'computerText'){
+    if(paragraphSel === 'computerText') {
       this.choiceComputerTrans = !this.choiceComputerTrans;
     }
-    if(paragraphSel === 'userText'){
-      console.log(this.choiceUserTrans)
-      this.choiceUserTrans = !this.choiceUserTrans;
+    if(paragraphSel === 'voiceText') {
+      this.textTran = !this.textTran;
     }
+    if(paragraphSel === 'choiceOneWrong') {
+      this.choiceOneTranWrong = !this.choiceOneTranWrong;
+    }
+    if(paragraphSel === 'choiceTwoWrong') {
+      this.choiceTwoTransWrong = !this.choiceTwoTransWrong;
+    }
+  }
 
-    if(this.voiceText === undefined){
-      this.voiceText = '';
+  logTranslation(role, index) {
+    if (role === 'player') {
+      this.logPlayerTran = this.conversationLog[index].player;
+      this.tranHold = this.conversationLog[index].playerTran;
+      this.conversationLog.forEach((element) => {
+        element.playerTran = false;
+      });
+      this.conversationLog[index].playerTran = !this.tranHold;
     }
-    if(paragraphSel !== 'userText' && paragraphSel !== 'choiceOne'&& paragraphSel !== '' && paragraphSel !== 'computerText'&& paragraphSel !== 'choiceTwo'){
-      this.inputString = paragraphSel;
+    else {
+      this.logComputerTran = this.conversationLog[index].computer;
+      this.computerLogTrans = !this.computerLogTrans;
+      this.tranHold = this.conversationLog[index].computerTran;
+      this.conversationLog.forEach((element) => {
+        element.computerTran = false;
+      });
+      this.conversationLog[index].computerTran = !this.tranHold;
     }
-    console.log(this.choiceOne,this.choiceTwo,this.voiceText,this.computerSentence);
-    const googleObj: GoogleObj = {
-      q: [this.choiceOne, this.choiceTwo, this.voiceText, this.computerSentence, this.inputString],
+    const translation: GoogleObj = {
+      q: [this.logPlayerTran, this.logComputerTran],
       target: this.langTo.value
     };
-
-    this.translateBtn.disabled = true;
-
-    this.google.translate(googleObj).subscribe(
+    this.google.translate(translation).subscribe(
       (res: any) => {
-        this.translateBtn.disabled = false;
-        this.data = {
-          firstChoice: res.data.translations[0].translatedText.replace(/&#39;/g, "'"),
-        	secondChoice: res.data.translations[1].translatedText.replace(/&#39;/g, "'"),
-        	userText: res.data.translations[2].translatedText.replace(/&#39;/g, "'"),
-          computerText: res.data.translations[3].translatedText.replace(/&#39;/g, "'"),
-          inputString: res.data.translations[4].translatedText.replace(/&#39;/g, "'")
-        };
-        if(this.voiceTextTrans.length < this.userVoiceText.length){
-          this.voiceTextTrans.push(res.data.translations[4].translatedText.replace(/&#39;/g, "'"));
-        }
+        this.logPlayerTran = res.data.translations[0].translatedText.replace(/&#39;/g, "'");
+        this.logComputerTran = res.data.translations[1].translatedText.replace(/&#39;/g, "'");
       },
       err => {
-        console.log(err);
+        console.error(err);
       }
     );
   }
 
-  //Changes if it is using L1 or L2
-  onSwitch() {
-    this.langSwitch = !this.langSwitch;
+
+  onPlayBack() {
+    if (this.sentenceNum > 1) {
+      if (this.sentenceNum % 2 ==0) {
+        this.sentenceNum = this.sentenceNum/2;
+      }
+      else {
+        this.sentenceNum = (this.sentenceNum - 1)/2;
+      }
+      this.conversationLog.pop();
+      for (var i = this.userVoiceArray.length-1; i >= 0; i--) {
+        if (this.correctRecord[i] === false) {
+          this.correctVoiceRecord.splice(i,1);
+          this.correctRecord.splice(i,1);
+        }
+      }
+      this.correctVoiceRecord.splice(-1);
+      this.correctRecord.splice(-1);
+      this.choiceOne = this.serviceArray[(this.sentenceNum * 2)];
+      this.choiceTwo = this.serviceArray[(this.sentenceNum * 2) + 1];
+      this.userTextCorrect = this.voiceText;
+      this.videoUrl = this.videoBase + this.serviceArray[this.sentenceNum].video;
+      this.recordAudio.userVoiceText = [];
+      this.userTextCorrectTrans = this.voiceTextTrans[this.voiceTextTrans.length];
+      this.voiceText = '...';
+      let videoRange = this.serviceArray[this.sentenceNum].video;
+      let videoList = videoRange.split(',')
+      let videoSeconds = (parseInt(videoList[1])-parseInt(videoList[0]));
+      this.speaking = true;
+      this.computerSentence = this.serviceArray[this.sentenceNum].computer;
+      setTimeout(() => {
+        this._ngzone.run(() => {
+          this.speaking = false;
+        })
+      }, videoSeconds*1200)
+      this.lessonCompleted = false;
+      this.wrongAnswer = false;
+      this.wrongAnswer1 = false;
+      this.wrongAnswer2 = false;
+      this.showVoiceText = false;
+      this.send(undefined);
+    }
+    if (this.sentenceNum === 1) {
+      this.firstPrompt = true;
+    }
+  }
+
+  onPlayAgain() {
+    this.lessonCompleted = false;
+    this.conversationLog = [];
+    this.userVoiceArray = [];
+    this.correctVoiceRecord = [];
+    this.correctRecord = [];
+    this.sentenceNum = 1;
+    this.startConversation = true;
+    this.choiceOne = this.serviceArray[(this.sentenceNum * 2)];
+    this.choiceTwo = this.serviceArray[(this.sentenceNum * 2) + 1];
+    this.computerSentence = this.serviceArray[this.sentenceNum].computer;
+    this.userTextCorrect = this.voiceText;
+    this.videoUrl = this.videoBase + this.serviceArray[this.sentenceNum].video;
+    this.recordAudio.userVoiceText = [];
+    this.userTextCorrectTrans = this.voiceTextTrans[this.voiceTextTrans.length];
+    this.voiceText = '...';
+    this.lessonCompleted = false;
+    this.wrongAnswer = false;
+    this.wrongAnswer1 = false;
+    this.wrongAnswer2 = false;
+    this.send(undefined);
+    this.firstPrompt = true;
+    this.score = 0;
   }
 }

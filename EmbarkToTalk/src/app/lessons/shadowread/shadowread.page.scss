@@ -1,7 +1,6 @@
 ion-icon {
     font-size: 20px;
   }
-  
   /*background */
   .line-bc {
     padding: 20px 10px;
@@ -9,40 +8,33 @@ ion-icon {
     margin: 15px auto;
     text-align: right;
     font-size: 14px;
-    // background: #7da4cd;
-  
   }
-  
   /*CP side comment*/
   .balloon6 {
     width: 100%;
     margin: 10px 0;
     overflow: hidden;
   }
-  
   .balloon6 .faceicon {
     float: left;
     margin-right: -50px;
     width: 40px;
   }
-  
   .balloon6 .faceiconright {
     float: right;
     margin-left: -50px;
     width: 40px;
   }
-  
-  .balloon6 .faceicon img{
+  .balloon6 .faceicon img {
     width: 100%;
     height: auto;
     border-radius: 50%;
   }
-  .balloon6 .faceiconright img{
+  .balloon6 .faceiconright img {
     width: 100%;
     height: auto;
     border-radius: 50%;
   }
-  
   .balloon6 .chatting {
     width: 100%;
     text-align: left;
@@ -61,7 +53,6 @@ ion-icon {
     border-radius: 12px;
     background: #edf1ee;
   }
-  
   .says:after {
     content: "";
     display: inline-block;
@@ -77,25 +68,21 @@ ion-icon {
     margin: 0;
     padding: 0;
   }
-
-  .ion-button changecolor{
+  .ion-button changecolor {
     margin: 100px;
     background-color: rgb(240, 87, 87);
   }
-
-  .changecolor{
+  .changecolor {
     margin: 100px;
     background-color: rgb(240, 87, 87);
   }
-  
   /*Your comment*/
   .mycomment {
     margin: 10px 0;
   }
-  .mycommentmargin{
+  .mycommentmargin {
     margin-top:5px;
     margin-right: 42px;
-    
   }
   .mycomment p {
     text-align: left;
@@ -108,7 +95,6 @@ ion-icon {
     background: #ffffff;
     font-size: 15px;
   }
-  
   .mycomment p:after {
     content: "";
     position: absolute;
@@ -119,8 +105,6 @@ ion-icon {
     -webkit-transform: rotate(-35deg);
     transform: rotate(-35deg);
   }
-  
-  
   //loading bar
   .ldBar {
     position: relative;
@@ -140,46 +124,64 @@ ion-icon {
   .ldBar.no-percent .ldBar-label:after {
     content: "";
   }
-  
-  ion-footer {
-    text-align: center;
-    bottom: 0;
-    width: 100%;
-    position: fixed;
+ion-footer {
+  text-align: center;
+  bottom: 0;
+  width: 100%;
+  position: fixed;
 }
-
 ion-icon-footer {
     font-size: 40px;
 }
-
-.background-image{
-    background: url(../../../assets/icon/embarkbackground.png) 0 0/100% 100% no-repeat;
-}
-
 .fixed-content {
   right: relative;
   left: relative;
-  // top: 225px;
   top: 10%;
   width: 100%;
   margin: 15px auto;
-  // bottom: 225px;
   bottom: 35.5%;
   position:fixed;
   overflow-y:scroll;
   overflow-x:auto;
   background: rgba(255, 255, 255, 0.6);
 }
-
-
-.user-option{
+.user-option {
   top: 70%;
 }
-
 .bg-style {
   background: url(../../../assets/icon/embarkbackground.png) 0 0/100% 100% no-repeat;
 }
-
-.card-content-md{
-  min-height: 50px;
+.floatRight {
+  float: right;
+}
+.floatLeft {
+  float: left;
+}
+.gray {
+  color: gray;
+}
+.marginLeft {
+  margin-left: auto;
+}
+.mic {
+  font-size: 35px;
+  color: white;
+}
+.stop {
+  font-size: 35px;
+  color: red;
+}
+.fixed-content-bottom {
+  right: relative;
+  left: relative;
+  top: 65%;
+  bottom: 8%;
+  position: fixed;
+  padding: 0%;
+  overflow-y: scroll;
+  overflow-x: auto;
+  width: 100%;
+}
+ion-button {
+  width: 100%;
 }

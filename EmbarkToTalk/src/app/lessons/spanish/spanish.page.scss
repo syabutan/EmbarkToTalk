@@ -1,56 +1,72 @@
 ion-icon {
   font-size: 20px;
 }
-
-ion-row.fixVideo{
-  top:5%;
-  bottom: 65%;
-}
-
 /*background */
 .line-bc {
-  padding: 20px 10px;
-  max-width: 450px;
-  margin: 15px auto;
+  padding: 5px 5px;
   text-align: right;
+  background: #a6d1f891;
+  color: rgb(59, 59, 59);
+}
+.font-size {
   font-size: 14px;
-  // background: #7da4cd;
+}
+@media screen and (min-width:350px) {
+  .font-size {
+    font-size: 15px;
+  }
+}
+@media screen and (min-width: 550px) {
+  .font-size {
+    font-size: 16px;
+  }
 }
 
+.font-size-card {
+  font-size: 15px;
+  color: rgb(59, 59, 59);
+}
+@media screen and (min-width:350px) {
+  .font-size-card {
+    font-size: 16px;
+  }
+}
+@media screen and (min-width: 550px) {
+  .font-size-card {
+    font-size: 17px;
+  }
+}
+.video-bc {
+  padding: 0px 0px;
+}
 /*CP side comment*/
 .balloon6 {
   width: 100%;
   margin: 10px 0;
   overflow: hidden;
 }
-
 .balloon6 .faceicon {
   float: left;
   margin-right: -50px;
   width: 40px;
 }
-
 .balloon6 .faceiconright {
   float: right;
   margin-left: -50px;
   width: 40px;
 }
-
 .balloon6 .faceicon img{
   width: 40px;
   height: 40px;
   border-radius: 50%;
   background-position: center center;
-  // background-size:cover;
 }
 .balloon6 .faceiconright img{
   width: 40px;
   height: 40px;
   border-radius: 50%;
   background-position: center center;
-  // background-size:cover;
 }
-
 .balloon6 .chatting {
   width: 100%;
   text-align: left;
@@ -67,9 +83,10 @@ ion-row.fixVideo{
   padding: 10px;
   max-width: 250px;
   border-radius: 12px;
-  background: #edf1ee;
+  background: #ffffff;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+  width: 100%;
 }
-
 .says:after {
   content: "";
   display: inline-block;
@@ -77,7 +94,7 @@ ion-row.fixVideo{
   top: 3px;
   left: -19px;
   border: 8px solid transparent;
-  border-right: 18px solid #edf1ee;
+  border-right: 18px solid #ffffff;
   -webkit-transform: rotate(35deg);
   transform: rotate(35deg);
 }
@@ -85,38 +102,62 @@ ion-row.fixVideo{
   margin: 0;
   padding: 0;
 }
-
+.saying {
+  display: inline-block;
+  position: relative;
+  margin: 0 0 0 50px;
+  padding: 10px;
+  max-width: 250px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+}
+.saying:after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  top: 3px;
+  left: -19px;
+  border: 8px solid transparent;
+  border-right: 18px solid #ffffff;
+  -webkit-transform: rotate(35deg);
+  transform: rotate(35deg);
+}
+.saying p {
+  margin: 0;
+  padding: 0;
+}
 /*Your comment*/
 .mycomment {
   margin: 10px 0;
 }
+
 .mycommentmargin{
-  margin-top:5px;
-  margin-right: 42px;
-}
-.mycomment p {
+  margin-top: 5px;
+  text-align: left;
   display: inline-block;
   position: relative;
-  margin: 0 10px 0 0;
-  padding: 8px;
-  max-width: 250px;
+  max-width: 235px;
   border-radius: 12px;
-  background:white;
-  font-size: 15px;
+  background: #ffffff;
+  margin-right: 50px;
+  padding: 8px;
 }
 
-.mycomment p:after {
+.mycommentmargin p {
+  margin: 0;
+}
+
+.mycommentmargin p:after {
   content: "";
   position: absolute;
   top: 3px;
   right: -19px;
   border: 8px solid transparent;
-  border-left: 18px solid white;
+  border-left: 18px solid #ffffff;
   -webkit-transform: rotate(-35deg);
   transform: rotate(-35deg);
 }
-
-
 //loading bar
 .ldBar {
   position: relative;
@@ -136,43 +177,179 @@ ion-row.fixVideo{
 .ldBar.no-percent .ldBar-label:after {
   content: "";
 }
-
 ion-footer {
   text-align: center;
   bottom: 0;
   width: 100%;
   position: fixed;
 }
-
 ion-icon-footer {
   font-size: 40px;
 }
-
 .item-text-center
 {
   display: block;
   margin: 0 0 0 auto;
 }
-
+.fixed-content-top {
+  right: relative;
+  left: relative;
+  top: 0%;
+  width: 100%;
+  bottom: 65%;
+  position:fixed;
+  overflow-x:auto;
+}
 .fixed-content {
   right: relative;
   left: relative;
-  // top: 225px;
-  top: 35%;
+  top: 36%;
   width: 100%;
-  margin: 15px auto;
-  // bottom: 225px;
-  bottom: 35.5%;
+  bottom: 35%;
   position:fixed;
-  overflow-y:scroll;
   overflow-x:auto;
-  background: rgba(255, 255, 255, 0.6);
 }
+.fixed-content-bottom {
+  top: 65%;
+  bottom: 60px;
+  position: fixed;
+  padding: 0%;
+  overflow-x: auto;
+  width: 100%;
+}
+.fixed-content-again {
+  right: relative;
+  left: relative;
+  top: 65%;
+  bottom: 0%;
+  position: fixed;
+  padding: 0%;
+  overflow-y: scroll;
+  width: 100%;
+  margin-top: 10%;
+}
+.fixed-content-finished {
+  right: relative;
+  left: relative;
+  top: 65%;
+  bottom: 0%;
+  position: fixed;
+  padding: 0%;
+  overflow-y: scroll;
+}
+ion-toolbar, ion-content {
+  --background: transparent;
+  --ion-color-base: transparent !important;
+  }
+  .all-center {
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  align-items: center;
+  }
+  .floatRight {
+    float: right;
+  }
+  .floatLeft {
+    float: left;
+  }
+  .gray {
+    color: rgb(59, 59, 59);
+  }
+  .marginLeft {
+    margin-left: auto;
+  }
+  .mic {
+    font-size: 35px;
+    color: rgb(66, 66, 66);
+  }
+  .stop {
+    font-size: 35px;
+    color: #D13B4C;
+  }
+  ion-button {
+    width: 100%;
+    --box-shadow:none;
+  }
 
-.scrollTop{
-  scroll-behavior: smooth;
-}
+  .bg-img {
+    position: relative;
+  }
 
-.bg-style {
-  background: url(../../../assets/icon/embarkbackground.png) 0 0/100% 100% no-repeat;
-}
+  .resizeimage {
+    width: 100%;
+    max-height: 34vh;
+    max-width: 600px;
+    top: 50%;
+    left: 50%;
+    transform: translateY(10%);
+    margin: auto;
+  }
+
+  .layover {
+    position: absolute;
+    top: 47%;
+    left: 5%;
+    transform: translate(-60%, -40%);
+    width: 30px;
+    height: 150px;
+    background-color: rgba(122, 121, 121, 0.644);
+  }
+  .layover-icon {
+    position: absolute;
+    top: 47%;
+    left: 5%;
+    transform: translate(-60%, -45%);
+    width: 30px;
+    height: 150px;
+  }
+
+  .startButton {
+    margin-top: 50%;
+  }
+
+  .card-margin {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .card-margin-top {
+    margin-bottom: 0px;
+  }
+
+  .content-margin {
+    margin: -8px;
+  }
+
+  .footerButton {
+    vertical-align: middle;
+  }
+
+  .spacing {
+    letter-spacing: .1em;
+  }
+
+  .buttonBackground {
+    border-radius: 36px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+      0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    background-color: var(--light);
+    color: var(--dark);
+  }
+
+  .footerHeight {
+    height: 70px;
+  }
+
+  .redHighlight {
+    color: #D13B4C;
+  }
+
+  .marginChatComp {
+    margin-right: 40px;
+  }
+
+  .marginChatUser {
+    margin-left: 48px;
+  }

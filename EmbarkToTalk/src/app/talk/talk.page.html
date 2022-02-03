@@ -1,28 +1,26 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <!-- <ion-row> -->
       <ion-buttons>
         <ion-button [routerLink]="['/home']">
           <ion-icon color="dark" name="arrow-back-outline"></ion-icon>
         </ion-button>
-      </ion-buttons>
-      <!-- <ion-title>
+      </ion-buttons>   
 
-      </ion-title> -->
-      
-        <video [src]="videoUrl" type="video/mp4" width="100%" autoplay playsinline webkit-playsinline></video>
-
-      </ion-toolbar>
+      <video [src]="videoUrl" type="video/mp4" width="100%" autoplay playsinline webkit-playsinline></video>
       <ion-buttons>
         <ion-button slot="start" class="flex-left" (click)="onPlayBack();">
           <ion-icon color="dark" name="play-back-outline" ></ion-icon>
         </ion-button>
-      </ion-buttons>
+      </ion-buttons>  
+    </ion-toolbar>
+
 </ion-header>
 
 <ion-content class="ion-no-border;">
  <!-- <div class = "all-center"> -->
      <div #list class = "fixed-content" [scrollTop] = "list.scrollHeight" >
+
+
   <div class="line-bc">
 
     <!--chat start-->
@@ -126,11 +124,6 @@
         </div>
       </div>
 
-
-
-    <!-- </div> -->
-  <!-- </div> -->
-  <!-- </div> -->
 </div>
 </div>
 
@@ -197,9 +190,9 @@
 
   <button id="translatebtn" (click)="send('nothing')" style="margin-left: auto;"></button>
 
+  <!-- <br><br><br>-->
   <br><br><br>
-  <br><br><br>
-  <br><br><br>
+  <br><br><br> 
   <!-- </div> -->
 </ion-content>
 

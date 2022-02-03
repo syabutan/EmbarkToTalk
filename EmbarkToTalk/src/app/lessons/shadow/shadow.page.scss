@@ -4,12 +4,14 @@ ion-icon {
 /*background */
 .line-bc {
   padding: 5px 5px;
+  margin: 5px auto;
   text-align: right;
   background: #a6d1f891;
   color: rgb(59, 59, 59);
 }
 .font-size {
   font-size: 14px;
+  color: rgb(59, 59, 59);
 }
 @media screen and (min-width:350px) {
   .font-size {
@@ -36,9 +38,6 @@ ion-icon {
     font-size: 17px;
   }
 }
-.video-bc {
-  padding: 0px 0px;
-}
 /*CP side comment*/
 .balloon6 {
   width: 100%;
@@ -55,17 +54,15 @@ ion-icon {
   margin-left: -50px;
   width: 40px;
 }
-.balloon6 .faceicon img{
-  width: 40px;
-  height: 40px;
+.balloon6 .faceicon img {
+  width: 100%;
+  height: auto;
   border-radius: 50%;
-  background-position: center center;
 }
-.balloon6 .faceiconright img{
-  width: 40px;
-  height: 40px;
+.balloon6 .faceiconright img {
+  width: 100%;
+  height: auto;
   border-radius: 50%;
-  background-position: center center;
 }
 .balloon6 .chatting {
   width: 100%;
@@ -73,7 +70,7 @@ ion-icon {
 }
 .balloon6 .chattingright {
   width: 100%;
-  text-align: right;
+  text-align: left;
   margin-left: -50px;
 }
 .says {
@@ -83,9 +80,7 @@ ion-icon {
   padding: 10px;
   max-width: 250px;
   border-radius: 12px;
-  background: #ffffff;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
-  width: 100%;
+  background: #edf1ee;
 }
 .says:after {
   content: "";
@@ -94,7 +89,7 @@ ion-icon {
   top: 3px;
   left: -19px;
   border: 8px solid transparent;
-  border-right: 18px solid #ffffff;
+  border-right: 18px solid #edf1ee;
   -webkit-transform: rotate(35deg);
   transform: rotate(35deg);
 }
@@ -102,6 +97,7 @@ ion-icon {
   margin: 0;
   padding: 0;
 }
+
 .saying {
   display: inline-block;
   position: relative;
@@ -127,12 +123,20 @@ ion-icon {
   margin: 0;
   padding: 0;
 }
+
+.ion-button changecolor {
+  margin: 100px;
+  background-color: rgb(240, 87, 87);
+}
+.changecolor {
+  margin: 100px;
+  background-color: rgb(240, 87, 87);
+}
 /*Your comment*/
 .mycomment {
   margin: 10px 0;
 }
-
-.mycommentmargin{
+.mycommentmargin {
   margin-top: 5px;
   text-align: left;
   display: inline-block;
@@ -149,6 +153,26 @@ ion-icon {
 }
 
 .mycommentmargin p:after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  right: -19px;
+  border: 8px solid transparent;
+  border-left: 18px solid #ffffff;
+  -webkit-transform: rotate(-35deg);
+  transform: rotate(-35deg);
+}
+.commentShape {
+  text-align: left;
+  display: inline-block;
+  position: relative;
+  margin: 0 10px 0 0;
+  padding: 8px;
+  max-width: 235px;
+  border-radius: 12px;
+  background: #ffffff;
+}
+.commentShape:after {
   content: "";
   position: absolute;
   top: 3px;
@@ -178,45 +202,128 @@ ion-icon {
   content: "";
 }
 ion-footer {
-  text-align: center;
-  bottom: 0;
-  width: 100%;
-  position: fixed;
+text-align: center;
+bottom: 0;
+width: 100%;
+position: fixed;
 }
 ion-icon-footer {
   font-size: 40px;
 }
-.item-text-center
-{
-  display: block;
-  margin: 0 0 0 auto;
-}
-.fixed-content-top {
-  right: relative;
-  left: relative;
-  top: 0%;
-  width: 100%;
-  bottom: 65%;
-  position:fixed;
-  overflow-x:auto;
-}
 .fixed-content {
-  right: relative;
-  left: relative;
-  top: 36%;
-  width: 100%;
-  bottom: 35%;
-  position:fixed;
-  overflow-x:auto;
+right: relative;
+left: relative;
+top: 10%;
+width: 100%;
+margin: 15px auto;
+bottom: 35.5%;
+position:fixed;
+overflow-y:scroll;
+overflow-x:auto;
+}
+.user-option {
+top: 70%;
+}
+.bg-style {
+background: url(../../../assets/icon/embarkbackground.png) 0 0/100% 100% no-repeat;
+}
+.floatRight {
+float: right;
+}
+.floatLeft {
+float: left;
+}
+.gray {
+  color: rgb(59, 59, 59);
+}
+.marginLeft {
+margin-left: auto;
+}
+.mic {
+font-size: 35px;
+color: rgb(66, 66, 66);
+}
+.stop {
+font-size: 35px;
+color: #D13B4C;
 }
 .fixed-content-bottom {
+right: relative;
+left: relative;
+top: 65%;
+bottom: 8%;
+position: fixed;
+padding: 0%;
+overflow-y: scroll;
+overflow-x: auto;
+width: 100%;
+}
+.fixed-content-finished {
+  right: relative;
+  left: relative;
   top: 65%;
-  bottom: 60px;
+  bottom: 0%;
   position: fixed;
   padding: 0%;
-  overflow-x: auto;
-  width: 100%;
+  overflow-y: scroll;
 }
+ion-button {
+width: 100%;
+}
+
+.all-center {
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+align-items: center;
+}
+
+.card-margin {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.card-margin-top {
+  margin-bottom: 0px;
+}
+
+.content-margin {
+  margin: -8px;
+}
+
+.footerButton {
+  vertical-align: middle;
+}
+
+.spacing {
+  letter-spacing: .1em;
+}
+
+.buttonBackground {
+  border-radius: 36px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  background-color: var(--light);
+  color: var(--dark);
+}
+
+.footerHeight {
+  height: 70px;
+}
+
+.marginChatComp {
+  margin-right: 40px;
+}
+
+.marginChatUser {
+  margin-left: 48px;
+}
+
+.startButton {
+  margin-top: 50%;
+}
+
 .fixed-content-again {
   right: relative;
   left: relative;
@@ -228,128 +335,7 @@ ion-icon-footer {
   width: 100%;
   margin-top: 10%;
 }
-.fixed-content-finished {
-  right: relative;
-  left: relative;
-  top: 65%;
-  bottom: 0%;
-  position: fixed;
-  padding: 0%;
-  overflow-y: scroll;
+
+.redHighlight {
+  color: #D13B4C;
 }
-ion-toolbar, ion-content {
-  --background: transparent;
-  --ion-color-base: transparent !important;
-  }
-  .all-center {
-    text-align: center;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  align-items: center;
-  }
-  .floatRight {
-    float: right;
-  }
-  .floatLeft {
-    float: left;
-  }
-  .gray {
-    color: rgb(59, 59, 59);
-  }
-  .marginLeft {
-    margin-left: auto;
-  }
-  .mic {
-    font-size: 35px;
-    color: rgb(66, 66, 66);
-  }
-  .stop {
-    font-size: 35px;
-    color: #D13B4C;
-  }
-  ion-button {
-    width: 100%;
-    --box-shadow:none;
-  }
-
-  .bg-img {
-    position: relative;
-  }
-
-  .resizeimage {
-    width: 100%;
-    max-height: 34vh;
-    max-width: 600px;
-    top: 50%;
-    left: 50%;
-    transform: translateY(10%);
-    margin: auto;
-  }
-
-  .layover {
-    position: absolute;
-    top: 47%;
-    left: 5%;
-    transform: translate(-60%, -40%);
-    width: 30px;
-    height: 150px;
-    background-color: rgba(122, 121, 121, 0.644);
-  }
-  .layover-icon {
-    position: absolute;
-    top: 47%;
-    left: 5%;
-    transform: translate(-60%, -45%);
-    width: 30px;
-    height: 150px;
-  }
-
-  .startButton {
-    margin-top: 50%;
-  }
-
-  .card-margin {
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
-
-  .card-margin-top {
-    margin-bottom: 0px;
-  }
-
-  .content-margin {
-    margin: -8px;
-  }
-
-  .footerButton {
-    vertical-align: middle;
-  }
-
-  .spacing {
-    letter-spacing: .1em;
-  }
-
-  .buttonBackground {
-    border-radius: 36px;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2),
-      0 1px 5px 0 rgba(0, 0, 0, 0.12);
-    background-color: var(--light);
-    color: var(--dark);
-  }
-
-  .footerHeight {
-    height: 70px;
-  }
-
-  .redHighlight {
-    color: #D13B4C;
-  }
-
-  .marginChatComp {
-    margin-right: 40px;
-  }
-
-  .marginChatUser {
-    margin-left: 48px;
-  }

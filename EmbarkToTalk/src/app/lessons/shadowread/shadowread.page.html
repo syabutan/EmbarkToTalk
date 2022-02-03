@@ -1,255 +1,213 @@
-
 <ion-item>
   <ion-label>Roleplay as: </ion-label>
-  <ion-select (ionChange) = "chooseRoleplay($event);" placeholder="Select One">
+  <ion-select (ionChange)="chooseRoleplay($event);" placeholder="Select One">
     <ion-select-option value="1">Mr. Brown</ion-select-option>
     <ion-select-option value="2">Mr. Brown's neighbor</ion-select-option>
   </ion-select>
 </ion-item>
 <ion-content>
-  <div class = "bg-style">
-  <div #list class = "fixed-content" [scrollTop] = "list.scrollHeight">
-    <div class="line-bc">
-  
-      <!--chat start-->
-      <div *ngFor="let log of conversationLog; let i=index">
-        <ng-template #bubble>
+  <div >
+    <div #list class="fixed-content" [scrollTop]="list.scrollHeight">
+      <div class="line-bc">
+        <!--chat start-->
+        <div *ngFor="let log of conversationLog; let i=index">
+          <ng-template #bubble>
+            <div class="mycomment">
+              <div class="balloon6">
+                <div class="faceicon">
+                  <img [src]="userImage" />
+                </div>
+              </div>
+            </div>
+          </ng-template>
+          <div *ngIf="log.computer">
+            <div class="balloon6">
+              <div class="faceicon">
+                <img [src]="cpImage" />
+              </div>
+              <div class="chatting">
+                <div class="says">
+                  <!-- <ion-icon name="language-outline" class="floatRight gray" (click)="setUserArray(log.computer, i)"></ion-icon> -->
+                  <span class="floatRight gray"  (click)="setUserArray(log.computer, i)"> TRANSLATE </span>
+                  <ion-icon [name]="audioIconArray[i].computer" class="floatRight" (click)="playAudio(i,'computer')"></ion-icon>
+                  <p>{{log.computer}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="mycomment">
             <div class="balloon6">
-              <div class="faceiconright">
-                <img [src] = "userImage"/>
+              <div class="faceicon">
+                <img [src]="userImage" />
+              </div>
+              <div class="mycommentmargin">
+                <!-- <ion-icon name="language-outline" class="floatLeft" (click)="setUserArray(log.player, i)"></ion-icon> -->
+                <p>
+                  <span class="floatLeft gray"  (click)="setUserArray(log.player, i)"> TRANSLATE </span>
+                  <ion-icon [name]="audioIconArray[i].player" class="floatLeft" (click)="playAudio(i,'player')"></ion-icon>
+                  {{log.player}}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #bubble>
+          <div *ngIf="userArray.length===0">
+            <div class="mycomment">
+              <div class="balloon6">
+                <div class="faceicon">
+                  <img [src]="userImage" />
+                </div>
               </div>
             </div>
           </div>
         </ng-template>
-  
-        <div *ngIf = "log.computer">
+        <div *ngIf="computerSentence">
           <div class="balloon6">
             <div class="faceicon">
-              <img [src] = "cpImage"/>
+              <img [src]="cpImage" />
             </div>
             <div class="chatting">
-              <div  class="says">
-                <ion-icon name="language-outline" style= "float:right; color: gray" (click) = "setUserArray(log.computer, i)"></ion-icon>
-                <ion-icon [name] ="audioIconArray[i].computer" style="float:right" (click) = "playAudio(i,'computer')"></ion-icon>
-                <p>{{log.computer}}</p>
+              <div *ngIf="!choiceComputerTrans" class="says">
+                <!-- <ion-icon name="language-outline" class="floatRight gray" (click)="send('computerText')"></ion-icon> -->
+                <span class="floatRight gray"  (click)="send('computerText')"> TRANSLATE </span>
+                <ion-icon [name]="audioIcon[1]" class="floatRight" (click)="onListenToSentence(2)"></ion-icon>
+                <p>{{computerSentence}}</p>
+              </div>
+              <div *ngIf="choiceComputerTrans" class="says">
+                <!-- <ion-icon name="language-outline" class="floatRight gray" (click)="send('computerText')"></ion-icon> -->
+                <span class="floatRight gray"  (click)="send('computerText')"> TRANSLATE </span>
+                <ion-icon [name]="audioIcon[1]" class="floatRight" (click)="onListenToSentence(2)"></ion-icon>
+                <p>{{data.computerText}}</p>
               </div>
             </div>
-          </div>  
-        </div>
-        
-        <div class="mycomment">
-          <div class="balloon6">
-            <div class="faceiconright">
-              <img [src] = "userImage"/>
-            </div>
-              <div class="mycommentmargin">
-                <ion-icon name="language-outline" style= "float:left" (click) = "setUserArray(log.player, i)"></ion-icon>
-                  <ion-icon [name] ="audioIconArray[i].player" style="float:left" (click) = "playAudio(i,'player')"></ion-icon>
-                <p>{{log.player}}</p>
-              </div>
           </div>
         </div>
-      </div>
-      
-      <ng-template #bubble>
-        <div *ngIf = "userArray.length === 0">
-        <div class="mycomment">
-          <div class="balloon6">
-            <div class="faceiconright">
-              <img [src] = "userImage"/>
-            </div>
-            </div>
-          </div>
-        </div>
-      </ng-template>
-  
-      <div *ngIf = "computerSentence">
-      <div class="balloon6">
-        <div class="faceicon">
-          <!-- <img src="https://cdn0.iconfinder.com/data/icons/avatar-2/500/man-2-512.png"/> -->
-          <img [src] = "cpImage"/>
-        </div>
-        <div class="chatting">
-          <div *ngIf = "!choiceComputerTrans" class="says">
-            <ion-icon name="language-outline" style= "float:right; color: gray" (click) = "send('computerText')"></ion-icon>
-            <ion-icon [name]="audioIcon[1]" style="float:right" (click) = "onListenToSentence(2)"></ion-icon>
-            <p>{{computerSentence}}</p>
-          </div>
-          <div *ngIf = "choiceComputerTrans" class="says">
-            <ion-icon name="language-outline" style= "float:right; color:gray" (click) = "send('computerText')"></ion-icon>
-            <ion-icon [name] ="audioIcon[1]" style="float:right" (click) = "onListenToSentence(2)"></ion-icon>
-            <p>{{data.computerText}}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
         <div class="mycomment" *ngIf="showVoiceText">
           <div class="balloon6">
             <div class="faceiconright">
-              <img [src] = "userImage"/>
+              <img [src]="userImage" />
             </div>
-              <div class="mycommentmargin">
-                <!-- <ion-icon name="language-outline" style= "float:left" (click) = "setUserArray(voice, i)"></ion-icon>
-                <ion-icon name="play-outline" style="float:left" (click) = "playUserAudio(i)"></ion-icon> -->
-                <p>...</p>
-              </div>
+            <div class="mycommentmargin">
+              <p>...</p>
+            </div>
           </div>
         </div>
         <div class="mycomment" *ngIf="!showVoiceText">
-        <div *ngIf = "langSwitch">
-          <div class="balloon6">
-            <div class="faceiconright">
-              <img [src] = "userImage"/>
-            </div>
-            <div class="mycommentmargin" *ngIf="showVoiceText2 && voiceText">
-              <ion-icon name="language-outline" style= "float:left" (click) = "onSwitch()"></ion-icon>
-              <ion-icon [name] ="audioIcon[2]" style="float:left" (click) = "playAudio('current', 'player')"></ion-icon>
-              <p>{{ voiceText }}</p>
+          <div *ngIf="langSwitch">
+            <div class="balloon6">
+              <div class="faceiconright">
+                <img [src]="userImage" />
+              </div>
+              <div class="mycommentmargin" *ngIf="showVoiceText2 && voiceText">
+                <!-- <ion-icon name="language-outline" class="floatLeft" (click)="onSwitch()"></ion-icon> -->
+                <span class="floatLeft gray"  (click)="onSwitch()"> TRANSLATE </span>
+                <ion-icon [name]="audioIcon[2]" class="floatLeft" (click)="playAudio('current', 'player')"></ion-icon>
+                <p>{{ voiceText }}</p>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div *ngIf = "!langSwitch">
-          <div class="balloon6">
-            <div class="faceiconright">
-              <img [src] = "userImage"/>
-            </div>
-            <div class="mycommentmargin" *ngIf="showVoiceText2">
-              <ion-icon name="language-outline" style= "float:left" (click) = "onSwitch()"></ion-icon>
-              <ion-icon [name] ="audioIcon[2]" style="float:left" (click) = "playAudio('current', 'player')"></ion-icon>
-              <p>{{ userTextCorrectTrans }}</p>
+          <div *ngIf="!langSwitch">
+            <div class="balloon6">
+              <div class="faceicon">
+                <img [src]="userImage" />
+              </div>
+              <div class="mycommentmargin" *ngIf="showVoiceText2">
+                <!-- <ion-icon name="language-outline" class="floatLeft" (click)="onSwitch()"></ion-icon> -->
+                <span class="floatLeft gray"  (click)="onSwitch()"> TRANSLATE </span>
+                <ion-icon [name]="audioIcon[2]" class="floatLeft" (click)="playAudio('current', 'player')"></ion-icon>
+                <p>{{ userTextCorrectTrans }}</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-  
     </div>
+    <hr>
+    <div class="fixed-content-bottom">
+      <ion-card class="ion-no-padding">
+        <ion-card-content *ngIf="!!wrongAnswer">
+          <!-- <ion-icon name="language-outline" class="floatRight" (click)="send('choiceOne')"></ion-icon> -->
+          <span class="floatRight gray"  (click)="send('choiceOne')"> TRANSLATE </span>
+          <ion-icon name="play-outline" class="floatRight" (click)="onListenToSentence(1)"></ion-icon>
+          <span *ngFor="let chunk of correctOrNotArray" [ngStyle]="{ 'color': !chunk.boolean ? 'red' : 'black' }">
+            {{chunk.chunk }}<span *ngIf="!noSpace">{{ " " }}</span>
+          </span>
+        </ion-card-content>
+      </ion-card>
+      <ion-card *ngIf="!wrongAnswer1" class="ion-no-padding">
+        <ion-card-content *ngIf="!choiceOneTran else choiceone" id="userchoiceId">
+          <!-- <ion-icon name="language-outline" class="floatRight" (click)="send('choiceOne')"></ion-icon> -->
+          <span class="floatRight gray"  (click)="send('choiceOne')"> TRANSLATE </span>
+          <ion-icon [name]="audioIcon[0]" class="floatRight" (click)="onListenToSentence(1)"></ion-icon>
+          {{choiceOne}}
+        </ion-card-content>
+      </ion-card>
+      <ng-template #choiceone>
+        <ion-card-content>
+          <!-- <ion-icon name="language-outline" class="floatRight" (click)="send('choiceOne')"></ion-icon> -->
+          <span class="floatRight gray"  (click)="send('choiceOne')"> TRANSLATE </span>
+          <ion-icon [name]="audioIcon[0]" class="floatRight" (click)="onListenToSentence(1)"></ion-icon>
+          {{data.firstChoice}}
+        </ion-card-content>
+      </ng-template>
+    </div>
+    <button id="translatebtn" (click)="send('nothing')" class="marginLeft"></button>
   </div>
-  <hr>
-  <br><br><br>
-  <br><br><br>
-  <br><br><br>
-  <br><br><br>
-  <br><br><br>
-  <br><br><br><br>
-  
-  <!-- <ion-card *ngIf = "choiceOne !== ''"> -->
-  <ion-card>
-    <ion-card-content *ngIf = "!choiceOneTran else choiceone" id = "userchoiceId">
-      <ion-icon name="language-outline" style= "float:right" (click) = "send('choiceOne')"></ion-icon>
-      <ion-icon [name] ="audioIcon[0]" style="float:right" (click) = "onListenToSentence(1)"></ion-icon>
-      {{choiceOne}}
-    </ion-card-content>
-  </ion-card>
-  <ng-template #choiceone>
-    <ion-card-content>
-      <ion-icon name="language-outline" style= "float:right" (click) = "send('choiceOne')"></ion-icon>
-      <ion-icon [name] ="audioIcon[0]" style="float:right" (click) = "onListenToSentence(1)"></ion-icon>
-      {{data.firstChoice}}
-    </ion-card-content>
-  </ng-template>
-
-  
-<br><br><br>
-<br><br><br>
-<br><br><br>
-<br><br><br>
-<br><br><br>
-<br><br><br>
-<br><br><br>
-<br><br><br>
-
-<button id="translatebtn" (click)="send('nothing')" style="margin-left: auto;"></button>
-</div>
 </ion-content>
-
-
 <ion-footer class="ion-no-border">
   <ion-toolbar>
-    <!-- <ion-button (click)="onStartVoiceRecognition()" *ngIf="voiceActiveSectionDisabled">
-      <ion-icon name="play-circle-outline"></ion-icon>
-    </ion-button>
-    <ion-button color="danger" *ngIf="!voiceActiveSectionDisabled" (click) = "onCloseVoiceRecognition()">
-      <ion-icon name="mic-circle-outline"></ion-icon>
-    </ion-button>
-    <ion-button color="success" *ngIf="!recordStart" (click) = "check()">
-      Check    
-    </ion-button> -->
-    
-    <!-- <ion-buttons *ngIf="voiceActiveSectionDisabled; else voicesection;"> -->
+    <ion-grid>
       <ion-row>
         <ion-col></ion-col>
-        <ion-col >
-          <ion-button color = "primary"
-            (click)="onStartVoiceRecognition();" *ngIf="voiceActiveSectionDisabled; else voicesection;">
-            <ion-icon class="ion-padding" name="mic-outline" style = "font-size: 35px; color:white;"></ion-icon>
-          </ion-button>          
+        <ion-col>
+          <ion-button color="primary" (click)="onStartVoiceRecognition();"
+            *ngIf="voiceActiveSectionDisabled; else voicesection;">
+            <ion-icon class="ion-padding" name="mic-outline" class="mic"></ion-icon>
+          </ion-button>
         </ion-col>
-        <ion-col >
-          <circle-progress
-          [percent]= "score * 100"
-          [radius]="20"
-          [outerStrokeWidth]="4"
-          [innerStrokeWidth]="5"
-          [outerStrokeColor]="'#d17d00'"
-          [innerStrokeColor]="'#a4adb3'"
-          [animation]="true"
-          [animationDuration]="300"
-        ></circle-progress>          
+        <ion-col>
+          <circle-progress 
+              [percent]="score * 100" 
+              [radius]="20" 
+              [outerStrokeWidth]="4" 
+              [innerStrokeWidth]="5"
+              [outerStrokeColor]="'#d17d00'" 
+              [innerStrokeColor]="'#a4adb3'" 
+              [animation]="true" 
+              [animationDuration]="300"
+          >
+          </circle-progress>
         </ion-col>
-        <!-- <ion-col></ion-col> -->
       </ion-row>
-    
-      <!-- <ion-button (click) = "playFullActivity()">
-        Listen to conversation
-      </ion-button> -->
-
-    <!-- </ion-buttons> -->
-    
+    </ion-grid>
     <ng-template #voicesection>
       <ng-container *ngIf="!voiceActiveSectionError; else failure">
         <ng-container *ngIf="voiceText; else start">
-          <!-- <ion-buttons>
-            <ion-button color="danger" type="button" (click)="onCloseVoiceRecognition()">Close</ion-button>
-            <ion-button color="success" type="button" (click)="onStartVoiceRecognition()">Restart</ion-button>
-          </ion-buttons> -->
-          <ion-button color="primary" (click) = "onStartVoiceRecognition()">
-            <ion-icon class="ion-padding" name="mic-outline" style = "font-size: 35px; color:white;"></ion-icon>
+          <ion-button color="primary" (click)="onStartVoiceRecognition()">
+            <ion-icon class="ion-padding" name="mic-outline" class="mic"></ion-icon>
           </ion-button>
         </ng-container>
         <ng-template #start>
-          <ng-container *ngIf="voiceActiveSectionListening; else beginning" (click) = "onCloseVoiceRecognition">
-            <!-- <span style="margin-left:10px"> -->
-              <ion-button color = "light" (click) = "onCloseVoiceRecognition();">
-                  <ion-icon class="ion-padding" name="stop-circle-outline" style = "font-size: 35px; color: red" #changeColor></ion-icon>
-                <!-- <img src="../../assets/icon/stop-white.png" height="32px" width="32px"/> -->
-              </ion-button>
-            <!-- <img src="../../assets/icon/stop.png" height="40px" width="40px" /> -->
-            <!-- </span> -->
+          <ng-container *ngIf="voiceActiveSectionListening; else beginning" (click)="onCloseVoiceRecognition">
+            <ion-button color="light" (click)="onCloseVoiceRecognition();">
+              <ion-icon class="ion-padding" name="stop-circle-outline" class="stop" #changeColor>
+              </ion-icon>
+            </ion-button>
           </ng-container>
           <ng-template #beginning>
-            <!-- <span style="margin-left:10px"> -->
-            <ion-button color = "light" (click) = "onCloseVoiceRecognition();">
-              <!-- <img src="../../assets/icon/stop-white.png" height="32px" width="32px"/> -->
-                <ion-icon class="ion-padding" name="stop-circle-outline" style = "font-size: 35px; color: red" #changeColor></ion-icon>
-              <!-- <ion-icon name="stop-circle-outline" style = "font-size: 40px"></ion-icon> -->
+            <ion-button color="light" (click)="onCloseVoiceRecognition();">
+              <ion-icon class="ion-padding" name="stop-circle-outline" class="stop" #changeColor>
+              </ion-icon>
             </ion-button>
-            <!-- </span> -->
           </ng-template>
         </ng-template>
       </ng-container>
       <ng-template #failure>
-        <ion-button color="primary" (click) = "onStartVoiceRecognition()">
-          <ion-icon class="ion-padding" name="mic-outline" style = "font-size: 35px; color:white;"></ion-icon>
+        <ion-button color="primary" (click)="onStartVoiceRecognition()">
+          <ion-icon class="ion-padding" name="mic-outline" class="mic"></ion-icon>
         </ion-button>
       </ng-template>
     </ng-template>
   </ion-toolbar>
 </ion-footer>
-
-
-
-
-

@@ -290,7 +290,7 @@ export class TalkPage implements OnInit {
 
       setTimeout(() => {
         this.audio.pause();
-        this.audio.src = "../assets/soundFile/complete/firework.mp3#t=0,10"; 
+        // this.audio.src = "../assets/soundFile/complete/firework.mp3#t=0,10"; 
         this.audio.load();
         this.audio.play();
       }, 5000);
@@ -490,6 +490,7 @@ export class TalkPage implements OnInit {
     this.langSwitch = !this.langSwitch;
   }
 
+  
   onPlayBack() {
 
     if (this.sentenceNum > 1) {
@@ -510,6 +511,8 @@ export class TalkPage implements OnInit {
   
       this.recordAudio.userVoiceText = [];
       this.userTextCorrectTrans = this.voiceTextTrans[this.voiceTextTrans.length];
+      this.voiceText = '...';
+
       }
     }
 }

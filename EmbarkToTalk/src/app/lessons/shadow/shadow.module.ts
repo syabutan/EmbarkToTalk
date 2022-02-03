@@ -3,15 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgCircleProgressModule } from 'ng-circle-progress';
 import { IonicModule } from '@ionic/angular';
-import { ShadowreadPageRoutingModule } from './shadowread-routing.module';
-import { ShadowPage } from './shadowread.page';
+import { ShadowPage } from './shadow.page';
+import { ShadowPageRoutingModule } from './shadow-routing.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ShadowreadPageRoutingModule,
+    ShadowPageRoutingModule,
     NgCircleProgressModule.forRoot({
       // set defaults here
       radius: 30,
@@ -21,7 +21,7 @@ import { ShadowPage } from './shadowread.page';
       innerStrokeColor: "#C7E596",
       animationDuration: 300,
       titleFontSize: "10",
-      subtitle: "correct",
+      subtitle: "match",
       showInnerStroke: false,
       imageHeight: 100,
       imageWidth: 100
@@ -29,4 +29,4 @@ import { ShadowPage } from './shadowread.page';
   ],
   declarations: [ShadowPage]
 })
-export class ShadowreadPageModule {}
+export class ShadowPageModule {}

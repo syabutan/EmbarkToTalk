@@ -39,6 +39,7 @@
             "styles": [
               "src/theme/variables.scss",
               "src/global.scss",
+              "src/styles.scss",
               {
                 "input": "node_modules/@ionic/angular/css/core.css"
               },

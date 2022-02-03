@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
-import { ShadowreadPage } from './shadowread.page';
+import { ShadowPage } from './shadowread.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: ShadowreadPage
+    component: ShadowPage
   }
 ];
 
